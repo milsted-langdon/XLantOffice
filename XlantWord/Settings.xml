@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Settings>
+  <TemplateLocation>
+    <Letter>C:\Dropbox\Dev\XlantWord\Letter.dotx</Letter>
+    <Fax>C:\Dropbox\Dev\XlantWord\Fax.dotx</Fax>
+    <FileNote>C:\Dropbox\Dev\XlantWord\FN.dotx</FileNote>
+  </TemplateLocation>
+  <Headings>
+    <Heading Description ="Milsted Langdon" Firm="Milsted Langdon LLP">
+      <Lines Type ="Header" Width="400">
+        <Line>ML Line 1</Line>
+        <Line>ML Line 2</Line>
+        <Line>ML Line 3</Line>
+        <Line>ML Line 4</Line>
+      </Lines>
+      <Lines Type ="Footer" Width="600">
+        <Line>ML Line 5</Line>
+        <Line>ML Line 6</Line>
+      </Lines>
+    </Heading>
+    <Heading Description ="Insolvency" Firm="Milsted Langdon LLP">
+      <Lines Type ="Header" Width="300">
+        <Line>Insol Line 1</Line>
+        <Line>Insol Line 2</Line>
+        <Line>Insol Line 3</Line>
+        <Line>Insol Line 4</Line>
+      </Lines>
+      <Lines Type ="Footer" Width="900">
+        <Line>Insol Line 5</Line>
+        <Line>Insol Line 6</Line>
+        <Line>Insol Line 7</Line>
+      </Lines>
+    </Heading>
+  </Headings>
+</Settings>

@@ -1,0 +1,174 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Settings>
+  <Headings>
+    <Heading Description ="Milsted Langdon Taunton" Firm="Milsted Langdon LLP">
+      <Lines Type ="Header">
+        <HeaderLine Font="Eras Light ITC" Size="11">MILSTED LANGDON LLP</HeaderLine>
+        <HeaderLine Font="Eras Light ITC" Size="9">Winchester House, Deane Gate Avenue, Taunton TA1 2UH</HeaderLine>
+        <HeaderLine Font="Eras Light ITC" Size="9"></HeaderLine>
+		    <HeaderLine Font="Eras Light ITC" Size="9">Telephone:01823 445566 Fax:01823 445555</HeaderLine>
+        <HeaderLine Font="Eras Light ITC" Size="9">DX 97181 Taunton Blackbrook</HeaderLine>
+		    <HeaderLine Font="Eras Light ITC" Size="9">e-mail: advice@milsted-langdon.co.uk</HeaderLine>
+		    <HeaderLine Font="Eras Light ITC" Size="9">Website: www.milsted-langdon.co.uk</HeaderLine>
+      </Lines>
+      <Lines Type ="Footer" RightIndent="150">
+        <FooterLine Font="Eras Light ITC" Size="9">Also at BATH, BRISTOL and YEOVIL</FooterLine>
+        <FooterLine Font="Eras Light ITC" Size="6">Milsted Langdon is a trading name of Milsted Langdon LLP, a limited liability partnership registered in England with LLP number;OC329479.  The registered office of Milsted Langdon LLP is Winchester House, Deane Gate Avenue, Taunton, TA1 2UH.  A list of the members of the LLP is available for inspection at the registered office.</FooterLine>
+		    <FooterLine Font="Eras Light ITC" Size="6">MGI is a worldwide association of independent auditing, accounting and consulting firms. Neither MGI nor any member firm accepts;responsibility for the activities, work, opinions or service of any other members.</FooterLine>
+	  </Lines>
+    </Heading>
+    <Heading Description ="Insolvency Taunton" Firm="Milsted Langdon LLP">
+        <Lines Type ="Header">
+        <HeaderLine Font="Eras Light ITC" Size="11">MILSTED LANGDON LLP</HeaderLine>
+        <HeaderLine Font="Eras Light ITC" Size="9">Winchester House, Deane Gate Avenue, Taunton TA1 2UH</HeaderLine>
+        <HeaderLine Font="Eras Light ITC" Size="9"></HeaderLine>
+		    <HeaderLine Font="Eras Light ITC" Size="9">Telephone:01823 445566 Fax:01823 445555</HeaderLine>
+        <HeaderLine Font="Eras Light ITC" Size="9">DX 97181 Taunton Blackbrook</HeaderLine>
+		    <HeaderLine Font="Eras Light ITC" Size="9">e-mail: advice@milsted-langdon.co.uk</HeaderLine>
+		    <HeaderLine Font="Eras Light ITC" Size="9">Website: www.milsted-langdon.co.uk</HeaderLine>
+      </Lines>
+      <Lines Type ="Footer" RightIndent="150">
+        <FooterLine Font="Eras Light ITC" Size="9">Also at BATH, BRISTOL and YEOVIL</FooterLine>
+        <FooterLine Font="Eras Light ITC" Size="6">Milsted Langdon is a trading name of Milsted Langdon LLP, a limited liability partnership registered in England with LLP number;OC329479.  The registered office of Milsted Langdon LLP is Winchester House, Deane Gate Avenue, Taunton, TA1 2UH.  A list of the members of the LLP is available for inspection at the registered office.</FooterLine>
+		    <FooterLine Font="Eras Light ITC" Size="6">MGI is a worldwide association of independent auditing, accounting and consulting firms. Neither MGI nor any member firm accepts;responsibility for the activities, work, opinions or service of any other members.</FooterLine>
+		    <FooterLine Font="Eras Light ITC" Size="6">Mr T A Close, Mr R A Isaacs and Mr S A Rowe are licensed as insolvency practitioners in the UK by the Institute of Chartered Accountants in England and Wales. Where they are appointed as Administrator they act as agents of the company without personal liability.;In such cases the affairs, business and property of the company are being managed by them as Administrators.</FooterLine>
+      </Lines>
+    </Heading>
+	  <Heading Description ="Insolvency Bristol" Firm="Milsted Langdon LLP">
+        <Lines Type ="Header">
+        <HeaderLine Font="Eras Light ITC" Size="11">MILSTED LANGDON LLP</HeaderLine>
+        <HeaderLine Font="Eras Light ITC" Size="9">One Redcliff Street, Bristol, BS1 6NP</HeaderLine>
+        <HeaderLine Font="Eras Light ITC" Size="9"></HeaderLine>
+		    <HeaderLine Font="Eras Light ITC" Size="9">Telephone:0117 9452500 Fax:0117 9452545</HeaderLine>
+        <HeaderLine Font="Eras Light ITC" Size="9">DX 7805 Bristol</HeaderLine>
+		    <HeaderLine Font="Eras Light ITC" Size="9">e-mail: advice@milsted-langdon.co.uk</HeaderLine>
+		    <HeaderLine Font="Eras Light ITC" Size="9">Website: www.milsted-langdon.co.uk</HeaderLine>
+      </Lines>
+      <Lines Type ="Footer" RightIndent="150">
+        <FooterLine Font="Eras Light ITC" Size="9">Also at BATH, TAUNTON and YEOVIL</FooterLine>
+        <FooterLine Font="Eras Light ITC" Size="6">Milsted Langdon is a trading name of Milsted Langdon LLP, a limited liability partnership registered in England with LLP number;OC329479.  The registered office of Milsted Langdon LLP is Winchester House, Deane Gate Avenue, Taunton, TA1 2UH.  A list of the members of the LLP is available for inspection at the registered office.</FooterLine>
+		    <FooterLine Font="Eras Light ITC" Size="6">MGI is a worldwide association of independent auditing, accounting and consulting firms. Neither MGI nor any member firm accepts;responsibility for the activities, work, opinions or service of any other members.</FooterLine>
+		    <FooterLine Font="Eras Light ITC" Size="6">Mr T A Close, Mr R A Isaacs and Mr S A Rowe are licensed as insolvency practitioners in the UK by the Institute of Chartered Accountants in England and Wales. Where they are appointed as Administrator they act as agents of the company without personal liability.;In such cases the affairs, business and property of the company are being managed by them as Administrators.</FooterLine>
+      </Lines>
+    </Heading>
+	  <Heading Description ="General Practice Bristol" Firm="Milsted Langdon LLP">
+        <Lines Type ="Header">
+        <HeaderLine Font="Eras Light ITC" Size="11">MILSTED LANGDON LLP</HeaderLine>
+        <HeaderLine Font="Eras Light ITC" Size="9">One Redcliff Street, Bristol, BS1 6NP</HeaderLine>
+        <HeaderLine Font="Eras Light ITC" Size="9"></HeaderLine>
+		    <HeaderLine Font="Eras Light ITC" Size="9">Telephone:0117 9452500 Fax:0117 9452545</HeaderLine>
+        <HeaderLine Font="Eras Light ITC" Size="9">DX 7805 Bristol</HeaderLine>
+		    <HeaderLine Font="Eras Light ITC" Size="9">e-mail: advice@milsted-langdon.co.uk</HeaderLine>
+		    <HeaderLine Font="Eras Light ITC" Size="9">Website: www.milsted-langdon.co.uk</HeaderLine>
+      </Lines>
+      <Lines Type ="Footer" RightIndent="150">
+        <FooterLine Font="Eras Light ITC" Size="9">Also at BATH, TAUNTON and YEOVIL</FooterLine>
+        <FooterLine Font="Eras Light ITC" Size="6">Milsted Langdon is a trading name of Milsted Langdon LLP, a limited liability partnership registered in England with LLP number;OC329479.  The registered office of Milsted Langdon LLP is Winchester House, Deane Gate Avenue, Taunton, TA1 2UH.  A list of the members of the LLP is available for inspection at the registered office.</FooterLine>
+		    <FooterLine Font="Eras Light ITC" Size="6">MGI is a worldwide association of independent auditing, accounting and consulting firms. Neither MGI nor any member firm accepts;responsibility for the activities, work, opinions or service of any other members.</FooterLine>
+      </Lines>
+    </Heading>
+	  <Heading Description ="General Practice Yeovil" Firm="Milsted Langdon LLP">
+      <Lines Type ="Header">
+        <HeaderLine Font="Eras Light ITC" Size="11">MILSTED LANGDON LLP</HeaderLine>
+        <HeaderLine Font="Eras Light ITC" Size="9">Motivo house, Alvington, Yeovil, BA20 2FG</HeaderLine>
+        <HeaderLine Font="Eras Light ITC" Size="9"></HeaderLine>
+		    <HeaderLine Font="Eras Light ITC" Size="9">Telephone:01935 383500 Fax:01935 383511</HeaderLine>
+		    <HeaderLine Font="Eras Light ITC" Size="9">e-mail: advice@milsted-langdon.co.uk</HeaderLine>
+		    <HeaderLine Font="Eras Light ITC" Size="9">Website: www.milsted-langdon.co.uk</HeaderLine>
+      </Lines>
+      <Lines Type ="Footer" RightIndent="150">
+        <FooterLine Font="Eras Light ITC" Size="9">Also at BATH, BRISTOL and TAUNTON</FooterLine>
+        <FooterLine Font="Eras Light ITC" Size="6">Milsted Langdon is a trading name of Milsted Langdon LLP, a limited liability partnership registered in England with LLP number;OC329479.  The registered office of Milsted Langdon LLP is Winchester House, Deane Gate Avenue, Taunton, TA1 2UH.  A list of the members of the LLP is available for inspection at the registered office.</FooterLine>
+		    <FooterLine Font="Eras Light ITC" Size="6">MGI is a worldwide association of independent auditing, accounting and consulting firms. Neither MGI nor any member firm accepts;responsibility for the activities, work, opinions or service of any other members.</FooterLine>
+      </Lines>
+    </Heading>
+    <Heading Description ="MLFS" Firm="Milsted Langdon Financial Services Limited">
+      <Lines Type ="Header">
+        <HeaderLine Font="Eras Light ITC" Size="11">MILSTED LANGDON FINANCIAL SERVICES LIMITED</HeaderLine>
+		    <HeaderLine Font="Eras Light ITC" Size="9">Independent Financial Advisers</HeaderLine>
+		    <HeaderLine Font="Eras Light ITC" Size="11"></HeaderLine>
+        <HeaderLine Font="Eras Light ITC" Size="9">Winchester House, Deane Gate Avenue, Taunton TA1 2UH</HeaderLine>
+		    <HeaderLine Font="Eras Light ITC" Size="9">Telephone:01823 445544 Fax:01823 445540</HeaderLine>
+        <HeaderLine Font="Eras Light ITC" Size="9">DX 97181 Taunton Blackbrook</HeaderLine>
+		    <HeaderLine Font="Eras Light ITC" Size="9">e-mail: advice@mlifa.co.uk</HeaderLine>
+      </Lines>
+      <Lines Type ="Footer" RightIndent="150">
+        <FooterLine Font="Eras Light ITC" Size="9">Registered in England: 3953890</FooterLine>
+        <FooterLine Font="Eras Light ITC" Size="6">Authorised and regulated by the Financial Services Authority</FooterLine>
+      </Lines>
+    </Heading>
+	  <Heading Description ="General Practice Bath" Firm="Milsted Langdon LLP">
+      <Lines Type ="Header">
+        <HeaderLine Font="Eras Light ITC" Size="11">MILSTED LANGDON LLP</HeaderLine>
+        <HeaderLine Font="Eras Light ITC" Size="9">1 Queen Square, Bath, BA1 2HA</HeaderLine>
+        <HeaderLine Font="Eras Light ITC" Size="9"></HeaderLine>
+		    <HeaderLine Font="Eras Light ITC" Size="9">Telephone:01225 904940</HeaderLine>
+		    <HeaderLine Font="Eras Light ITC" Size="9">e-mail: advice@milsted-langdon.co.uk</HeaderLine>
+		    <HeaderLine Font="Eras Light ITC" Size="9">Website: www.milsted-langdon.co.uk</HeaderLine>
+      </Lines>
+      <Lines Type ="Footer" RightIndent="150">
+        <FooterLine Font="Eras Light ITC" Size="9">Also at BRISTOL, TAUNTON and YEOVIL</FooterLine>
+        <FooterLine Font="Eras Light ITC" Size="6">Milsted Langdon is a trading name of Milsted Langdon LLP, a limited liability partnership registered in England with LLP number;OC329479.  The registered office of Milsted Langdon LLP is Winchester House, Deane Gate Avenue, Taunton, TA1 2UH.  A list of the members of the LLP is available for inspection at the registered office.</FooterLine>
+		    <FooterLine Font="Eras Light ITC" Size="6">MGI is a worldwide association of independent auditing, accounting and consulting firms. Neither MGI nor any member firm accepts;responsibility for the activities, work, opinions or service of any other members.</FooterLine>
+      </Lines>
+    </Heading>	
+  </Headings>
+  <Mappings>
+    <Map Office="BRISTOL" Department="GPB" FileStore="General Practice - Bristol" Header="Milsted Langdon Bristol"></Map>
+    <Map Office="TAUNTON" Department="GPT" FileStore="General Practice - Taunton" Header="Milsted Langdon Taunton"></Map>
+    <Map Office="YEOVIL" Department="GPY" FileStore="General Practice - Yeovil" Header="Milsted Langdon Yeovil"></Map>
+    <Map Office="BATH" Department="GPBATH" FileStore="General Practice - Bristol" Header="Milsted Langdon Bath"></Map>
+    <Map Office="BATH" Department="GPB" FileStore="General Practice - Bristol" Header="Milsted Langdon Bristol"></Map>
+    <Map Office="BRISTOL" Department="INS" FileStore="Insolvency Bristol" Header="Insolvency Bristol"></Map>
+    <Map Office="TAUNTON" Department="INS" FileStore="Insolvency Taunton" Header="Insolvency Taunton"></Map>
+    <Map Office="TAUNTON" Department="MLFS" FileStore="MLFS" Header="MLFS"></Map>
+  </Mappings>
+  <Offices>
+    <Office DbTag="BATH">Bath</Office>
+    <Office DbTag="BRISTOL">Bristol</Office>
+    <Office DbTag="TAUNTON">Taunton</Office>
+    <Office DbTag="YEOVIL">Yeovil</Office>
+  </Offices>
+  <Departments>
+    <Department DbTag="INS">Insolvency</Department>
+    <Department DbTag="GPT">GP Taunton</Department>
+    <Department DbTag="GPY">GP Yeovil</Department>
+    <Department DbTag="GPB">GP Bristol</Department>
+    <Department DbTag="GPBATH">GP Bath</Department>
+    <Department DbTag="MLFS">MLFS</Department>
+    <Department DbTag="FOR">Forensic</Department>
+    <Department DbTag="TAX">Tax</Department>
+  </Departments>
+  <Styles>
+    <Style>Insolvency Numbering</Style>
+    <Style>Insolvency 1</Style>
+    <Style>Insolvency 2</Style>
+    <Style>Insolvency 3</Style>
+    <Style>Insolvency 4</Style>
+    <Style>Insolvency 5</Style>
+    <Style>Insolvency 6</Style>
+    <Style>Forensic Numbering</Style>
+    <Style>Forensic 1</Style>
+    <Style>Forensic 2</Style>
+    <Style>Forensic 3</Style>
+    <Style>Forensic 4</Style>
+    <Style>Forensic 5</Style>
+    <Style>ML Report Numbering</Style>
+    <Style>ML Report 1</Style>
+    <Style>ML Report 2</Style>
+    <Style>ML Report 3</Style>
+    <Style>ML Report 4</Style>
+    <Style>ML Report 5</Style>
+    <Style>ML Heading</Style>
+    <Style>ML Main</Style>
+    <Style>ML Small Font</Style>
+    <Style>ML Small Font + Bold</Style>
+    <Style>ML Signature</Style>
+  </Styles>
+  <Standards Location="C:\Dropbox\Dev\XlantWord\"></Standards>
+  <ConnectionStr Server="database-server" db="XLant"></ConnectionStr>
+  <Indexes>
+	<Index Type="Status">35</Index>
+	<Index Type="ToBe">36</Index>
+  </Indexes>
+</Settings>

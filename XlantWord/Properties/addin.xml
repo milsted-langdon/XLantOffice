@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<XLantWordAddin>
+	<Office>
+		<title>
+			Bristol
+		</title>
+		<HeaderLine>
+			Milsted Langdon LLP
+		</HeaderLine>
+		<HeaderLine>
+			One Redcliff Street
+		</HeaderLine>
+		<HeaderLine>
+			Bristol
+		</HeaderLine>
+		<HeaderLine>
+			BS1 6NP
+		</HeaderLine>
+	</Office>
+	<Office>
+		<title>
+			Taunton
+		</title>
+		<HeaderLine>
+			Milsted Langdon LLP
+		</HeaderLine>
+		<HeaderLine>
+			Winchester House
+		</HeaderLine>
+		<HeaderLine>
+			Deane Gate Avenue
+		</HeaderLine>
+		<HeaderLine>
+			Taunton
+		</HeaderLine>
+		<HeaderLine>
+			TA1 2UH
+		</HeaderLine>
+		<FooterLine>
+			Also in Bath, Bristol and Yeovil
+		</FooterLine>
+	</Office>
+	<Footer>
+		<title>
+			Milsted Langdon
+		</title>
+		<FooterLine>
+			Disclaimer
+		</FooterLine>
+		<FooterLine>
+			More disclaimers
+		</FooterLine>
+	</Footer>
+	<Footer>
+		<title>
+			Insolvency
+		</title>
+		<FooterLine>
+			Disclaimer (Insol)
+		</FooterLine>
+		<FooterLine>
+			More disclaimers (Insol)
+		</FooterLine>
+	</Footer>
+	<VCReferences>
+		<Status>
+			Index01
+		</Status>
+		<Client>
+			Section01
+		</Client>
+	</VCReferences>
+</XLantWordAddin>
+	
