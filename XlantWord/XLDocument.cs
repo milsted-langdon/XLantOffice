@@ -927,11 +927,8 @@ namespace XlantWord
             
             string office = "";
             Header header = new Header();
-            long startPosition = currentDoc.Content.End;
-            long endPosition = currentDoc.Content.End;
-
-            currentDoc.Range().Copy();
-
+            var tempRange = CopyRangeToWordXML(currentDoc.Range());
+            
             List<PropertyInfo> properties = clients.FirstOrDefault().GetType().GetProperties().ToList();
             
             foreach(XLMain.FPIClient client in clients)
@@ -941,35 +938,35 @@ namespace XlantWord
                     //create a new document and set up the headers
                     app.Documents.Add();
                     UpdateCurrentDoc();
-                    startPosition = currentDoc.Content.Start;
-                    currentDoc.Words.Last.Paste();
+                    Range endRange = currentDoc.Range(currentDoc.Content.End - 1, currentDoc.Content.End - 1);
+                    endRange.InsertXML(tempRange);
                     header = MapHeader(client.office, "GPB");
                     DeployHeader(header);
-                    currentDoc.Range().Copy();
-                    endPosition = currentDoc.Content.End;
+                    tempRange = CopyRangeToWordXML(currentDoc.Range());
                     office = client.office;
                 }
                 else
                 {
-                    //make the start position the previous end position (less a few to catch all)
-                    if (endPosition > 200)
-                    {
-                        startPosition = endPosition - 200;
-                    }
-                    else
-                    {
-                        startPosition = 0;
-                    }
-                    currentDoc.Words.Last.Paste();
-                    endPosition = currentDoc.Content.End;
+                    Range endRange = currentDoc.Range(currentDoc.Content.End - 1, currentDoc.Content.End - 1);
+                    endRange.InsertXML(tempRange);
                 }
-                Range currentRange = currentDoc.Range(startPosition, endPosition);
+                Range currentRange = currentDoc.Range();
 
                 UpdateFieldsFromRange(currentRange, client, properties);
                 
                 currentDoc.Words.Last.InsertBreak(WdBreakType.wdSectionBreakNextPage);
             }
-            Clipboard.Clear();
+        }
+
+        /// <summary>
+        /// Takes the range and copies the data into an xml string for use later on
+        /// </summary>
+        /// <param name="range">The range of the document you want a copy of</param>
+        /// <returns>A string of XML format</returns>
+        public static string CopyRangeToWordXML(Range range)
+        {
+            string xml = range.WordOpenXML;
+            return xml;
         }
 
         /// <summary>

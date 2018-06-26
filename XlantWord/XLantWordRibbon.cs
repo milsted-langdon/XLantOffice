@@ -725,5 +725,20 @@ namespace XlantWord
                 } 
             }
         }
+
+        private void InvoiceBtn_Click(object sender, RibbonControlEventArgs e)
+        {
+            XLForms.ClientForm clientForm = new XLForms.ClientForm();
+            clientForm.ShowDialog();
+
+            if (clientForm.selectedClient != null)
+            {
+                XLMain.Client client = clientForm.selectedClient;
+                XLMain.FPIClient fpiClient = XLMain.FPIClient.GetFPIClientInvoice(client);
+                List<XLMain.FPIClient> clientList = new List<XLMain.FPIClient>();
+                clientList.Add(fpiClient);
+                XLDocument.MergeFPIData(clientList.OrderBy(c => c.office).ToList());
+            }
+        }
     }
 }

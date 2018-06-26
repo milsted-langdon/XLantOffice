@@ -813,6 +813,53 @@ namespace XLant
 
         public class FPIClient : Client
         {
+
+            public FPIClient()
+            {
+            
+            }
+
+            public FPIClient(DataRow row)
+            {
+                crmID = row["id"].ToString();
+                clientcode = row["clientcode"].ToString();
+                name = row["Lead_Name"].ToString();
+                type = row["client_type"].ToString();
+                office = row["office"].ToString();
+                Manager = row["manager"].ToString();
+                ManagerRole = row["ManagerRole"].ToString();
+                Mgr = row["Mgr"].ToString();
+                Username = row["manager_user"].ToString();
+                Ptr = row["Ptr"].ToString();
+                addresses = new List<Address>();
+                addresses.Add(new Address(true, row["Add1"].ToString(), row["Add2"].ToString(), row["Add3"].ToString(), row["Add4"].ToString(), "", row["Postcode"].ToString()));
+                Address = addresses.FirstOrDefault().addressBlock;
+                Salutation = row["Salutation"].ToString();
+                Addressee = row["Addressee"].ToString();
+                DirectDebit = Boolean.Parse(row["direct_debit"].ToString());
+                ddref1 = clientcode.Substring(0, 1);
+                ddref2 = clientcode.Substring(1, 1);
+                ddref3 = clientcode.Substring(2, 1);
+                ddref4 = clientcode.Substring(3, 1);
+                ddref5 = clientcode.Substring(4, 1);
+                ddref6 = clientcode.Substring(5, 1);
+                LastYear = Boolean.Parse(row["last_year"].ToString());
+                decimal premium = 0;
+                if (decimal.TryParse(row["TotalPremium"].ToString(), out premium))
+                {
+                    TotalPremium = premium;
+                }
+                else
+                {
+                    TotalPremium = 0;
+                }
+                InvoiceLines = row["InvoiceLines"].ToString();
+                Email = row["email"].ToString();
+                if (Addressee != name)
+                {
+                    Addressee = Addressee + Environment.NewLine + name;
+                }
+            }
             public decimal TotalPremium { get; set; }
             public bool DirectDebit { get; set; }
             public string ddref1 { get; set; }
@@ -849,50 +896,11 @@ namespace XLant
                     query += " " + additionalQuery;
                 }
                 DataTable xlReader = XLSQL.ReturnTable(query);
-                decimal premium = 0;
-
                 if (xlReader != null)
                 {
                     for (int i = 0; i < xlReader.Rows.Count; i++)
                     {
-                        FPIClient client = new FPIClient();
-                        client.crmID = xlReader.Rows[i]["id"].ToString();
-                        client.clientcode = xlReader.Rows[i]["clientcode"].ToString();
-                        client.name = xlReader.Rows[i]["Lead_Name"].ToString();
-                        client.type = xlReader.Rows[i]["client_type"].ToString();
-                        client.office = xlReader.Rows[i]["office"].ToString();
-                        client.Manager = xlReader.Rows[i]["manager"].ToString();
-                        client.ManagerRole = xlReader.Rows[i]["ManagerRole"].ToString();
-                        client.Mgr = xlReader.Rows[i]["Mgr"].ToString();
-                        client.Username = xlReader.Rows[i]["manager_user"].ToString();
-                        client.Ptr = xlReader.Rows[i]["Ptr"].ToString();
-                        client.addresses = new List<Address>();
-                        client.addresses.Add(new Address(true, xlReader.Rows[i]["Add1"].ToString(), xlReader.Rows[i]["Add2"].ToString(), xlReader.Rows[i]["Add3"].ToString(), xlReader.Rows[i]["Add4"].ToString(), "", xlReader.Rows[i]["Postcode"].ToString()));
-                        client.Address = client.addresses.FirstOrDefault().addressBlock;
-                        client.Salutation = xlReader.Rows[i]["Salutation"].ToString();
-                        client.Addressee = xlReader.Rows[i]["Addressee"].ToString();
-                        client.DirectDebit = Boolean.Parse(xlReader.Rows[i]["direct_debit"].ToString());
-                        client.ddref1 = client.clientcode.Substring(0, 1);
-                        client.ddref2 = client.clientcode.Substring(1, 1);
-                        client.ddref3 = client.clientcode.Substring(2, 1);
-                        client.ddref4 = client.clientcode.Substring(3, 1);
-                        client.ddref5 = client.clientcode.Substring(4, 1);
-                        client.ddref6 = client.clientcode.Substring(5, 1);
-                        client.LastYear = Boolean.Parse(xlReader.Rows[i]["last_year"].ToString());
-                        if (decimal.TryParse(xlReader.Rows[i]["TotalPremium"].ToString(), out premium))
-                        {
-                            client.TotalPremium = premium;
-                        }
-                        else
-                        {
-                            client.TotalPremium = 0;
-                        }
-                        client.InvoiceLines = xlReader.Rows[i]["InvoiceLines"].ToString();
-                        client.Email = xlReader.Rows[i]["email"].ToString();
-                        if (client.Addressee == client.name)
-                        {
-                            client.Addressee = " ";
-                        }
+                        FPIClient client = new FPIClient(xlReader.Rows[i]);
                         list.Add(client);
                     } 
                 }
@@ -905,9 +913,14 @@ namespace XLant
                 list = GetFPIClients(client.manager.crmID, "where clientcode = '" + client.clientcode + "'");
                 return list;
             }
-        }
 
-        
+            public static FPIClient GetFPIClientInvoice(Client client)
+            {
+                DataTable table = XLSQL.ReturnTable("select * from FPIInvoice('" + client.clientcode + "')");
+                FPIClient fpiClient = new FPIClient(table.Rows[0]);
+                return fpiClient;
+            }
+        }
 
         public static string DiscoverType(string crmID)
         {

@@ -41,7 +41,7 @@
     <PublishUrl>\\taunton-fs1\Information Technology\XLant\publish\Word\</PublishUrl>
     <InstallUrl />
     <TargetCulture>en</TargetCulture>
-    <ApplicationVersion>1.8.0.0</ApplicationVersion>
+    <ApplicationVersion>1.8.1.0</ApplicationVersion>
     <AutoIncrementApplicationRevision>false</AutoIncrementApplicationRevision>
     <UpdateEnabled>true</UpdateEnabled>
     <UpdateInterval>7</UpdateInterval>

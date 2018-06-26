@@ -73,6 +73,7 @@
             this.Merge2Btn = this.Factory.CreateRibbonButton();
             this.Merge3Btn = this.Factory.CreateRibbonButton();
             this.Merge4Btn = this.Factory.CreateRibbonButton();
+            this.InvoiceBtn = this.Factory.CreateRibbonButton();
             this.XLantDataTab.SuspendLayout();
             this.group1.SuspendLayout();
             this.group2.SuspendLayout();
@@ -80,7 +81,6 @@
             this.Signature.SuspendLayout();
             this.group3.SuspendLayout();
             this.FPI.SuspendLayout();
-            this.SuspendLayout();
             // 
             // XLantDataTab
             // 
@@ -385,6 +385,7 @@
             this.FPI.Items.Add(this.Merge2Btn);
             this.FPI.Items.Add(this.Merge3Btn);
             this.FPI.Items.Add(this.Merge4Btn);
+            this.FPI.Items.Add(this.InvoiceBtn);
             this.FPI.Label = "FPI";
             this.FPI.Name = "FPI";
             // 
@@ -412,6 +413,12 @@
             this.Merge4Btn.Name = "Merge4Btn";
             this.Merge4Btn.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.Merge4Btn_Click);
             // 
+            // InvoiceBtn
+            // 
+            this.InvoiceBtn.Label = "Merge Invoice";
+            this.InvoiceBtn.Name = "InvoiceBtn";
+            this.InvoiceBtn.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.InvoiceBtn_Click);
+            // 
             // XLantWordRibbon
             // 
             this.Name = "XLantWordRibbon";
@@ -432,7 +439,6 @@
             this.group3.PerformLayout();
             this.FPI.ResumeLayout(false);
             this.FPI.PerformLayout();
-            this.ResumeLayout(false);
 
         }
 
@@ -477,6 +483,7 @@
         internal Microsoft.Office.Tools.Ribbon.RibbonButton Merge2Btn;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton Merge3Btn;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton Merge4Btn;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton InvoiceBtn;
     }
 
     partial class ThisRibbonCollection
