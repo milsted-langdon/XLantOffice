@@ -924,10 +924,12 @@ namespace XlantWord
         public static void MergeFPIData(List<XLMain.FPIClient> clients)
         {
             UpdateCurrentDoc();
-            
             string office = "";
             Header header = new Header();
+            long startPosition = currentDoc.Content.Start;
+            long endPosition = currentDoc.Content.End;
             var tempRange = CopyRangeToWordXML(currentDoc.Range());
+            long letterLength = endPosition - startPosition;
             
             List<PropertyInfo> properties = clients.FirstOrDefault().GetType().GetProperties().ToList();
             
@@ -938,23 +940,34 @@ namespace XlantWord
                     //create a new document and set up the headers
                     app.Documents.Add();
                     UpdateCurrentDoc();
+                    startPosition = 0;
                     Range endRange = currentDoc.Range(currentDoc.Content.End - 1, currentDoc.Content.End - 1);
                     endRange.InsertXML(tempRange);
                     header = MapHeader(client.office, "GPB");
                     DeployHeader(header);
                     tempRange = CopyRangeToWordXML(currentDoc.Range());
+                    endPosition = currentDoc.Content.End - 1;
                     office = client.office;
                 }
                 else
                 {
+                    //make the start position the previous end position (less a few to catch all)
+                    if (endPosition > letterLength)
+                    {
+                        startPosition = endPosition - letterLength;
+                    }
+                    else
+                    {
+                        startPosition = 0;
+                    }
+                    currentDoc.Words.Last.InsertBreak(WdBreakType.wdSectionBreakNextPage);
                     Range endRange = currentDoc.Range(currentDoc.Content.End - 1, currentDoc.Content.End - 1);
                     endRange.InsertXML(tempRange);
+                    endPosition = currentDoc.Content.End-1;
                 }
-                Range currentRange = currentDoc.Range();
+                Range currentRange = currentDoc.Range(startPosition, endPosition);
 
                 UpdateFieldsFromRange(currentRange, client, properties);
-                
-                currentDoc.Words.Last.InsertBreak(WdBreakType.wdSectionBreakNextPage);
             }
         }
 
