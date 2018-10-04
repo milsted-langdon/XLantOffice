@@ -1,4 +1,4 @@
-﻿namespace XlantWord
+namespace XlantWord
 {
     partial class PrintForm
     {
@@ -67,7 +67,8 @@
             this.PaperDDL.FormattingEnabled = true;
             this.PaperDDL.Items.AddRange(new object[] {
             "Plain",
-            "Headed & Continuation"});
+            "Headed & Continuation",
+            "Continuation"});
             this.PaperDDL.Location = new System.Drawing.Point(126, 66);
             this.PaperDDL.Name = "PaperDDL";
             this.PaperDDL.Size = new System.Drawing.Size(236, 21);

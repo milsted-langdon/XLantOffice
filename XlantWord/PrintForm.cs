@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -72,6 +72,13 @@ namespace XlantWord
                         currentDoc.PageSetup.FirstPageTray = GetTray(printer, "headed");
                         currentDoc.PageSetup.OtherPagesTray = GetTray(printer, "continuation");
                     }
+                }
+                else if (paper == "continuation")
+                {
+
+                        currentDoc.PageSetup.FirstPageTray = GetTray(printer, "continuation");
+                        currentDoc.PageSetup.OtherPagesTray = GetTray(printer, "continuation");
+                    
                 }
                 else
                 {
