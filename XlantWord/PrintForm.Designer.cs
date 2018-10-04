@@ -34,6 +34,7 @@ namespace XlantWord
             this.PaperDDL = new System.Windows.Forms.ComboBox();
             this.PrintBtn = new System.Windows.Forms.Button();
             this.AdvPrintBtn = new System.Windows.Forms.Button();
+            this.PageSetup = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label1
@@ -94,6 +95,16 @@ namespace XlantWord
             this.AdvPrintBtn.Text = "Advanced...";
             this.AdvPrintBtn.UseVisualStyleBackColor = true;
             this.AdvPrintBtn.Click += new System.EventHandler(this.AdvPrintBtn_Click);
+            // 
+            // PageSetup
+            // 
+            this.PageSetup.Location = new System.Drawing.Point(126, 114);
+            this.PageSetup.Name = "PageSetup";
+            this.PageSetup.Size = new System.Drawing.Size(122, 23);
+            this.PageSetup.TabIndex = 6;
+            this.PageSetup.Text = "Page Setup";
+            this.PageSetup.UseVisualStyleBackColor = true;
+            this.PageSetup.Click += new System.EventHandler(this.PageSetup_Click);
             // 
             // PrintForm
             // 

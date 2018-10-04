@@ -175,6 +175,12 @@ namespace XlantWord
 
         }
 
+         private void PageSetup_Click(object sender, EventArgs e)
+        {
+            Globals.ThisAddIn.Application.Dialogs[WdWordDialog.wdDialogFilePageSetup].Show();
+            this.Close();
+        }
+
         
     }
 }
