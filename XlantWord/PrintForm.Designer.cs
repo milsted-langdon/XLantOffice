@@ -132,5 +132,6 @@ namespace XlantWord
         private System.Windows.Forms.ComboBox PaperDDL;
         private System.Windows.Forms.Button PrintBtn;
         private System.Windows.Forms.Button AdvPrintBtn;
+        private System.Windows.Forms.Button PageSetup;
     }
 }
