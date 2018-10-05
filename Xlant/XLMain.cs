@@ -857,7 +857,11 @@ namespace XLant
                 Email = row["email"].ToString();
                 if (Addressee != name)
                 {
-                    Addressee = Addressee + Environment.NewLine + name;
+                    AddresseeBlock = Addressee + Environment.NewLine + name;
+                }
+                else
+                {
+                    AddresseeBlock = name;
                 }
             }
             public decimal TotalPremium { get; set; }
@@ -875,6 +879,7 @@ namespace XLant
             public string Mgr { get; set; }
             public string Ptr { get; set; }
             public string Address { get; set; }
+            public string AddresseeBlock { get; set; }
             public string Addressee { get; set; }
             public string Salutation { get; set; }
             public string Username { get; set; }
@@ -886,7 +891,7 @@ namespace XLant
             /// <param name="managerCRMId">THe Id of the manager</param>
             /// <param name="additionalQuery">Allows you to filter the list at the sql end format "where x = y"</param>
             /// <returns>The populated list of clients</returns>
-            public static List<FPIClient> GetFPIClients(string managerCRMId, string additionalQuery = null)
+            public static List<FPIClient> GetFPIClients(string managerCRMId, string additionalQuery = null, bool domestic = true)
             {
                 List<FPIClient> list = new List<FPIClient>();
                 Staff manager = Staff.FetchStaff(managerCRMId);
@@ -894,6 +899,23 @@ namespace XLant
                 if (additionalQuery != null)
                 {
                     query += " " + additionalQuery;
+                }
+                if (query.Contains("where"))
+                {
+                    query += " and";
+                }
+                else
+                {
+                    query += " where";
+                }
+                if(domestic)
+                {
+                    
+                    query += " (isnull(add4,'') = '' or add4 in ('UK', 'United Kingdom', 'England', 'Wales', 'Scotland', 'Northern Ireland', 'GB', 'NULL', ' '))";
+                }
+                else
+                {
+                    query += " (isnull(add4,'') != '' and add4 not in ('UK', 'United Kingdom', 'England', 'Wales', 'Scotland', 'Northern Ireland', 'GB', 'NULL', ' '))";
                 }
                 DataTable xlReader = XLSQL.ReturnTable(query);
                 if (xlReader != null)

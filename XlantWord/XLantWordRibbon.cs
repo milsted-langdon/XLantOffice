@@ -654,15 +654,27 @@ namespace XlantWord
             staffForm.ShowDialog();
             if (staffForm.selectedStaff != null)
             {
+                Document currentDoc = XLDocument.GetCurrentDoc();
+                long startPosition = currentDoc.Content.Start;
+                long endPosition = currentDoc.Content.End;
+                string templateXML = XLDocument.CopyRangeToWordXML(currentDoc.Range());
                 List<XLMain.FPIClient> clients = XLMain.FPIClient.GetFPIClients(staffForm.selectedStaff.crmID, "where Last_year = 0");
-                clients = clients.Where(c => c.LastYear == false).ToList();
                 if (clients.Count > 0)
                 {
-                    XLDocument.MergeFPIData(clients.OrderBy(c => c.office).ToList());
+                    XLDocument.MergeFPIData(clients.OrderBy(c => c.office).ToList(), templateXML);
                 }
                 else
                 {
                     MessageBox.Show("No clients founds to merge.");
+                }
+                clients = XLMain.FPIClient.GetFPIClients(staffForm.selectedStaff.crmID, "where Last_year = 0", false);
+                if (clients.Count > 0)
+                {
+                    XLDocument.MergeFPIData(clients.OrderBy(c => c.office).ToList(), templateXML);
+                }
+                else
+                {
+                    MessageBox.Show("No foreign clients founds to merge.");
                 }
             }
         }
@@ -671,19 +683,27 @@ namespace XlantWord
         {
             XLForms.StaffSelectForm staffForm = new XLForms.StaffSelectForm();
             staffForm.ShowDialog();
-
-            if (staffForm.selectedStaff != null)
+            Document currentDoc = XLDocument.GetCurrentDoc();
+            long startPosition = currentDoc.Content.Start;
+            long endPosition = currentDoc.Content.End;
+            string templateXML = XLDocument.CopyRangeToWordXML(currentDoc.Range());
+            List<XLMain.FPIClient> clients = XLMain.FPIClient.GetFPIClients(staffForm.selectedStaff.crmID, "where direct_debit = 1 and Last_year = 1");
+            if (clients.Count > 0)
             {
-                List<XLMain.FPIClient> clients = XLMain.FPIClient.GetFPIClients(staffForm.selectedStaff.crmID, "where direct_debit = 1 and Last_year = 1");
-                //clients = clients.Where(c => c.DirectDebit && c.LastYear).ToList();
-                if (clients.Count > 0)
-                {
-                    XLDocument.MergeFPIData(clients.OrderBy(c => c.office).ToList());
-                }
-                else
-                {
-                    MessageBox.Show("No clients founds to merge.");
-                } 
+                XLDocument.MergeFPIData(clients.OrderBy(c => c.office).ToList(), templateXML);
+            }
+            else
+            {
+                MessageBox.Show("No clients founds to merge.");
+            }
+            clients = XLMain.FPIClient.GetFPIClients(staffForm.selectedStaff.crmID, "where direct_debit = 1 and Last_year = 1", false);
+            if (clients.Count > 0)
+            {
+                XLDocument.MergeFPIData(clients.OrderBy(c => c.office).ToList(), templateXML);
+            }
+            else
+            {
+                MessageBox.Show("No foreign clients founds to merge.");
             }
         }
 
@@ -691,18 +711,27 @@ namespace XlantWord
         {
             XLForms.StaffSelectForm staffForm = new XLForms.StaffSelectForm();
             staffForm.ShowDialog();
-            if (staffForm.selectedStaff != null)
+            Document currentDoc = XLDocument.GetCurrentDoc();
+            long startPosition = currentDoc.Content.Start;
+            long endPosition = currentDoc.Content.End;
+            string templateXML = XLDocument.CopyRangeToWordXML(currentDoc.Range());
+            List<XLMain.FPIClient> clients = XLMain.FPIClient.GetFPIClients(staffForm.selectedStaff.crmID, "where direct_debit = 0 and Last_year = 1");
+            if (clients.Count > 0)
             {
-                List<XLMain.FPIClient> clients = XLMain.FPIClient.GetFPIClients(staffForm.selectedStaff.crmID, "where direct_debit = 0 and Last_year = 1");
-                //clients = clients.Where(c => c.DirectDebit == false && c.LastYear).ToList();
-                if (clients.Count > 0)
-                {
-                    XLDocument.MergeFPIData(clients.OrderBy(c => c.office).ToList());
-                }
-                else
-                {
-                    MessageBox.Show("No clients founds to merge.");
-                } 
+                XLDocument.MergeFPIData(clients.OrderBy(c => c.office).ToList(), templateXML);
+            }
+            else
+            {
+                MessageBox.Show("No clients founds to merge.");
+            }
+            clients = XLMain.FPIClient.GetFPIClients(staffForm.selectedStaff.crmID, "where direct_debit = 0 and Last_year = 1", false);
+            if (clients.Count > 0)
+            {
+                XLDocument.MergeFPIData(clients.OrderBy(c => c.office).ToList(), templateXML);
+            }
+            else
+            {
+                MessageBox.Show("No foreign clients founds to merge.");
             }
         }
 

@@ -74,6 +74,12 @@ namespace XlantWord
             currentDoc = Globals.ThisAddIn.Application.ActiveDocument;
         }
 
+        public static Document GetCurrentDoc()
+        {
+            currentDoc = Globals.ThisAddIn.Application.ActiveDocument;
+            return currentDoc;
+        }
+
         public static void UpdateCurrentView()
         {
             currentView = Globals.ThisAddIn.Application.ActiveWindow.View;
@@ -921,14 +927,23 @@ namespace XlantWord
         /// Merge an FPI list of clients into the current active document
         /// </summary>
         /// <param name="clients">The list of FPIClients you want to merge</param>
-        public static void MergeFPIData(List<XLMain.FPIClient> clients)
+        public static void MergeFPIData(List<XLMain.FPIClient> clients, string templateXML = null)
         {
             UpdateCurrentDoc();
             string office = "";
+            string tempXML = "";
             Header header = new Header();
             long startPosition = currentDoc.Content.Start;
             long endPosition = currentDoc.Content.End;
-            var tempRange = CopyRangeToWordXML(currentDoc.Range());
+            if(templateXML == null)
+            {
+                tempXML = CopyRangeToWordXML(currentDoc.Range());
+            }
+            else
+            {
+                tempXML = templateXML;
+            }
+                       
             long letterLength = endPosition - startPosition;
             
             List<PropertyInfo> properties = clients.FirstOrDefault().GetType().GetProperties().ToList();
@@ -942,10 +957,10 @@ namespace XlantWord
                     UpdateCurrentDoc();
                     startPosition = 0;
                     Range endRange = currentDoc.Range(currentDoc.Content.End - 1, currentDoc.Content.End - 1);
-                    endRange.InsertXML(tempRange);
+                    endRange.InsertXML(tempXML);
                     header = MapHeader(client.office, "GPB");
                     DeployHeader(header);
-                    tempRange = CopyRangeToWordXML(currentDoc.Range());
+                    tempXML = CopyRangeToWordXML(currentDoc.Range());
                     endPosition = currentDoc.Content.End - 1;
                     office = client.office;
                 }
@@ -962,7 +977,7 @@ namespace XlantWord
                     }
                     currentDoc.Words.Last.InsertBreak(WdBreakType.wdSectionBreakNextPage);
                     Range endRange = currentDoc.Range(currentDoc.Content.End - 1, currentDoc.Content.End - 1);
-                    endRange.InsertXML(tempRange);
+                    endRange.InsertXML(tempXML);
                     endPosition = currentDoc.Content.End-1;
                 }
                 Range currentRange = currentDoc.Range(startPosition, endPosition);
