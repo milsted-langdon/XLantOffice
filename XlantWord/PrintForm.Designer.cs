@@ -1,4 +1,4 @@
-﻿namespace XlantWord
+namespace XlantWord
 {
     partial class PrintForm
     {
@@ -34,6 +34,7 @@
             this.PaperDDL = new System.Windows.Forms.ComboBox();
             this.PrintBtn = new System.Windows.Forms.Button();
             this.AdvPrintBtn = new System.Windows.Forms.Button();
+            this.PageSetup = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label1
@@ -67,7 +68,8 @@
             this.PaperDDL.FormattingEnabled = true;
             this.PaperDDL.Items.AddRange(new object[] {
             "Plain",
-            "Headed & Continuation"});
+            "Headed & Continuation",
+            "Continuation"});
             this.PaperDDL.Location = new System.Drawing.Point(126, 66);
             this.PaperDDL.Name = "PaperDDL";
             this.PaperDDL.Size = new System.Drawing.Size(236, 21);
@@ -93,6 +95,16 @@
             this.AdvPrintBtn.Text = "Advanced...";
             this.AdvPrintBtn.UseVisualStyleBackColor = true;
             this.AdvPrintBtn.Click += new System.EventHandler(this.AdvPrintBtn_Click);
+            // 
+            // PageSetup
+            // 
+            this.PageSetup.Location = new System.Drawing.Point(126, 114);
+            this.PageSetup.Name = "PageSetup";
+            this.PageSetup.Size = new System.Drawing.Size(122, 23);
+            this.PageSetup.TabIndex = 6;
+            this.PageSetup.Text = "Page Setup";
+            this.PageSetup.UseVisualStyleBackColor = true;
+            this.PageSetup.Click += new System.EventHandler(this.PageSetup_Click);
             // 
             // PrintForm
             // 
@@ -120,5 +132,6 @@
         private System.Windows.Forms.ComboBox PaperDDL;
         private System.Windows.Forms.Button PrintBtn;
         private System.Windows.Forms.Button AdvPrintBtn;
+        private System.Windows.Forms.Button PageSetup;
     }
 }
