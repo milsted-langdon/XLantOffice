@@ -112,6 +112,7 @@ namespace XlantWord
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(383, 150);
             this.Controls.Add(this.AdvPrintBtn);
+            this.Controls.Add(this.PageSetup);
             this.Controls.Add(this.PrintBtn);
             this.Controls.Add(this.PaperDDL);
             this.Controls.Add(this.label2);

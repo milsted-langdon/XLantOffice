@@ -155,10 +155,10 @@
     <SignManifests>true</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>XLantOutlook_2_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestKeyFile>XLantOutlook_3_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>82BCDDD2A9E046D89009728B3CE09C54B83244C8</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>319A7CC4DB09C7B606FFEBD2C20C8EE41FA69B5A</ManifestCertificateThumbprint>
   </PropertyGroup>
   <!--
     This section specifies references for the project.
@@ -270,6 +270,7 @@
     <AppDesigner Include="Properties\" />
     <None Include="XLantOutlook_1_TemporaryKey.pfx" />
     <None Include="XLantOutlook_2_TemporaryKey.pfx" />
+    <None Include="XLantOutlook_3_TemporaryKey.pfx" />
     <None Include="XLantOutlook_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>

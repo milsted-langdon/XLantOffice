@@ -797,21 +797,21 @@ namespace XLantOutlook
                 //strip out the field
                 if (property != null && (fileId == null || fileId == ""))
                 {
-                    MessageBox.Show(property.Name + ":" + property.Value);
+                    //MessageBox.Show(property.Name + ":" + property.Value);
                     property.Delete();
-                    MessageBox.Show("Deleted");
+                    //MessageBox.Show("Deleted");
                 }
                 XLOutlook.UpdateParameter("VCFileID", "", email);
                 //for testing purposes try it again to make sure it is gone
-                property = properties.Cast<Outlook.ItemProperty>().Where(c => c.Name == "In Virtual Cabinet").FirstOrDefault();
-                if (property == null)
-                {
-                    MessageBox.Show("Gone");
-                }
-                else
-                {
-                    MessageBox.Show(property.Name + ":" + property.Value);
-                }
+                //property = properties.Cast<Outlook.ItemProperty>().Where(c => c.Name == "In Virtual Cabinet").FirstOrDefault();
+                //if (property == null)
+                //{
+                //    MessageBox.Show("Gone");
+                //}
+                //else
+                //{
+                //    MessageBox.Show(property.Name + ":" + property.Value);
+                //}
             }
             catch (Exception ex)
             {

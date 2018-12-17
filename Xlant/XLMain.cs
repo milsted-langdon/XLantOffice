@@ -616,7 +616,11 @@ namespace XLant
                     {
                         foreach (DataRow row in xlReader.Rows)
                         {
-                            emails.Add(new EmailAddress(row["crmid"].ToString(), row["email"].ToString(), row["email"].ToString(), Convert.ToBoolean(row["isprimary"].ToString()), Convert.ToBoolean(row["donotmail"].ToString())));
+                            string crmid = row["crmid"].ToString();
+                            string email = row["email"].ToString();
+                            bool isPrimary = Convert.ToBoolean(row["isprimary"]);
+                            bool doNotMail = Convert.ToBoolean(row["donotmail"]);
+                            emails.Add(new EmailAddress(crmid, email, email, isPrimary, doNotMail));
                         }
                     }
                     return emails;
