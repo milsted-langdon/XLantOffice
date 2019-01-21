@@ -636,7 +636,8 @@ namespace XlantWord
                 if (!currentDoc.Bookmarks.Exists("Status"))
                 {
                     textBox = currentDoc.Shapes.AddTextbox(MsoTextOrientation.msoTextOrientationHorizontal, 400, 50, 100, 50);
-                    textBox.Line.Visible = 0;
+                    textBox.Line.Visible = MsoTriState.msoFalse;
+                    textBox.Name = "MLStatus";
                     textBox.TextFrame.TextRange.Text = "Status";
                     textBox.TextFrame.TextRange.Font.Hidden = 1;
                     textBox.TextFrame.TextRange.Font.Italic = 1;

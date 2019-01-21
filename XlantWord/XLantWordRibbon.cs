@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using XLant;
 using XLForms;
 using System.Xml.Linq;
+using Microsoft.Office.Core;
 
 namespace XlantWord
 {
@@ -52,15 +53,27 @@ namespace XlantWord
 
         private void ShowHiddenBtn_Click(object sender, RibbonControlEventArgs e)
         {
-            Microsoft.Office.Interop.Word.View currentView = XLDocument.currentView;
-
-            if (currentView.ShowHiddenText)
+            Microsoft.Office.Interop.Word._Application app = Globals.ThisAddIn.Application;
+            Microsoft.Office.Interop.Word.Shape tBox;
+            Microsoft.Office.Interop.Word.View currentView = app.ActiveWindow.View;
+            
+            foreach (Microsoft.Office.Interop.Word.Shape s in app.ActiveDocument.Shapes)
             {
-                currentView.ShowHiddenText = false;
-            }
-            else
-            {
-                currentView.ShowHiddenText = true;
+                if(s.Name == "MLStatus")
+                {
+                    tBox = s;
+                    if (tBox.Visible == MsoTriState.msoTrue)
+                    {
+                        tBox.Visible = MsoTriState.msoFalse;
+                        currentView.ShowHiddenText = false;
+                    }
+                    else
+                    {
+                        tBox.Visible = MsoTriState.msoTrue;
+                        currentView.ShowHiddenText = true;
+                    }
+                    break;
+                }
             }
         }
 
