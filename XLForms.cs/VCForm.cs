@@ -139,6 +139,7 @@ namespace XLForms
                     list1 = lists[0];
                     Listlabel1.Text = list1.name;
                     ListDDL1.DataSource = list1.items;
+                    ListDDL1.SelectedItem = null;
 
                     Listlabel1.Visible = true;
                     ListDDL1.Visible = true;
