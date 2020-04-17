@@ -47,11 +47,6 @@ namespace XlantWord
                 string printer = (string)PrinterDDL.SelectedItem;
                 string paper = ((string)PaperDDL.SelectedItem).ToLower();
                 
-                ////Set the section start to handle mail merges
-                //if (MailMergeCheck.Checked == true)
-                //{
-                //    currentDoc.PageSetup.SectionStart = WdSectionStart.wdSectionNewPage;
-                //}
                 
                 //set printer trays based on input and obtain id from XML
                 if (paper == "headed & continuation")

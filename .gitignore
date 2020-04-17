@@ -187,3 +187,7 @@ FakesAssemblies/
 GeneratedArtifacts/
 _Pvt_Extensions/
 ModelManifest.xml
+/.vs/XlantOffice/v16/Server/sqlite3/db.lock
+/.vs/XlantOffice/v16/Server/sqlite3/storage.ide
+/.vs/XlantOffice/v16/Server/sqlite3/storage.ide-shm
+/.vs/XlantOffice/v16/Server/sqlite3/storage.ide-wal

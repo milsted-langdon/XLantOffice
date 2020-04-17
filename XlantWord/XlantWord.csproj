@@ -41,7 +41,7 @@
     <PublishUrl>\\taunton-fs1\Information Technology\XLant\publish\Word\</PublishUrl>
     <InstallUrl />
     <TargetCulture>en</TargetCulture>
-    <ApplicationVersion>1.8.3.5</ApplicationVersion>
+    <ApplicationVersion>1.8.4.0</ApplicationVersion>
     <AutoIncrementApplicationRevision>false</AutoIncrementApplicationRevision>
     <UpdateEnabled>true</UpdateEnabled>
     <UpdateInterval>7</UpdateInterval>
@@ -278,6 +278,7 @@
     <None Include="XlantWord_4_TemporaryKey.pfx" />
     <None Include="XlantWord_5_TemporaryKey.pfx" />
     <None Include="XlantWord_6_TemporaryKey.pfx" />
+    <None Include="XlantWord_7_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
@@ -300,10 +301,10 @@
     <SignManifests>true</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>XlantWord_6_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestKeyFile>XlantWord_7_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>2F14133542E906DAF58410809A747724773B21FE</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>9B86E3C0BBB8A7151C41C0E3AFDB5DF717BA8F6E</ManifestCertificateThumbprint>
   </PropertyGroup>
   <!-- Include the build rules for a C# project. -->
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

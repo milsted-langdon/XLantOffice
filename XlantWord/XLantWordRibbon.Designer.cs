@@ -63,7 +63,8 @@
             this.SigViewBtn = this.Factory.CreateRibbonButton();
             this.group3 = this.Factory.CreateRibbonGroup();
             this.TempSaveBtn = this.Factory.CreateRibbonButton();
-            this.MLPdfBtn = this.Factory.CreateRibbonButton();
+            this.PdfBtn = this.Factory.CreateRibbonSplitButton();
+            this.pdfAttachmentsBtn = this.Factory.CreateRibbonButton();
             this.PrintBtn = this.Factory.CreateRibbonButton();
             this.HeaderFooterBtn = this.Factory.CreateRibbonButton();
             this.StyleBtn = this.Factory.CreateRibbonButton();
@@ -81,6 +82,7 @@
             this.Signature.SuspendLayout();
             this.group3.SuspendLayout();
             this.FPI.SuspendLayout();
+            this.SuspendLayout();
             // 
             // XLantDataTab
             // 
@@ -322,7 +324,7 @@
             // group3
             // 
             this.group3.Items.Add(this.TempSaveBtn);
-            this.group3.Items.Add(this.MLPdfBtn);
+            this.group3.Items.Add(this.PdfBtn);
             this.group3.Items.Add(this.PrintBtn);
             this.group3.Items.Add(this.HeaderFooterBtn);
             this.group3.Items.Add(this.StyleBtn);
@@ -341,15 +343,22 @@
             this.TempSaveBtn.ShowImage = true;
             this.TempSaveBtn.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.TempSaveBtn_Click);
             // 
-            // MLPdfBtn
+            // PdfBtn
             // 
-            this.MLPdfBtn.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
-            this.MLPdfBtn.Description = "Create a ML Headed Pdf";
-            this.MLPdfBtn.Label = "ML Pdf";
-            this.MLPdfBtn.Name = "MLPdfBtn";
-            this.MLPdfBtn.OfficeImageId = "SendPdf";
-            this.MLPdfBtn.ShowImage = true;
-            this.MLPdfBtn.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.MLPdfBtn_Click);
+            this.PdfBtn.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+            this.PdfBtn.Items.Add(this.pdfAttachmentsBtn);
+            this.PdfBtn.Label = "ML Pdf";
+            this.PdfBtn.Name = "PdfBtn";
+            this.PdfBtn.OfficeImageId = "GroupInk";
+            this.PdfBtn.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.MLPdfBtn_Click);
+            // 
+            // pdfAttachmentsBtn
+            // 
+            this.pdfAttachmentsBtn.Label = "With Attachments";
+            this.pdfAttachmentsBtn.Name = "pdfAttachmentsBtn";
+            this.pdfAttachmentsBtn.ScreenTip = "Create an ML PDF and add attachments to it";
+            this.pdfAttachmentsBtn.ShowImage = true;
+            this.pdfAttachmentsBtn.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.pdfAttachmentsBtn_Click);
             // 
             // PrintBtn
             // 
@@ -439,6 +448,7 @@
             this.group3.PerformLayout();
             this.FPI.ResumeLayout(false);
             this.FPI.PerformLayout();
+            this.ResumeLayout(false);
 
         }
 
@@ -472,7 +482,6 @@
         internal Microsoft.Office.Tools.Ribbon.RibbonGroup Signature;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton button2;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton SigViewBtn;
-        internal Microsoft.Office.Tools.Ribbon.RibbonButton MLPdfBtn;
         internal Microsoft.Office.Tools.Ribbon.RibbonSplitButton ScannedImage;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton MLsignature;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton StaffSig;
@@ -484,6 +493,8 @@
         internal Microsoft.Office.Tools.Ribbon.RibbonButton Merge3Btn;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton Merge4Btn;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton InvoiceBtn;
+        internal Microsoft.Office.Tools.Ribbon.RibbonSplitButton PdfBtn;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton pdfAttachmentsBtn;
     }
 
     partial class ThisRibbonCollection

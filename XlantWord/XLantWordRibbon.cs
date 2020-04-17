@@ -250,8 +250,8 @@ namespace XlantWord
                     str += contact.addresses[0].addressBlock;
                     XLDocument.InsertText(str);
                     //insert the status text box;
-                    XLDocument.AddStatusBox();
-                    XLDocument.ChangeStatus("Draft");
+                    //XLDocument.AddStatusBox();
+                    //XLDocument.ChangeStatus("Draft");
                 }
                 else
                 {
@@ -296,8 +296,8 @@ namespace XlantWord
                     XLDocument.UpdateParameter("Cabinet", fileStore);
                     XLDocument.UpdateParameter("ClientStr", client.clientcode + " - " + client.name);
                     //insert the status text box;
-                    XLDocument.AddStatusBox();
-                    XLDocument.ChangeStatus("Draft");
+                    //XLDocument.AddStatusBox();
+                    //XLDocument.ChangeStatus("Draft");
                 }
                 else
                 {
@@ -470,8 +470,8 @@ namespace XlantWord
                     str += contact.addresses[0].addressBlock;
                     XLDocument.InsertText(str);
                     //insert the status text box;
-                    XLDocument.AddStatusBox();
-                    XLDocument.ChangeStatus("Draft");
+                    //XLDocument.AddStatusBox();
+                    //XLDocument.ChangeStatus("Draft");
                 }
                 else
                 {
@@ -500,8 +500,8 @@ namespace XlantWord
                     string str = selectContact.name + Environment.NewLine;
                     str += selectContact.addressBlock;
                     XLDocument.InsertText(str);
-                    XLDocument.AddStatusBox();
-                    XLDocument.ChangeStatus("Draft");
+                    //XLDocument.AddStatusBox();
+                    //XLDocument.ChangeStatus("Draft");
                 }
                 else
                 {
@@ -781,6 +781,37 @@ namespace XlantWord
                 clientList.Add(fpiClient);
                 XLDocument.MergeFPIData(clientList.OrderBy(c => c.office).ToList());
             }
+        }
+
+        private void pdfAttachmentsBtn_Click(object sender, RibbonControlEventArgs e)
+        {
+            //get available documents
+            List<Tuple<string,string>> attachmentOptions = XLDocument.GetAttachmentFiles();
+            //ask user to check which ones they want
+            XLForms.Attachments attachmentsForm = new XLForms.Attachments(attachmentOptions);
+            attachmentsForm.ShowDialog();
+            List<Tuple<string, string>> selectedDocs = attachmentsForm.selectedDocuments;
+            //get the id for later use and before the original is closed.
+            string fileID = XLDocument.GetFileID();
+            //save the document as a pdf and get location
+            string file = XLDocument.CreatePdf();
+            //close the original, it isn't required any more
+            XLDocument.EndDocument();
+            //add the header and get the location of the new combined file
+            file = XLDocument.AddHeadertoPDF(file);
+            //merge the attachments, if any selected
+            if (selectedDocs.Count != 0)
+            {
+                List<string> docs = new List<string>();
+                docs.Add(file);
+                foreach (Tuple<string, string> tuple in selectedDocs)
+                {
+                    docs.Add(tuple.Item2);
+                }
+                file = XLDocument.AddAttachments(docs);
+            }
+            //index the combined file using the data from the original
+            XLDocument.IndexPDFCopy(file, fileID);
         }
     }
 }

@@ -10,7 +10,7 @@ using System.IO;
 using XLant;
 using System.Diagnostics;
 using System.Reflection;
-
+using System.Net;
 
 namespace XlantWord
 {
@@ -53,7 +53,7 @@ namespace XlantWord
         private static Microsoft.Office.Interop.Word.Application app = Globals.ThisAddIn.Application;
 
         //########################The following declarations and methods are different in .NET 3.5######################//
-        
+
         private static Range CurrentRange()
         {
             //reference to Global replaced with app
@@ -65,7 +65,7 @@ namespace XlantWord
         {
             Document NewDoc = new Document();
             //reference to Global replaced with app
-            NewDoc = Globals.ThisAddIn.Application.Documents.Open(name, ReadOnly: readOnly, AddToRecentFiles: recent, Visible:visible); 
+            NewDoc = Globals.ThisAddIn.Application.Documents.Open(name, ReadOnly: readOnly, AddToRecentFiles: recent, Visible: visible);
             return NewDoc;
         }
 
@@ -84,7 +84,7 @@ namespace XlantWord
         {
             currentView = Globals.ThisAddIn.Application.ActiveWindow.View;
         }
-        
+
         //###################After this point all code is identical in both versions############################//
 
         public static void openTemplate(string type)
@@ -137,20 +137,7 @@ namespace XlantWord
                 if (!Directory.Exists(folder))
                     Directory.CreateDirectory(folder);
 
-                Random rnd = new Random();
-                string filename = DateTime.Now.ToString("yyyy-MM-dd");
-                int id = rnd.Next(1000, 9999); //provides a four digit id
-                filename += "-" + id.ToString();
-                filename += fileType;
-                //If that file already exists try again until it doesn't
-                while (File.Exists(folder + filename))
-                {
-                    filename = DateTime.Now.ToString("yyyy-MM-dd");
-                    id = rnd.Next(1000, 9999); //provides a four digit id
-                    filename += "-" + id.ToString();
-                    filename += fileType;
-                }
-                location = folder + filename;
+                location = TempFileName(folder, fileType);
                 if (fileType == ".docx")
                 {
                     currentDoc.SaveAs(location, WdSaveFormat.wdFormatXMLDocument);
@@ -159,7 +146,7 @@ namespace XlantWord
                 {
                     currentDoc.SaveAs(location, WdSaveFormat.wdFormatPDF);
                 }
-                
+
                 return location;
             }
             catch (Exception e)
@@ -168,6 +155,30 @@ namespace XlantWord
                 XLtools.LogException("TempSave", e.ToString());
                 return null;
             }
+        }
+
+        private static string TempFileName(string folder, string ext)
+        {
+            string location = "";
+            if(!ext.Contains("."))
+            {
+                ext = "." + ext;
+            }
+            Random rnd = new Random();
+            string filename = DateTime.Now.ToString("yyyy-MM-dd");
+            int id = rnd.Next(1000, 9999); //provides a four digit id
+            filename += "-" + id.ToString();
+            filename += ext;
+            //If that file already exists try again until it doesn't
+            while (File.Exists(folder + filename))
+            {
+                filename = DateTime.Now.ToString("yyyy-MM-dd");
+                id = rnd.Next(1000, 9999); //provides a four digit id
+                filename += "-" + id.ToString();
+                filename += ext;
+            }
+            location = folder + filename;
+            return location;
         }
 
         public static void UpdateParameter(string pName, string pValue)
@@ -241,7 +252,7 @@ namespace XlantWord
             }
         }
 
-        public static void UpdateBookmark(string bName, string bValue, int bold=2, string styleName="") 
+        public static void UpdateBookmark(string bName, string bValue, int bold = 2, string styleName = "")
         {
             try
             {
@@ -259,7 +270,7 @@ namespace XlantWord
                     if (bold < 2)
                     {
                         bRange.Bold = bold;
-                    }                
+                    }
                     currentDoc.Bookmarks.Add(bName, bRange);
                 }
             }
@@ -291,7 +302,7 @@ namespace XlantWord
             }
         }
 
-        public static string CheckBookmark(string defaultString, string bName, int bold=2)
+        public static string CheckBookmark(string defaultString, string bName, int bold = 2)
         {
             try
             {
@@ -349,7 +360,7 @@ namespace XlantWord
                 List<Line> fLines = new List<Line>();
 
                 IEnumerable<XElement> xHeadings = settingsDoc.Descendants("Headings");
-                
+
                 foreach (XElement xHeading in xHeadings.Descendants("Heading"))
                 {
                     Header header = new Header();
@@ -403,17 +414,17 @@ namespace XlantWord
                 Header selectedHeader = new Header();
                 List<Line> hLines = new List<Line>();
                 List<Line> fLines = new List<Line>();
-            
+
                 //query the setting files and try to find a match
                 XElement selectedMap = (from map in settingsDoc.Descendants("Map")
-                                                     where (string)map.Attribute("Office") == office.ToUpper() && (string)map.Attribute("Department") == department
-                                                     select map).FirstOrDefault();
+                                        where (string)map.Attribute("Office") == office.ToUpper() && (string)map.Attribute("Department") == department
+                                        select map).FirstOrDefault();
                 if (selectedMap != null)
                 {
                     //find the header with that description
                     XElement foundHeader = (from heading in settingsDoc.Descendants("Heading")
-                                                        where (string)heading.Attribute("Description").Value == selectedMap.Attribute("Header").Value
-                                                        select heading).FirstOrDefault();
+                                            where (string)heading.Attribute("Description").Value == selectedMap.Attribute("Header").Value
+                                            select heading).FirstOrDefault();
                     //then build the object
                     selectedHeader.description = foundHeader.Attribute("Description").Value;
                     selectedHeader.firmname = foundHeader.Attribute("Firm").Value;
@@ -562,7 +573,7 @@ namespace XlantWord
                 rng = currentDoc.Sections[1].Headers[WdHeaderFooterIndex.wdHeaderFooterFirstPage].Range;
                 FormatRange(rng);
 
-            
+
                 //Setting First page footer
                 //First delete and existing footer
                 rng = currentDoc.Sections[1].Footers[WdHeaderFooterIndex.wdHeaderFooterFirstPage].Range;
@@ -597,7 +608,7 @@ namespace XlantWord
 
                 //query the setting files and try to find a match
                 IEnumerable<XElement> xItems = (from item in settingsDoc.Descendants(type)
-                                   select item);
+                                                select item);
                 foreach (XElement xItem in xItems)
                 {
                     items.Add(new ListItem(xItem.ElementValueNull(), xItem.AttributeValueNull("DbTag")));
@@ -617,7 +628,7 @@ namespace XlantWord
             try
             {
                 Microsoft.Office.Interop.Word.Range CurrRange = CurrentRange();
-                CurrRange.Text=text;
+                CurrRange.Text = text;
             }
             catch (Exception e)
             {
@@ -685,7 +696,7 @@ namespace XlantWord
             {
                 XLDocument.UpdateCurrentDoc();
                 string path = StandardLocation() + "Letter.dotx";
-                Document sTemplate = OpenDoc(path, true, false, false );
+                Document sTemplate = OpenDoc(path, true, false, false);
                 //object template = (object)path;
                 currentDoc.set_AttachedTemplate((object)sTemplate);
                 sTemplate.Close(SaveChanges: false);
@@ -705,7 +716,7 @@ namespace XlantWord
             {
                 XLDocument.UpdateCurrentDoc();
                 string fileID = "";
-                
+
                 //Check whether the parameter has already been set
                 fileID = ReadParameter("FileID");
 
@@ -839,6 +850,49 @@ namespace XlantWord
             }
         }
 
+        public static string AddAttachments(List<string> fileStrings)
+        {
+            //create a filelocation for the new file
+            string folder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\XLant\\";
+
+            //build the string of locations of files to merge
+            string inputfiles = "";
+            foreach (string s in fileStrings)
+            {
+                if (s.Contains("http"))
+                {
+                    //download remote files
+                    using (WebClient client = new WebClient())
+                    {
+                        string tempFileName = TempFileName(folder, ".pdf");
+                        client.UseDefaultCredentials = true;
+                        client.DownloadFile(s, tempFileName);
+                        inputfiles += tempFileName + " ";
+                    }
+                }
+                else
+                {
+                    inputfiles += "\"" + s + "\" ";
+                }
+            }
+            string outputFile = TempFileName(folder, ".pdf");
+            //merge the documents
+            Process p = new Process();
+            p.StartInfo.UseShellExecute = false;
+            p.StartInfo.RedirectStandardOutput = true;
+            p.StartInfo.FileName = "pdftk";
+            string processStr = inputfiles + " cat output \"" + outputFile + "\"";
+            p.StartInfo.Arguments = processStr;
+
+            //start
+            p.Start();
+
+            //wait for output and return result
+            p.WaitForExit();
+
+            return outputFile;
+        }
+
         public static void IndexPDFCopy(string filestring, string origFileID)
         {
             try
@@ -923,7 +977,7 @@ namespace XlantWord
             }
         }
 
-        
+
         /// <summary>
         /// Merge an FPI list of clients into the current active document
         /// </summary>
@@ -936,7 +990,7 @@ namespace XlantWord
             Header header = new Header();
             long startPosition = currentDoc.Content.Start;
             long endPosition = currentDoc.Content.End;
-            if(templateXML == null)
+            if (templateXML == null)
             {
                 tempXML = CopyRangeToWordXML(currentDoc.Range());
             }
@@ -944,12 +998,12 @@ namespace XlantWord
             {
                 tempXML = templateXML;
             }
-                       
+
             long letterLength = endPosition - startPosition;
-            
+
             List<PropertyInfo> properties = clients.FirstOrDefault().GetType().GetProperties().ToList();
-            
-            foreach(XLMain.FPIClient client in clients)
+
+            foreach (XLMain.FPIClient client in clients)
             {
                 if (client.office.ToUpper() != office.ToUpper())
                 {
@@ -959,8 +1013,8 @@ namespace XlantWord
                     startPosition = 0;
                     Range endRange = currentDoc.Range(currentDoc.Content.End - 1, currentDoc.Content.End - 1);
                     endRange.InsertXML(tempXML);
-                    header = MapHeader(client.office, "GPB");
-                    DeployHeader(header);
+                    //header = MapHeader(client.office, "GPB");
+                    //DeployHeader(header);
                     tempXML = CopyRangeToWordXML(currentDoc.Range());
                     endPosition = currentDoc.Content.End - 1;
                     office = client.office;
@@ -979,7 +1033,7 @@ namespace XlantWord
                     currentDoc.Words.Last.InsertBreak(WdBreakType.wdSectionBreakNextPage);
                     Range endRange = currentDoc.Range(currentDoc.Content.End - 1, currentDoc.Content.End - 1);
                     endRange.InsertXML(tempXML);
-                    endPosition = currentDoc.Content.End-1;
+                    endPosition = currentDoc.Content.End - 1;
                 }
                 Range currentRange = currentDoc.Range(startPosition, endPosition);
 
@@ -1004,7 +1058,7 @@ namespace XlantWord
         /// <param name="currentRange">The range in the document you want the method to act on</param>
         /// <param name="client">The object you want to take the data from</param>
         /// <param name="properties">The properties of the object, if null will ascertain from the object</param>
-        public static void UpdateFieldsFromRange(Range currentRange, object client, List<PropertyInfo> properties= null)
+        public static void UpdateFieldsFromRange(Range currentRange, object client, List<PropertyInfo> properties = null)
         {
             if (properties == null)
             {
@@ -1104,6 +1158,18 @@ namespace XlantWord
             }
 
             return fieldName;
+        }
+
+        public static List<Tuple<string, string>> GetAttachmentFiles()
+        {
+            List<Tuple<string, string>> docList = new List<Tuple<string, string>>();
+            IEnumerable<XElement> xAttachments = settingsDoc.Descendants("Attachments");
+            foreach (XElement xAttachment in xAttachments.Descendants("Document"))
+            {
+                Tuple<string, string> document = Tuple.Create(xAttachment.Attribute("Description").Value, xAttachment.Attribute("Location").Value);
+                docList.Add(document);
+            }
+            return docList;
         }
     }
 }
