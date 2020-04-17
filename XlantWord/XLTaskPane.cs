@@ -89,7 +89,7 @@ namespace XlantWord
                         PandCCheck.Checked = true;
                         WhenCallingCheck.Checked = false;
                     }
-                
+
                     //Deal with addresses or fax no as appropriate
                     if (docType == "Letter")
                     {
@@ -109,7 +109,7 @@ namespace XlantWord
                                 else
                                 {
                                     addTB.Text = client.name + Environment.NewLine + add.addressBlock;
-                                }                            
+                                }
                             }
                         }
                         if (clientHeader != null)
@@ -260,7 +260,7 @@ namespace XlantWord
         {
             if (FAOBCheck.Checked)
             {
-                XLDocument.UpdateBookmark("FAOBOML", "for and on behalf of Milsted Langdon LLP");
+                XLDocument.UpdateBookmark("FAOBOML", "Milsted Langdon");
             }
             else
             {
@@ -347,12 +347,12 @@ namespace XlantWord
             string addressee = AddresseeTB.Text;
             XLDocument.UpdateBookmark("Addressee", addressee);
             XLDocument.UpdateBookmark("Addressee2", addressee);
-           
+
         }
 
         private void SalDDL_SelectedIndexChanged(object sender, EventArgs e)
         {
-            sal = (XLMain.Salutation) SalDDL.SelectedItem;
+            sal = (XLMain.Salutation)SalDDL.SelectedItem;
             AddresseeTB.Text = sal.addressee;
             SalutationTb.Text = sal.salutation;
             XLDocument.UpdateBookmark("Salutation", SalutationTb.Text);
@@ -411,7 +411,7 @@ namespace XlantWord
                         }
                     }
                 }
-                
+
 
             }
             catch (Exception ex)
@@ -423,7 +423,7 @@ namespace XlantWord
 
         private void RevertBtn_Click(object sender, EventArgs e)
         {
-            
+
             try
             {
                 //Deal with salutations
@@ -546,7 +546,7 @@ namespace XlantWord
             {
                 MessageBox.Show("Unable to build when calling for");
                 XLtools.LogException("WhenCallingString", ex.ToString());
-            }            
+            }
         }
 
         private void SetVisibility(string docType)
@@ -581,7 +581,7 @@ namespace XlantWord
                     WhencallingDDL.Visible = true;
                     WhenCallingCheck.Visible = false;
                     FaxTB.Visible = true;
-                
+
                 }
                 else if (docType == "Letter")
                 {
@@ -718,13 +718,13 @@ namespace XlantWord
                     else
                     {
                         XLInsol.KeyData data = XLInsol.KeyData.FetchKeyData(client.crmID);
-                        string str = sender.name.ToUpper();
+                        string str = sender.name;
                         if (data.sign != null && data.sign != "" && data.sign != sender.name)
                         {
-                            str += Environment.NewLine + "FOR " + data.sign.ToUpper();
+                            str += Environment.NewLine + "FOR " + data.sign;
                         }
                         XLDocument.UpdateBookmark("Sender", str);
-                        XLDocument.UpdateBookmark("Sender2", sender.name.ToUpper());
+                        XLDocument.UpdateBookmark("Sender2", sender.name);
 
                         if (data.sign != null && data.sign != "")
                         {
@@ -737,7 +737,7 @@ namespace XlantWord
                                 str = data.title;
                             }
                             str += Environment.NewLine + client.name;
-                            XLDocument.UpdateBookmark("FAOBOML", str, 1, "ML Small Font + Bold");
+                            XLDocument.UpdateBookmark("FAOBOML", str);
                         }
                     }
                 }
@@ -745,34 +745,26 @@ namespace XlantWord
                 {
                     if (sender.crmID == "")
                     {
-                        XLDocument.UpdateBookmark("Sender", sender.name.ToUpper());
-                        XLDocument.UpdateBookmark("Sender2", sender.name.ToUpper());
+                        XLDocument.UpdateBookmark("Sender", sender.name);
+                        XLDocument.UpdateBookmark("Sender2", sender.name);
                     }
                     else
                     {
-                        //Handle an additional line if partner
-                        if (sender.grade == "PARTNER")
-                        {
-                            string sndr = "";
-                            sndr = sender.name.ToUpper();
-                            sndr += Environment.NewLine + "Partner";
-                            XLDocument.UpdateBookmark("Sender", sndr, styleName:"ML Main");
-                            XLDocument.UpdateBookmark("Sender2", sender.name);
-                        }
-                        else
-                        {
-                            XLDocument.UpdateBookmark("Sender", sender.name.ToUpper());
-                            XLDocument.UpdateBookmark("Sender2", sender.name.ToUpper());
-                        }
+                        string title = XLMain.Staff.GetJobTitle(sender);
+                        string sndr = "";
+                        sndr = sender.name;
+                        sndr += Environment.NewLine + title;
+                        XLDocument.UpdateBookmark("Sender", sndr);
+                        XLDocument.UpdateBookmark("Sender2", sender.name);
 
-                        if (sender.emails != null)
-                        {
-                            XLDocument.UpdateBookmark("SenderEmail", "email: " + sender.emails[0].email.ToLower(), bold: 1, styleName: "ML Main");
-                        }
-                        else
-                        {
-                            XLDocument.UpdateBookmark("SenderEmail", "");
-                        }
+                        //if (sender.emails != null)
+                        //{
+                        //    XLDocument.UpdateBookmark("SenderEmail", "email: " + sender.emails[0].email.ToLower(), bold: 1, styleName: "ML Main");
+                        //}
+                        //else
+                        //{
+                        //    XLDocument.UpdateBookmark("SenderEmail", "");
+                        //}
                     }
                 }
             }
@@ -813,7 +805,7 @@ namespace XlantWord
                     SalDDL.DataSource = null;
                     AddresseeTB.Text = "";
                     SalutationTb.Text = "";
-            
+
                     RevertBtn.Visible = true;
                     XLDocument.UpdateBookmark("Salutation", SalutationTb.Text);
                     XLDocument.UpdateBookmark("Addressee", AddresseeTB.Text);

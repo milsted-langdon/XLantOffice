@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Data.SqlClient;
 using System.Data;
+using System.DirectoryServices.AccountManagement;
 
 namespace XLant
 {
@@ -770,6 +771,60 @@ namespace XLant
                     XLtools.LogException("XLMain-Allstaff", ex.ToString());
                     return null;
                 }
+            }
+
+            [DirectoryRdnPrefix("CN")]
+            [DirectoryObjectClass("User")]
+            public class UserPrincipalEx : UserPrincipal
+            {
+                // Inplement the constructor using the base class constructor. 
+                public UserPrincipalEx(PrincipalContext context) : base(context)
+                { }
+
+                // Implement the constructor with initialization parameters.    
+                public UserPrincipalEx(PrincipalContext context,
+                                     string samAccountName,
+                                     string password,
+                                     bool enabled) : base(context, samAccountName, password, enabled)
+                { }
+
+
+                // Create the "Title" property.    
+                [DirectoryProperty("title")]
+                public string Title
+                {
+                    get
+                    {
+                        if (ExtensionGet("title").Length != 1)
+                            return string.Empty;
+
+                        return (string)ExtensionGet("title")[0];
+                    }
+                    set { ExtensionSet("title", value); }
+                }
+
+                // Implement the overloaded search method FindByIdentity.
+                public static new UserPrincipalEx FindByIdentity(PrincipalContext context, string identityValue)
+                {
+                    return (UserPrincipalEx)FindByIdentityWithType(context, typeof(UserPrincipalEx), identityValue);
+                }
+
+                // Implement the overloaded search method FindByIdentity. 
+                public static new UserPrincipalEx FindByIdentity(PrincipalContext context, IdentityType identityType, string identityValue)
+                {
+                    return (UserPrincipalEx)FindByIdentityWithType(context, typeof(UserPrincipalEx), identityType, identityValue);
+                }
+            }
+
+            public static string GetJobTitle(Staff staff)
+            {
+                string foundYou = "";
+                using (var pc = new PrincipalContext(ContextType.Domain, "MILSTED-LANGDON"))
+                {
+                    UserPrincipalEx user = UserPrincipalEx.FindByIdentity(pc, IdentityType.SamAccountName, "MILSTED-LANGDON\\" + staff.username);
+                    foundYou = user.Title;
+                }
+                return foundYou;
             }
         }
 
