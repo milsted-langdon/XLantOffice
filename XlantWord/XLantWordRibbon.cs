@@ -563,16 +563,7 @@ namespace XlantWord
 
         private void MLPdfBtn_Click(object sender, RibbonControlEventArgs e)
         {
-            //get the id for later use and before the original is closed.
-            string fileID = XLDocument.GetFileID();
-            //save the document as a pdf and get location
-            string file = XLDocument.CreatePdf();
-            //close the original, it isn't required any more
-            XLDocument.EndDocument();
-            //add the header and get the location of the new combined file
-            file = XLDocument.AddHeadertoPDF(file);
-            //index the combined file using the data from the original
-            XLDocument.IndexPDFCopy(file, fileID);
+            CreatePrettyPdf();
         }
 
         private void ScannedImage_Click(object sender, RibbonControlEventArgs e)
@@ -785,12 +776,32 @@ namespace XlantWord
 
         private void pdfAttachmentsBtn_Click(object sender, RibbonControlEventArgs e)
         {
-            //get available documents
-            List<Tuple<string,string>> attachmentOptions = XLDocument.GetAttachmentFiles();
-            //ask user to check which ones they want
-            XLForms.Attachments attachmentsForm = new XLForms.Attachments(attachmentOptions);
-            attachmentsForm.ShowDialog();
-            List<Tuple<string, string>> selectedDocs = attachmentsForm.selectedDocuments;
+            CreatePrettyPdf("", true);
+        }
+
+        private void MLFSPdfBtn_Click(object sender, RibbonControlEventArgs e)
+        {
+            CreatePrettyPdf("watermark-MLFS.pdf");
+        }
+
+        private void MLFPPdfBtn_Click(object sender, RibbonControlEventArgs e)
+        {
+            CreatePrettyPdf("watermark-MLFP.pdf");
+        }
+
+        private void CreatePrettyPdf(string watermark = "", bool withAttachments = false)
+        {
+            List<Tuple<string, string>> selectedDocs = new List<Tuple<string, string>>();
+            if (withAttachments)
+            {
+                //get available documents
+                List<Tuple<string, string>> attachmentOptions = XLDocument.GetAttachmentFiles();
+                //ask user to check which ones they want
+                XLForms.Attachments attachmentsForm = new XLForms.Attachments(attachmentOptions);
+                attachmentsForm.ShowDialog();
+                selectedDocs = attachmentsForm.selectedDocuments;
+            }
+            
             //get the id for later use and before the original is closed.
             string fileID = XLDocument.GetFileID();
             //save the document as a pdf and get location
@@ -798,7 +809,7 @@ namespace XlantWord
             //close the original, it isn't required any more
             XLDocument.EndDocument();
             //add the header and get the location of the new combined file
-            file = XLDocument.AddHeadertoPDF(file);
+            file = XLDocument.AddHeadertoPDF(file, watermark);
             //merge the attachments, if any selected
             if (selectedDocs.Count != 0)
             {
@@ -812,6 +823,16 @@ namespace XlantWord
             }
             //index the combined file using the data from the original
             XLDocument.IndexPDFCopy(file, fileID);
+        }
+
+        private void MLFSAttachBtn_Click(object sender, RibbonControlEventArgs e)
+        {
+            CreatePrettyPdf("watermark-MLFS.pdf", true);
+        }
+
+        private void MLFPAttachBtn_Click(object sender, RibbonControlEventArgs e)
+        {
+            CreatePrettyPdf("watermark-MLFP.pdf", true);
         }
     }
 }

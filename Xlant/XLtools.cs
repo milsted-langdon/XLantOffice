@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Xml;
 using System.Xml.Linq;
+using Microsoft.SharePoint.Client;
 
 namespace XLant
 {
@@ -20,7 +21,7 @@ namespace XLant
         {
             XDocument xDoc;
             string docPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\XLant\\personal.xml";
-            if (File.Exists(docPath))
+            if (System.IO.File.Exists(docPath))
             {
                 xDoc = XDocument.Load(docPath);
             }
@@ -231,6 +232,27 @@ namespace XLant
                 }
             }
             return folder;
+        }
+
+
+        public static string UploadToSharepoint(string siteUrl, string libraryName, string fileToUpload, string userName)
+        {
+            //Never used but available for when we go online
+            ClientContext context = new ClientContext(siteUrl);
+            List docLibrary = context.Web.Lists.GetByTitle(libraryName);
+            context.Load(docLibrary);
+            context.ExecuteQuery();
+
+            Byte[] fileInBytes = System.IO.File.ReadAllBytes(fileToUpload);
+            FileCreationInformation fileInfo = new FileCreationInformation();
+            fileInfo.Content = fileInBytes;
+            fileInfo.Url = siteUrl + libraryName + userName;
+
+            Microsoft.SharePoint.Client.File newFile = docLibrary.RootFolder.Files.Add(fileInfo);
+            newFile.ListItemAllFields.Update();
+            context.ExecuteQuery();
+
+            return fileInfo.Url;
         }
     }
 }

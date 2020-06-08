@@ -1,13 +1,16 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.40629.0
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29613.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XlantWord", "XlantWord\XlantWord.csproj", "{AD8188B9-0D06-4D33-BFEC-BA3A928C54C9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XLant", "Xlant\XLant.csproj", "{C2B5DCA7-5E48-4358-A5F3-764F5D6CD151}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XLForms", "XLForms.cs\XLForms.csproj", "{407690A2-81A7-4AC1-8873-7E8F0634C42C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{C2B5DCA7-5E48-4358-A5F3-764F5D6CD151} = {C2B5DCA7-5E48-4358-A5F3-764F5D6CD151}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XLantOutlook", "XLantOutlook\XLantOutlook\XLantOutlook.csproj", "{9446E744-5405-4645-888D-7D532F5DA2ED}"
 EndProject
@@ -36,5 +39,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CFF8B72C-17A8-4C49-80FF-229E291DF373}
 	EndGlobalSection
 EndGlobal

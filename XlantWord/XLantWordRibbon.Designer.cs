@@ -75,6 +75,10 @@
             this.Merge3Btn = this.Factory.CreateRibbonButton();
             this.Merge4Btn = this.Factory.CreateRibbonButton();
             this.InvoiceBtn = this.Factory.CreateRibbonButton();
+            this.MLFSAttachBtn = this.Factory.CreateRibbonButton();
+            this.MLFPPdfBtn = this.Factory.CreateRibbonButton();
+            this.MLFPAttachBtn = this.Factory.CreateRibbonButton();
+            this.MLFSPdfBtn = this.Factory.CreateRibbonButton();
             this.XLantDataTab.SuspendLayout();
             this.group1.SuspendLayout();
             this.group2.SuspendLayout();
@@ -347,6 +351,10 @@
             // 
             this.PdfBtn.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
             this.PdfBtn.Items.Add(this.pdfAttachmentsBtn);
+            this.PdfBtn.Items.Add(this.MLFSPdfBtn);
+            this.PdfBtn.Items.Add(this.MLFSAttachBtn);
+            this.PdfBtn.Items.Add(this.MLFPPdfBtn);
+            this.PdfBtn.Items.Add(this.MLFPAttachBtn);
             this.PdfBtn.Label = "ML Pdf";
             this.PdfBtn.Name = "PdfBtn";
             this.PdfBtn.OfficeImageId = "GroupInk";
@@ -428,6 +436,36 @@
             this.InvoiceBtn.Name = "InvoiceBtn";
             this.InvoiceBtn.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.InvoiceBtn_Click);
             // 
+            // MLFSAttachBtn
+            // 
+            this.MLFSAttachBtn.Label = "MLFS - With Attachments";
+            this.MLFSAttachBtn.Name = "MLFSAttachBtn";
+            this.MLFSAttachBtn.ScreenTip = "Create an MLFS PDF and add attachments to it";
+            this.MLFSAttachBtn.ShowImage = true;
+            this.MLFSAttachBtn.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.MLFSAttachBtn_Click);
+            // 
+            // MLFPPdfBtn
+            // 
+            this.MLFPPdfBtn.Label = "MLFP";
+            this.MLFPPdfBtn.Name = "MLFPPdfBtn";
+            this.MLFPPdfBtn.ShowImage = true;
+            this.MLFPPdfBtn.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.MLFPPdfBtn_Click);
+            // 
+            // MLFPAttachBtn
+            // 
+            this.MLFPAttachBtn.Label = "MLFP - With Attachments";
+            this.MLFPAttachBtn.Name = "MLFPAttachBtn";
+            this.MLFPAttachBtn.ScreenTip = "Create an MLFP PDF and add attachments to it";
+            this.MLFPAttachBtn.ShowImage = true;
+            this.MLFPAttachBtn.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.MLFPAttachBtn_Click);
+            // 
+            // MLFSPdfBtn
+            // 
+            this.MLFSPdfBtn.Label = "MLFS";
+            this.MLFSPdfBtn.Name = "MLFSPdfBtn";
+            this.MLFSPdfBtn.ShowImage = true;
+            this.MLFSPdfBtn.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.MLFSPdfBtn_Click);
+            // 
             // XLantWordRibbon
             // 
             this.Name = "XLantWordRibbon";
@@ -495,6 +533,10 @@
         internal Microsoft.Office.Tools.Ribbon.RibbonButton InvoiceBtn;
         internal Microsoft.Office.Tools.Ribbon.RibbonSplitButton PdfBtn;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton pdfAttachmentsBtn;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton MLFSPdfBtn;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton MLFSAttachBtn;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton MLFPPdfBtn;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton MLFPAttachBtn;
     }
 
     partial class ThisRibbonCollection
