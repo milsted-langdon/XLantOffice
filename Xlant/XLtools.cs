@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Xml;
 using System.Xml.Linq;
@@ -168,29 +169,6 @@ namespace XLant
             
             //try to store it to the database for easier access.
             bool toDb = DatabaseLog(app, e);
-            
-            
-            //now logging to db, would be nice to bew able to fall back on error.log but the sql connection hangs if it can't connect so not really an option and if
-            //there is no database or no settings.xml we have a serious problem anyway!
-            //if (!toDb)
-            ////if it doesn't store successfully fall back on a text file (otherwise no logging of sql issues)
-            //{
-            //    string date = DateTime.Now.ToString("yyyy-MM-dd");
-            //    string logPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\XLant\\" + date + "-log.txt";
-
-            //    if (!File.Exists(logPath))
-            //    {
-            //        using (StreamWriter sw = File.CreateText(logPath))
-            //        {
-            //            sw.WriteLine("Log Created on: " + DateTime.Now);
-            //        }
-            //    }
-
-            //    using (StreamWriter sw = File.AppendText(logPath))
-            //    {
-            //        sw.WriteLine(app + " - " + DateTime.Now + " - " + e);
-            //    }
-            //}
         }
 
         private static bool DatabaseLog(string command, string err)
@@ -231,6 +209,93 @@ namespace XLant
                 }
             }
             return folder;
+        }
+
+        /// <summary>
+        /// Converts a linq list to a data table
+        /// Credit to - https://www.c-sharpcorner.com/UploadFile/0c1bb2/join-two-datatable-using-linq-in-Asp-Net-C-Sharp/
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="Linqlist"></param>
+        /// <returns></returns>
+        public static DataTable LINQResultToDataTable<T>(IEnumerable<T> Linqlist)
+        {
+            DataTable dt = new DataTable();
+            PropertyInfo[] columns = null;
+
+            if (Linqlist == null) return dt;
+
+            foreach (T Record in Linqlist)
+            {
+                if (columns == null)
+                {
+                    columns = ((Type)Record.GetType()).GetProperties();
+                    foreach (PropertyInfo GetProperty in columns)
+                    {
+                        Type IcolType = GetProperty.PropertyType;
+
+                        if ((IcolType.IsGenericType) && (IcolType.GetGenericTypeDefinition()
+                        == typeof(Nullable<>)))
+                        {
+                            IcolType = IcolType.GetGenericArguments()[0];
+                        }
+
+                        dt.Columns.Add(new DataColumn(GetProperty.Name, IcolType));
+                    }
+                }
+
+                DataRow dr = dt.NewRow();
+
+                foreach (PropertyInfo p in columns)
+                {
+                    dr[p.Name] = p.GetValue(Record, null) == null ? DBNull.Value : p.GetValue
+                    (Record, null);
+                }
+
+                dt.Rows.Add(dr);
+            }
+            return dt;
+        }
+
+        /// <summary>
+        /// Converts nullable decimal to decimal, repalcing null with 0
+        /// </summary>
+        /// <param name="value">Decimal to alter</param>
+        /// <returns>decimal</returns>
+        public static decimal HandleNull(decimal? value)
+        {
+            decimal d = value != null ? (decimal)value : 0;
+            return d;
+        }
+
+        /// <summary>
+        /// Converts string to decimal, repalcing null or empty with 0
+        /// </summary>
+        /// <param name="value">string to convert and alter</param>
+        /// <returns>decimal</returns>
+        public static decimal HandleNull(string value)
+        {
+            decimal d = 0;
+            if (!decimal.TryParse(value, out d))
+            {
+                d = 0;
+            }
+            return d;
+        }
+
+        public static DateTime? HandleStringToDate(string value)
+        {
+            DateTime? nullableDate = new DateTime();
+            DateTime date = new DateTime();
+            if (DateTime.TryParse(value, out date))
+            {
+                nullableDate = (DateTime?)date;
+            }
+            else
+            {
+                nullableDate = null;
+            }
+            return nullableDate;
         }
     }
 }

@@ -1,15 +1,29 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.40629.0
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29613.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XlantWord", "XlantWord\XlantWord.csproj", "{AD8188B9-0D06-4D33-BFEC-BA3A928C54C9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XLant", "Xlant\XLant.csproj", "{C2B5DCA7-5E48-4358-A5F3-764F5D6CD151}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XLForms", "XLForms.cs\XLForms.csproj", "{407690A2-81A7-4AC1-8873-7E8F0634C42C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{C2B5DCA7-5E48-4358-A5F3-764F5D6CD151} = {C2B5DCA7-5E48-4358-A5F3-764F5D6CD151}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XLantOutlook", "XLantOutlook\XLantOutlook\XLantOutlook.csproj", "{9446E744-5405-4645-888D-7D532F5DA2ED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XLantExcel", "XLantExcel\XLantExcel.csproj", "{3BB9E7E4-726E-4BD6-975C-92827B67E30E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XLantDataStore", "XlantDataStore\XLantDataStore.csproj", "{049A910C-097C-4C77-A4A4-E090AF6B7C7F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{C2B5DCA7-5E48-4358-A5F3-764F5D6CD151} = {C2B5DCA7-5E48-4358-A5F3-764F5D6CD151}
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XLantCore", "XLantCore\XLantCore.csproj", "{33EF9C33-AB88-4056-B948-88D43F419494}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XLantTest", "XLantTest\XLantTest.csproj", "{9CAFE55E-95E0-45AA-B43C-FF5EC6FE3308}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,8 +47,27 @@ Global
 		{9446E744-5405-4645-888D-7D532F5DA2ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9446E744-5405-4645-888D-7D532F5DA2ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9446E744-5405-4645-888D-7D532F5DA2ED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3BB9E7E4-726E-4BD6-975C-92827B67E30E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3BB9E7E4-726E-4BD6-975C-92827B67E30E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3BB9E7E4-726E-4BD6-975C-92827B67E30E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3BB9E7E4-726E-4BD6-975C-92827B67E30E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{049A910C-097C-4C77-A4A4-E090AF6B7C7F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{049A910C-097C-4C77-A4A4-E090AF6B7C7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{049A910C-097C-4C77-A4A4-E090AF6B7C7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{049A910C-097C-4C77-A4A4-E090AF6B7C7F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{33EF9C33-AB88-4056-B948-88D43F419494}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{33EF9C33-AB88-4056-B948-88D43F419494}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{33EF9C33-AB88-4056-B948-88D43F419494}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{33EF9C33-AB88-4056-B948-88D43F419494}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9CAFE55E-95E0-45AA-B43C-FF5EC6FE3308}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9CAFE55E-95E0-45AA-B43C-FF5EC6FE3308}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9CAFE55E-95E0-45AA-B43C-FF5EC6FE3308}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9CAFE55E-95E0-45AA-B43C-FF5EC6FE3308}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {19286AEE-CEFD-4B56-BD2C-A0530FFE0970}
 	EndGlobalSection
 EndGlobal

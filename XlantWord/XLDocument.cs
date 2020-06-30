@@ -795,13 +795,30 @@ namespace XlantWord
             }
         }
 
-        public static string AddHeadertoPDF(string filestring)
+        public static string AddHeadertoPDF(string filestring, string watermarkFile = "")
         {
             try
             {
                 //find the watermark pdf
                 string folder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\XLant\\";
-                string watermarkLocation = folder + "Watermark.pdf";
+                if (String.IsNullOrEmpty(watermarkFile))
+                {
+                    watermarkFile = "Watermark.pdf";
+                }
+                //if it isn't in the Roaming folder fetch from sharepoint
+                if (!System.IO.File.Exists(folder + watermarkFile))
+                {
+                    string webLocation = StandardLocation();
+                    //download remote files
+                    using (WebClient client = new WebClient())
+                    {
+                        string fileName = folder + watermarkFile;
+                        client.UseDefaultCredentials = true;
+                        client.DownloadFile(webLocation + watermarkFile, fileName);
+                    }
+                }
+                string watermarkLocation = folder + watermarkFile;
+
                 //create a filelocation for the new file
                 string filelocation = folder;
                 Random rnd = new Random();

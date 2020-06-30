@@ -75,6 +75,10 @@
             this.Merge3Btn = this.Factory.CreateRibbonButton();
             this.Merge4Btn = this.Factory.CreateRibbonButton();
             this.InvoiceBtn = this.Factory.CreateRibbonButton();
+            this.MLFSPdfBtn = this.Factory.CreateRibbonButton();
+            this.MLFSPdfAttachBtn = this.Factory.CreateRibbonButton();
+            this.MLFPPdfBtn = this.Factory.CreateRibbonButton();
+            this.MLFPPdfAttachBtn = this.Factory.CreateRibbonButton();
             this.XLantDataTab.SuspendLayout();
             this.group1.SuspendLayout();
             this.group2.SuspendLayout();
@@ -347,6 +351,10 @@
             // 
             this.PdfBtn.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
             this.PdfBtn.Items.Add(this.pdfAttachmentsBtn);
+            this.PdfBtn.Items.Add(this.MLFSPdfBtn);
+            this.PdfBtn.Items.Add(this.MLFSPdfAttachBtn);
+            this.PdfBtn.Items.Add(this.MLFPPdfBtn);
+            this.PdfBtn.Items.Add(this.MLFPPdfAttachBtn);
             this.PdfBtn.Label = "ML Pdf";
             this.PdfBtn.Name = "PdfBtn";
             this.PdfBtn.OfficeImageId = "GroupInk";
@@ -354,7 +362,7 @@
             // 
             // pdfAttachmentsBtn
             // 
-            this.pdfAttachmentsBtn.Label = "With Attachments";
+            this.pdfAttachmentsBtn.Label = "ML With Attachments";
             this.pdfAttachmentsBtn.Name = "pdfAttachmentsBtn";
             this.pdfAttachmentsBtn.ScreenTip = "Create an ML PDF and add attachments to it";
             this.pdfAttachmentsBtn.ShowImage = true;
@@ -428,6 +436,38 @@
             this.InvoiceBtn.Name = "InvoiceBtn";
             this.InvoiceBtn.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.InvoiceBtn_Click);
             // 
+            // MLFSPdfBtn
+            // 
+            this.MLFSPdfBtn.Label = "MLFS";
+            this.MLFSPdfBtn.Name = "MLFSPdfBtn";
+            this.MLFSPdfBtn.ScreenTip = "Create an MLFS PDF";
+            this.MLFSPdfBtn.ShowImage = true;
+            this.MLFSPdfBtn.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.MLFSPdfBtn_Click);
+            // 
+            // MLFSPdfAttachBtn
+            // 
+            this.MLFSPdfAttachBtn.Label = "MLFS with Attachments";
+            this.MLFSPdfAttachBtn.Name = "MLFSPdfAttachBtn";
+            this.MLFSPdfAttachBtn.ScreenTip = "Create an MLFS PDF and add attachments to it";
+            this.MLFSPdfAttachBtn.ShowImage = true;
+            this.MLFSPdfAttachBtn.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.MLFSAttachBtn_Click);
+            // 
+            // MLFPPdfBtn
+            // 
+            this.MLFPPdfBtn.Label = "MLFP";
+            this.MLFPPdfBtn.Name = "MLFPPdfBtn";
+            this.MLFPPdfBtn.ScreenTip = "Create an MLFP PDF";
+            this.MLFPPdfBtn.ShowImage = true;
+            this.MLFPPdfBtn.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.MLFPPdfBtn_Click);
+            // 
+            // MLFPPdfAttachBtn
+            // 
+            this.MLFPPdfAttachBtn.Label = "MLFP with Attachments";
+            this.MLFPPdfAttachBtn.Name = "MLFPPdfAttachBtn";
+            this.MLFPPdfAttachBtn.ScreenTip = "Create an MLFP PDF and add attachments to it";
+            this.MLFPPdfAttachBtn.ShowImage = true;
+            this.MLFPPdfAttachBtn.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.MLFPAttachBtn_Click);
+            // 
             // XLantWordRibbon
             // 
             this.Name = "XLantWordRibbon";
@@ -495,6 +535,10 @@
         internal Microsoft.Office.Tools.Ribbon.RibbonButton InvoiceBtn;
         internal Microsoft.Office.Tools.Ribbon.RibbonSplitButton PdfBtn;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton pdfAttachmentsBtn;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton MLFSPdfBtn;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton MLFSPdfAttachBtn;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton MLFPPdfBtn;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton MLFPPdfAttachBtn;
     }
 
     partial class ThisRibbonCollection
