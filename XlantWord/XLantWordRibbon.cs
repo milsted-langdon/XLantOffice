@@ -88,8 +88,7 @@ namespace XlantWord
                 string fileID = XLDocument.GetFileID();
                 if (String.IsNullOrEmpty(fileID))
                 {
-                    MessageBox.Show("Unable to find FileID.  If the document has not yet been placed in VC click First Index" + Environment.NewLine + "alternatively reindex the document with Virtual Cabinet.");
-                    Exception ex = new Exception("Failed to find File ID");
+                    return;
                 }
 
                 if (XLDocument.ReadParameter("CRMid") != null)
@@ -352,8 +351,7 @@ namespace XlantWord
                 string fileID = XLDocument.GetFileID();
                 if (String.IsNullOrEmpty(fileID))
                 {
-                    MessageBox.Show("Unable to find FileID.  If the document has not yet been placed in VC click First Index" + Environment.NewLine + "alternatively reindex the document with Virtual Cabinet.");
-                    Exception ex = new Exception("Failed to find File ID");
+                    return;
                 }
 
                 if (XLDocument.ReadParameter("CRMid") != null)
@@ -791,38 +789,50 @@ namespace XlantWord
 
         private void CreatePrettyPdf(string watermark = "", bool withAttachments = false)
         {
-            List<Tuple<string, string>> selectedDocs = new List<Tuple<string, string>>();
-            if (withAttachments)
+            try
             {
-                //get available documents
-                List<Tuple<string, string>> attachmentOptions = XLDocument.GetAttachmentFiles();
-                //ask user to check which ones they want
-                XLForms.Attachments attachmentsForm = new XLForms.Attachments(attachmentOptions);
-                attachmentsForm.ShowDialog();
-                selectedDocs = attachmentsForm.selectedDocuments;
-            }
-
-            //get the id for later use and before the original is closed.
-            string fileID = XLDocument.GetFileID();
-            //save the document as a pdf and get location
-            string file = XLDocument.CreatePdf();
-            //close the original, it isn't required any more
-            XLDocument.EndDocument();
-            //add the header and get the location of the new combined file
-            file = XLDocument.AddHeadertoPDF(file, watermark);
-            //merge the attachments, if any selected
-            if (selectedDocs.Count != 0)
-            {
-                List<string> docs = new List<string>();
-                docs.Add(file);
-                foreach (Tuple<string, string> tuple in selectedDocs)
+                List<Tuple<string, string>> selectedDocs = new List<Tuple<string, string>>();
+                if (withAttachments)
                 {
-                    docs.Add(tuple.Item2);
+                    //get available documents
+                    List<Tuple<string, string>> attachmentOptions = XLDocument.GetAttachmentFiles();
+                    //ask user to check which ones they want
+                    XLForms.Attachments attachmentsForm = new XLForms.Attachments(attachmentOptions);
+                    attachmentsForm.ShowDialog();
+                    selectedDocs = attachmentsForm.selectedDocuments;
                 }
-                file = XLDocument.AddAttachments(docs);
+
+                //get the id for later use and before the original is closed.
+                string fileID = XLDocument.GetFileID();
+                if (String.IsNullOrEmpty(fileID))
+                {
+                    return;
+                }
+                //save the document as a pdf and get location
+                string file = XLDocument.CreatePdf();
+                //close the original, it isn't required any more
+                XLDocument.EndDocument();
+                //add the header and get the location of the new combined file
+                file = XLDocument.AddHeadertoPDF(file, watermark);
+                //merge the attachments, if any selected
+                if (selectedDocs.Count != 0)
+                {
+                    List<string> docs = new List<string>();
+                    docs.Add(file);
+                    foreach (Tuple<string, string> tuple in selectedDocs)
+                    {
+                        docs.Add(tuple.Item2);
+                    }
+                    file = XLDocument.AddAttachments(docs);
+                }
+                //index the combined file using the data from the original
+                XLDocument.IndexPDFCopy(file, fileID);
             }
-            //index the combined file using the data from the original
-            XLDocument.IndexPDFCopy(file, fileID);
+            catch (Exception ex)
+            {
+                MessageBox.Show("Cancelled PDF Creation");
+                XLant.XLtools.LogException("Word - PDFCreation", ex.Message);
+            }
         }
 
         private void MLFSAttachBtn_Click(object sender, RibbonControlEventArgs e)

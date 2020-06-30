@@ -723,6 +723,11 @@ namespace XlantWord
                 fileID = currentDoc.Name;
                 int len = fileID.IndexOf("-"); //get the index of the version identifier
                 fileID = fileID.Substring(0, len);//ignore everything after and including the -
+                if (String.IsNullOrEmpty(fileID))
+                {
+                    throw new ArgumentException("Document doesn't appear to be in VC");
+                }
+                
                 UpdateParameter("FileID", fileID); //add the parameter for next time.
 
                 return fileID;

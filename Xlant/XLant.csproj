@@ -44,25 +44,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\Address.cs" />
-    <Compile Include="Models\Client.cs" />
-    <Compile Include="Models\Contact.cs" />
-    <Compile Include="Models\EmailAddress.cs" />
-    <Compile Include="Models\Enums\ContactType.cs" />
-    <Compile Include="Models\Enums\OccupationType.cs" />
-    <Compile Include="Models\Enums\PlanStatus.cs" />
-    <Compile Include="Models\Enums\Title.cs" />
-    <Compile Include="Models\Extension\MLFSClient.cs" />
-    <Compile Include="Models\Extension\Plan.cs" />
-    <Compile Include="Models\Fee.cs" />
-    <Compile Include="Models\MLClient.cs" />
-    <Compile Include="Models\MLFSClient.cs" />
-    <Compile Include="Models\Number.cs" />
-    <Compile Include="Models\Organisation.cs" />
-    <Compile Include="Models\Person.cs" />
-    <Compile Include="Models\Plan.cs" />
-    <Compile Include="Models\Staff.cs" />
-    <Compile Include="Models\Enums\StaffGrade.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="XLAPI.cs" />
     <Compile Include="XLCSV.cs" />

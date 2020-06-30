@@ -35,7 +35,7 @@ namespace XLantCore.Models.Tests
             List<EmailAddress> emails = EmailAddress.CreateList(s);
 
             //assert
-            Assert.AreEqual(1, emails.Count);
+            Assert.AreEqual(2, emails.Count);
         }
     }
 }

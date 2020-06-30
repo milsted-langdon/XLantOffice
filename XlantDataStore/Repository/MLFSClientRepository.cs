@@ -142,11 +142,29 @@ namespace XLantDataStore.Repository
             string searilisedArray = "";
             if (emails)
             {
-                filteredArray = (JArray)_array.AsEnumerable().Where(x => x["type"].ToString().Contains("Email"));
+                //how many do we have
+                int elementCount = _array.AsEnumerable().Where(x => x["type"].ToString().Contains("Email")).Count();
+                if (elementCount == 1)
+                {
+                    filteredArray.Add(_array.AsEnumerable().Where(x => x["type"].ToString().Contains("Email")));
+                }
+                else if (elementCount > 1)
+                {
+                    filteredArray = _array.AsEnumerable().Where(x => x["type"].ToString().Contains("Email")) as JArray;
+                }
             }
             else
             {
-                filteredArray = (JArray)_array.AsEnumerable().Where(x => !x["type"].ToString().Contains("Email"));
+                //how many do we have
+                int elementCount = _array.AsEnumerable().Where(x => !x["type"].ToString().Contains("Email")).Count();
+                if (elementCount == 1)
+                {
+                    filteredArray.Add(_array.AsEnumerable().Where(x => !x["type"].ToString().Contains("Email")));
+                }
+                else if (elementCount > 1)
+                {
+                    filteredArray = _array.AsEnumerable().Where(x => !x["type"].ToString().Contains("Email")) as JArray;
+                }
             }
             
             if (filteredArray.Count != 0)
