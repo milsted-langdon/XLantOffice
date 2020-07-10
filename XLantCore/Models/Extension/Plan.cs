@@ -10,13 +10,13 @@ namespace XLantCore.Models
     public partial class Plan
     {
 
-        public static List<Plan> CreateList(string jsonResponse)
+        public static List<Plan> CreateList(JArray jArray)
         {
             List<Plan> plans = new List<Plan>();
-            JArray jarray = Tools.ExtractItemsArrayFromJsonString(jsonResponse);
-            foreach (JObject p in jarray)
+            
+            foreach (JObject p in jArray)
             {
-                Plan plan = new Plan(JsonConvert.SerializeObject(p));
+                Plan plan = new Plan(p);
                 plans.Add(plan);
             }
             return plans;

@@ -29,10 +29,11 @@ namespace XLantCore.Models.Tests
         public void BuildMLFSClientFromJsonString()
         {
             //arrange
-            string jsonRespoonse = "{\"id\":30944834,\"href\":\"https://api.intelliflo.com/v2/clients/30944834\",\"name\":\"John Smith\",\"createdAt\":\"2020-06-24T11:29:34Z\",\"category\":\"Retail\",\"externalReference\":\"30929016-30944834\",\"secondaryReference\":\"\",\"originalAdviser\":{\"id\":91653,\"name\":\"A rowe.sy\",\"href\":\"https://api.intelliflo.com/v2/advisers/91653\"},\"currentAdviser\":{\"id\":91653,\"name\":\"A rowe.sy\",\"href\":\"https://api.intelliflo.com/v2/advisers/91653\"},\"type\":\"Client\",\"partyType\":\"Person\",\"person\":{\"title\":\"Mr\",\"firstName\":\"John\",\"middleName\":\"Arthur\",\"lastName\":\"Smith\",\"dateOfBirth\":\"1978-01-01\",\"gender\":\"Male\",\"niNumber\":\"\",\"isDeceased\":false},\"addresses_href\":\"https://api.intelliflo.com/v2/clients/30944834/addresses\",\"contactdetails_href\":\"https://api.intelliflo.com/v2/clients/30944834/contactdetails\",\"plans_href\":\"https://api.intelliflo.com/v2/clients/30944834/plans\",\"relationships_href\":\"https://api.intelliflo.com/v2/clients/30944834/relationships\",\"servicecases_href\":\"https://api.intelliflo.com/v2/clients/30944834/servicecases\",\"dependants_href\":\"https://api.intelliflo.com/v2/clients/30944834/dependants\",\"tags\":[]}";
+            string jsonResponse = "{\"id\":30944834,\"href\":\"https://api.intelliflo.com/v2/clients/30944834\",\"name\":\"John Smith\",\"createdAt\":\"2020-06-24T11:29:34Z\",\"category\":\"Retail\",\"externalReference\":\"30929016-30944834\",\"secondaryReference\":\"\",\"originalAdviser\":{\"id\":91653,\"name\":\"A rowe.sy\",\"href\":\"https://api.intelliflo.com/v2/advisers/91653\"},\"currentAdviser\":{\"id\":91653,\"name\":\"A rowe.sy\",\"href\":\"https://api.intelliflo.com/v2/advisers/91653\"},\"type\":\"Client\",\"partyType\":\"Person\",\"person\":{\"title\":\"Mr\",\"firstName\":\"John\",\"middleName\":\"Arthur\",\"lastName\":\"Smith\",\"dateOfBirth\":\"1978-01-01\",\"gender\":\"Male\",\"niNumber\":\"\",\"isDeceased\":false},\"addresses_href\":\"https://api.intelliflo.com/v2/clients/30944834/addresses\",\"contactdetails_href\":\"https://api.intelliflo.com/v2/clients/30944834/contactdetails\",\"plans_href\":\"https://api.intelliflo.com/v2/clients/30944834/plans\",\"relationships_href\":\"https://api.intelliflo.com/v2/clients/30944834/relationships\",\"servicecases_href\":\"https://api.intelliflo.com/v2/clients/30944834/servicecases\",\"dependants_href\":\"https://api.intelliflo.com/v2/clients/30944834/dependants\",\"tags\":[]}";
+            JObject obj = JObject.Parse(jsonResponse);
 
             //act
-            MLFSClient client = new MLFSClient(jsonRespoonse);
+            MLFSClient client = new MLFSClient(obj);
 
             //assert
             Assert.AreEqual("John Smith", client.Name);
@@ -45,7 +46,7 @@ namespace XLantCore.Models.Tests
             string jsonRespoonse = "30944834";
 
             //act
-            MLFSClient client = new MLFSClient(jsonRespoonse, true);
+            MLFSClient client = new MLFSClient(jsonRespoonse);
 
             //assert
             Assert.AreEqual(jsonRespoonse, client.PrimaryID);

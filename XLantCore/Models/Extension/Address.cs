@@ -9,13 +9,12 @@ namespace XLantCore.Models
     public partial class Address
     {
 
-        public static List<Address> CreateList(string jsonResponse)
+        public static List<Address> CreateList(JArray _array)
         {
             List<Address> addresses = new List<Address>();
-            JArray _array = Tools.ExtractItemsArrayFromJsonString(jsonResponse);
             foreach(JObject obj in _array)
             {
-                Address a = new Address(JsonConvert.SerializeObject(obj));
+                Address a = new Address(obj);
                 addresses.Add(a);
             }
             return addresses;

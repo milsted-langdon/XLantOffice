@@ -13,9 +13,9 @@ namespace XLantCore.Models
 
         }
 
-        public Address(string jsonString)
+        public Address(JObject jobject)
         {
-            dynamic obj = JObject.Parse(jsonString);
+            dynamic obj = jobject;
             PrimaryID = obj.id;
             IsPrimary = obj.isDefault;
             Line1 = obj.address.line1 + " " + obj.address.line2;

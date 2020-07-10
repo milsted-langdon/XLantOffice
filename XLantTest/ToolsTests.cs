@@ -22,5 +22,20 @@ namespace XLantCore.Tests
             //assert
             Assert.AreEqual(2, _array.Count);
         }
+
+        [TestMethod()]
+        public void SplitContactDetailsArrayTest()
+        {
+            //arrange
+            string s = "[{\"id\":30075066,\"href\":\"https://api.intelliflo.com/v2/clients/30944834/contactdetails/30075066\",\"type\":\"Telephone\",\"value\":\"0117 9452500\",\"isDefault\":true},{\"id\":30075067,\"href\":\"https://api.intelliflo.com/v2/clients/30944834/contactdetails/30075067\",\"type\":\"Mobile\",\"value\":\"07971 123456\",\"isDefault\":true},{\"id\":30075068,\"href\":\"https://api.intelliflo.com/v2/clients/30944834/contactdetails/30075068\",\"type\":\"Email\",\"value\":\"rowe.sy@gmail.com\",\"isDefault\":true}]";
+            JArray a = JArray.Parse(s);
+
+            //act
+            JArray result = Tools.SplitContactDetails(a, true);
+
+            //assert
+            Assert.AreEqual(true, result[0]["type"].ToString() == "Email", "Array doesn't include Email");
+            Assert.AreEqual(false, result.Contains("Telephone"), "Array includes Telephone in emails");
+        }
     }
 }

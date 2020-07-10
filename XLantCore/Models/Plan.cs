@@ -13,9 +13,14 @@ namespace XLantCore.Models
 
         }
 
-        public Plan(string plan)
+        public Plan(string id)
         {
-            dynamic p = JObject.Parse(plan);
+            PrimaryID = id;
+        }
+
+        public Plan(JObject plan)
+        {
+            dynamic p = plan;
             PrimaryID = p.id;
             Provider = p.productProvider.id;
             Reference = p.Reference;
@@ -30,7 +35,7 @@ namespace XLantCore.Models
                 string paraID = p.paraplanner.id;
                 ParaPlanner = new Staff(paraID);
             }
-            if (p.paraplanner != null)
+            if (p.administrator != null)
             {
                 string adminID = p.administrator.id;
                 ParaPlanner = new Staff(adminID);
@@ -60,5 +65,6 @@ namespace XLantCore.Models
         public List<MLFSClient> Clients { get; set; }
         public bool IsTopUp { get; set; }
         public decimal CurrentValuation { get; set; }
+        public decimal ContributionsToDate { get; set; }
     }
 }

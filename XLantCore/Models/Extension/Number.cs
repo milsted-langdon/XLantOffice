@@ -8,16 +8,22 @@ namespace XLantCore.Models
 {
     public partial class Number
     {
-        public static List<Number> CreateList(string jsonResponse)
+        public static List<Number> CreateList(JArray _array)
         {
             List<Number> numbers = new List<Number>();
-            JArray _array = Tools.ExtractItemsArrayFromJsonString(jsonResponse);
-            foreach (JObject obj in _array)
+            if (_array == null)
             {
-                Number n = new Number(JsonConvert.SerializeObject(obj));
-                numbers.Add(n);
+                return null;
             }
-            return numbers;
+            else
+            {
+                foreach (JObject obj in _array)
+                {
+                    Number n = new Number(obj);
+                    numbers.Add(n);
+                }
+                return numbers; 
+            }
         }
     }
 }

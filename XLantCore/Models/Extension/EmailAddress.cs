@@ -8,16 +8,22 @@ namespace XLantCore.Models
 {
     public partial class EmailAddress
     {
-        public static List<EmailAddress> CreateList(string jsonResponse)
+        public static List<EmailAddress> CreateList(JArray jarray)
         {
             List<EmailAddress> emails = new List<EmailAddress>();
-            JArray _array = Tools.ExtractItemsArrayFromJsonString(jsonResponse);
-            foreach (JObject obj in _array)
+            if (jarray == null)
             {
-                EmailAddress a = new EmailAddress(JsonConvert.SerializeObject(obj));
-                emails.Add(a);
+                return null;
             }
-            return emails;
+            else
+            {
+                foreach (JObject obj in jarray)
+                {
+                    EmailAddress a = new EmailAddress(obj);
+                    emails.Add(a);
+                }
+                return emails; 
+            }
         }
     }
 }

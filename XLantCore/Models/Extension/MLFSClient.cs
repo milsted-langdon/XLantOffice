@@ -13,7 +13,7 @@ namespace XLantCore.Models
             List<MLFSClient> clients = new List<MLFSClient>();
             foreach(JObject obj in array)
             {
-                MLFSClient c = new MLFSClient(obj["id"].ToString(), true);
+                MLFSClient c = new MLFSClient(obj["id"].ToString());
                 clients.Add(c);
             }
             return clients;

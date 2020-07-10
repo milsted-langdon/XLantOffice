@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,6 +8,53 @@ namespace XLantCore.Models
 {
     public partial class Fee
     {
+        public Fee()
+        {
+            Clients = new List<MLFSClient>();
+        }
+
+        public Fee(JObject fee)
+        {
+            Clients = new List<MLFSClient>();
+            dynamic f = fee;
+            PrimaryID = f.id;
+            SentToClient = f.sentToClientOn;
+            FeeType = f.feeChargingType.name;
+            if (f.sellingAdvisor != null)
+            {
+                string advisorID = f.sellingAdvisor.id;
+                Advisor = new Staff(advisorID);
+            }
+            NetAmount = f.net.amount;
+            VAT = f.vat.amount;
+            if (f.recurring == null)
+            {
+                IsRecurring = false;
+                RecurringFrequency = "";
+                RecurringStart = null;
+                RecurringEnd = null;
+            }
+            else
+            {
+                IsRecurring = true;
+                RecurringFrequency = f.recurring.frequency;
+                RecurringStart = DateTime.Parse(f.recurring.startsOn.ToString());
+                RecurringEnd = DateTime.Parse(f.recurring.endsOn.ToString());
+            }
+            PaidBy = f.paymentType.paidBy;
+            InitialPeriod = f.initialPeriod;
+            string planId = f.plan_href.ToString();
+            planId = planId.Substring(planId.IndexOf('('), planId.LastIndexOf(')')- planId.IndexOf('('));
+            Plan = new Plan(planId);
+            if (f.discount != null)
+            {
+                DiscountPercentage = f.discount.percentage;
+                DiscountTotal = f.discount.total.amount;
+            }
+            Clients = MLFSClient.CreateList(JArray.FromObject(f.clients));
+            FeePercentage = f.feePercentage;
+        }
+
         public string PrimaryID { get; set; }
         public DateTime? SentToClient { get; set; }
         public string FeeType { get; set; }
@@ -14,11 +62,11 @@ namespace XLantCore.Models
         public decimal NetAmount { get; set; }
         public decimal VAT { get; set; }
         public bool IsRecurring { get; set; }
-        public int RecuringFrequency { get; set;}
+        public string RecurringFrequency { get; set;}
         public DateTime? RecurringStart { get; set; }
         public DateTime? RecurringEnd { get; set; }
         public string PaidBy { get; set; }
-        public int InitialPeriod { get; set; }
+        public int? InitialPeriod { get; set; }
         public Plan Plan { get; set; }
         public decimal DiscountPercentage { get; set; }
         public decimal DiscountTotal { get; set; }

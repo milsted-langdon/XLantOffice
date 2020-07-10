@@ -13,9 +13,9 @@ namespace XLantCore.Models
 
         }
 
-        public EmailAddress(string jsonString)
+        public EmailAddress(JObject jobject)
         {
-            dynamic obj = JObject.Parse(jsonString);
+            dynamic obj = jobject;
             PrimaryID = obj.id;
             Address = obj.value;
             DisplayName = obj.type;

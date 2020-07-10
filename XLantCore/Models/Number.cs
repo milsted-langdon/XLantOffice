@@ -13,9 +13,9 @@ namespace XLantCore.Models
 
         }
 
-        public Number(string jsonString)
+        public Number(JObject jObject)
         {
-            dynamic obj = JObject.Parse(jsonString);
+            dynamic obj = jObject;
             PrimaryID = obj.id;
             Description = obj.type;
             PhoneNumber = obj.value;
