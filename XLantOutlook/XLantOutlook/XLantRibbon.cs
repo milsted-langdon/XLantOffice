@@ -5,7 +5,7 @@ using System.Text;
 using System.Xml.Linq;
 using Microsoft.Office.Tools.Ribbon;
 using Outlook = Microsoft.Office.Interop.Outlook;
-using XLant;
+using XLantCore;
 using XLForms;
 using System.Windows.Forms;
 using System.IO;
@@ -15,7 +15,7 @@ namespace XLantOutlook
 {
     public partial class XLantRibbon
     {
-        public static List<XLant.XLMain.Client> recentClients = new List<XLMain.Client>();
+        public static List<XLantCore.XLMain.Client> recentClients = new List<XLMain.Client>();
         public static List<XLMain.EntityCouplet> staff = new List<XLMain.EntityCouplet>();
         public static Boolean exInternal = false;
         private static Outlook.Items newItems;

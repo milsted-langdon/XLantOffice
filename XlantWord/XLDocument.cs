@@ -7,7 +7,7 @@ using Microsoft.Office.Interop.Word;
 using Microsoft.Office.Core;
 using System.Windows.Forms;
 using System.IO;
-using XLant;
+using XLantCore;
 using System.Diagnostics;
 using System.Reflection;
 using System.Net;

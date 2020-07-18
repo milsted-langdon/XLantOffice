@@ -12,16 +12,6 @@ namespace XLantCore.Models
         
         }
 
-        public MLFSReportingPeriod(DataRow row)
-        {
-            Id = (int)row["id"];
-            Description = row["Description"].ToString();
-            Month = (int)row["Month"];
-            Year = (int)row["Year"];
-            FinancialYear = row["FinancialYear"].ToString();
-            ReportOrder = (int)row["ReportOrder"];
-        }
-
         public int Id { get; set; }
         public string Description { get; set; }
         public int Month { get; set; }

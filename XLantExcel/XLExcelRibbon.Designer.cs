@@ -41,7 +41,7 @@
             this.group2 = this.Factory.CreateRibbonGroup();
             this.PERawDataBtn = this.Factory.CreateRibbonButton();
             this.group3 = this.Factory.CreateRibbonGroup();
-            this.MLFSDirRepBtn = this.Factory.CreateRibbonButton();
+            this.MLFSUploadBtn = this.Factory.CreateRibbonButton();
             this.tab1.SuspendLayout();
             this.group1.SuspendLayout();
             this.group2.SuspendLayout();
@@ -90,15 +90,15 @@
             // 
             // group3
             // 
-            this.group3.Items.Add(this.MLFSDirRepBtn);
+            this.group3.Items.Add(this.MLFSUploadBtn);
             this.group3.Label = "MLFS";
             this.group3.Name = "group3";
             // 
-            // MLFSDirRepBtn
+            // MLFSUploadBtn
             // 
-            this.MLFSDirRepBtn.Label = "Directors\' Report";
-            this.MLFSDirRepBtn.Name = "MLFSDirRepBtn";
-            this.MLFSDirRepBtn.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.MLFSDirRepBtn_Click);
+            this.MLFSUploadBtn.Label = "Month End Upload";
+            this.MLFSUploadBtn.Name = "MLFSUploadBtn";
+            this.MLFSUploadBtn.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.MLFSDirRepBtn_Click);
             // 
             // XLExcelRibbon
             // 
@@ -127,7 +127,7 @@
         internal Microsoft.Office.Tools.Ribbon.RibbonGroup group2;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton PERawDataBtn;
         internal Microsoft.Office.Tools.Ribbon.RibbonGroup group3;
-        internal Microsoft.Office.Tools.Ribbon.RibbonButton MLFSDirRepBtn;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton MLFSUploadBtn;
     }
 
     partial class ThisRibbonCollection

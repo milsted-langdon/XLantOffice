@@ -7,11 +7,9 @@ namespace XLantCore.Models
 {
     public partial class MLFSAdvisor :Staff
     {
-        public MLFSAdvisor(DataRow row)
+        public MLFSAdvisor()
         {
-            Name = row["name"].ToString();
-            PrimaryID = row["id"].ToString();
-            Department = row["Organisation"].ToString();
+
         }
 
         public List<MLFSBudget> Budget { get; set; }

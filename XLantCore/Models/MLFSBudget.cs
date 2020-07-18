@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Data;
-using XLant;
+using XLantCore;
 
 namespace XLantCore.Models
 {
@@ -11,14 +11,6 @@ namespace XLantCore.Models
         public MLFSBudget()
         {
 
-        }
-
-        public MLFSBudget(DataRow row)
-        {
-            Id = (int)row["Id"];
-            AdvisorId = row["AdvisorId"].ToString();
-            MLFSReportPeriodId = (int)row["MLFSReportPeriodId"];
-            Budget = XLtools.HandleNull(row["Budget"].ToString());
         }
 
         public int Id { get; set; }

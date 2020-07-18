@@ -1,13 +1,16 @@
-﻿using Microsoft.Office.Interop.Excel;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Office.Interop.Excel;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using XLant;
+using XLantCore;
 
 namespace XLantExcel
 {
@@ -355,51 +358,32 @@ namespace XLantExcel
         /// <summary>
         /// Builds the MLFS Director's report from two tables
         /// </summary>
+        /// <param name="periodId">The ID of the period we are adding these to</param>
         /// <param name="FeeCSV">THe location of the fee csv</param>
         /// <param name="PlanCSV">The location of the plan csv</param>
-        public static void BuildMLFSDirectorsReport(string feeCSV, string planCSV, DateTime periodEnd, decimal initialLimit = 450, decimal trailLimit = 500)
+        /// <param name="fciCSV">The location of the FCI csv</param>
+        /// <returns>Success or Failure</returns>
+        public static async Task<string> BuildMLFSDirectorsReport(int periodId, string feeCSV, string planCSV, string fciCSV)
         {
-            //convert our csvs into datatables
-            System.Data.DataTable feeDt = XLCSV.ConvertCSVToDataTable(feeCSV);
-            System.Data.DataTable planDt = XLCSV.ConvertCSVToDataTable(planCSV);
+            Uri webApi = new Uri(APIAccess.baseURL + "/MLFSSale/PostMonthlyData?periodId=" + periodId);
+            FileStream saleStream = File.OpenRead(feeCSV);
+            FileStream planStream = File.OpenRead(planCSV);
+            FileStream fciStream = File.OpenRead(fciCSV);
+            var content = new MultipartFormDataContent();
+            content.Add(new StreamContent(saleStream), "salesCSV", Path.GetFileName(feeCSV));
+            content.Add(new StreamContent(planStream), "planCSV", Path.GetFileName(planCSV));
+            content.Add(new StreamContent(fciStream), "feeCSV", Path.GetFileName(fciCSV));
 
-            //Create a list of our object
-            List<MLFSDirectorsReportEntry> entries = new List<MLFSDirectorsReportEntry>();
-            foreach (DataRow r in feeDt.Rows)
+            var client = new HttpClient();
+            HttpResponseMessage response = await client.PostAsync(webApi, content);
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
-                MLFSDirectorsReportEntry entry = new MLFSDirectorsReportEntry(r);
-                if (!String.IsNullOrEmpty(entry.Policy_Number))
-                {
-                    DataRow planRow = planDt.AsEnumerable().Where(x => x.Field<string>("Policy Number") == entry.Policy_Number).FirstOrDefault();
-                    if (planRow != null)
-                    {
-                        entry.Campaign_Type = planRow["Owner 1.Campaign Type"].ToString();
-                        entry.Campaign_Source = planRow["Owner 1.Campaign Source"].ToString();
-                        entry.Provider = planRow["Provider.Name"].ToString();
-                        entry.NonDisplay_Client_Creation_Date = XLtools.HandleStringToDate(planRow["Owner 1.Creation Date"].ToString());
-                        entry.Investment = XLtools.HandleNull(planRow["Total Premiums To Date"].ToString());
-                        entry.Ongoing_Percentage = XLtools.HandleNull(planRow["On-going Fee Percentage"].ToString());
-                        entry.Trail_12mths = entry.Investment * entry.Ongoing_Percentage / 100;
-                    }
-                }
-                if (entry.Total_Amount > initialLimit)
-                {
-                    entry.Initial_Passed = true;
-                }
-                if (entry.Trail_12mths > trailLimit)
-                {
-                    entry.Trail_Passed = true;
-                }
-                DateTime recent = periodEnd.AddMonths(-2);
-                if (entry.NonDisplay_Client_Creation_Date == null || entry.NonDisplay_Client_Creation_Date > recent)
-                {
-                    entry.New_Or_Existing = "New";
-                }
-                entries.Add(entry);
+                return "Success";
             }
-            System.Data.DataTable mergedTable = XLtools.LINQResultToDataTable(entries);
-            //add our merged and calculated table to excel
-            CreateWorkSheet(mergedTable, "Directors Report");
+            else
+            {
+                return "Failure";
+            }
         }
     }
 }

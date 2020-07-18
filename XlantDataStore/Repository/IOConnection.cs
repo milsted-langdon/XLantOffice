@@ -33,23 +33,23 @@ namespace XLantDataStore.Repository
             public string Scope { get; set; }
         }
 
-        public static APIToken GetToken()
+        public static async Task<APIToken> GetToken()
         {
             var client = new RestClient(tokenUrl);
             var request = new RestRequest(Method.POST);
             request.AddHeader("cache-control", "no-cache");
             request.AddHeader("content-type", "application/x-www-form-urlencoded");
             request.AddParameter("application/x-www-form-urlencoded", "grant_type=tenant_client_credentials&scope=client_data client_financial_data&" + credentials, ParameterType.RequestBody);
-            IRestResponse response = client.Execute(request);
+            IRestResponse response = await client.ExecuteAsync(request);
             APIToken token = JsonConvert.DeserializeObject<APIToken>(response.Content);
             return token;
         }
 
-        private static RestRequest BuildRestRequest(Method method)
+        private static async Task<RestRequest> BuildRestRequest(Method method)
         {
             if (String.IsNullOrEmpty(currentToken.AccessToken))
             {
-                currentToken = GetToken();
+                currentToken = await GetToken();
             }
             var request = new RestRequest(method);
             request.AddHeader("Accept", "application/json");
@@ -58,12 +58,12 @@ namespace XLantDataStore.Repository
             return request;
         }
 
-        public static IRestResponse GetResponse(string url)
+        public static async Task<IRestResponse> GetResponse(string url)
         {
             url = apiBaseUrl + url;
             var contRestClient = new RestClient(url);
-            var request = IOConnection.BuildRestRequest(Method.GET);
-            IRestResponse response = contRestClient.Execute(request);
+            var request = await IOConnection.BuildRestRequest(Method.GET);
+            IRestResponse response = await contRestClient.ExecuteAsync(request);
             return response;
         }
     }

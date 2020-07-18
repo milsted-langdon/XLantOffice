@@ -9,7 +9,7 @@ using System.Management;
 using System.Windows.Forms;
 using Microsoft.Office.Interop.Word;
 using System.Drawing.Printing;
-using XLant;
+using XLantCore;
 using System.Reflection;
 
 namespace XlantWord

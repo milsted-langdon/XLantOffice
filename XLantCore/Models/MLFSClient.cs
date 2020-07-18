@@ -78,6 +78,7 @@ namespace XLantCore.Models
         public Staff Advisor { get; set; }
         public string Category { get; set; }
         public string Type { get; set; }
+
         public List<Plan> Plans { get; set; }
         public List<Fee> Fees { get; set; }
     }

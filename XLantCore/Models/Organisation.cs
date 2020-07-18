@@ -7,6 +7,7 @@ namespace XLantCore.Models
 {
     public partial class Organisation
     {
+        public int Id { get; set; }
         public string PrimaryID { get; set; }
         public string Name { get; set; }
         public List<Address> Addresses { get; set; }

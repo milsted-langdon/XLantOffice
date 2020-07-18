@@ -1,4 +1,4 @@
-﻿namespace XLantExcel
+﻿namespace XLForms
 {
     partial class MLFSDirRepForm
     {
@@ -35,13 +35,13 @@
             this.PlansFileTb = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.DateTb = new System.Windows.Forms.DateTimePicker();
-            this.label4 = new System.Windows.Forms.Label();
-            this.InitialTb = new System.Windows.Forms.TextBox();
-            this.TrailTargetTb = new System.Windows.Forms.TextBox();
-            this.label5 = new System.Windows.Forms.Label();
             this.OkBtn = new System.Windows.Forms.Button();
             this.CancelBtn = new System.Windows.Forms.Button();
+            this.ChooseFCIFileBtn = new System.Windows.Forms.Button();
+            this.FCIFileTb = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.PeriodDDL = new System.Windows.Forms.ComboBox();
+            this.addPeriodBtn = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label1
@@ -101,54 +101,11 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(25, 147);
+            this.label3.Location = new System.Drawing.Point(25, 199);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(85, 13);
+            this.label3.Size = new System.Drawing.Size(37, 13);
             this.label3.TabIndex = 6;
-            this.label3.Text = "Period End Date";
-            // 
-            // DateTb
-            // 
-            this.DateTb.Location = new System.Drawing.Point(135, 141);
-            this.DateTb.Name = "DateTb";
-            this.DateTb.Size = new System.Drawing.Size(315, 20);
-            this.DateTb.TabIndex = 7;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(25, 188);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(86, 13);
-            this.label4.TabIndex = 8;
-            this.label4.Text = "Initial Fee Target";
-            // 
-            // InitialTb
-            // 
-            this.InitialTb.Location = new System.Drawing.Point(135, 185);
-            this.InitialTb.Name = "InitialTb";
-            this.InitialTb.Size = new System.Drawing.Size(315, 20);
-            this.InitialTb.TabIndex = 9;
-            this.InitialTb.Text = "450";
-            this.InitialTb.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            // 
-            // TrailTargetTb
-            // 
-            this.TrailTargetTb.Location = new System.Drawing.Point(135, 226);
-            this.TrailTargetTb.Name = "TrailTargetTb";
-            this.TrailTargetTb.Size = new System.Drawing.Size(315, 20);
-            this.TrailTargetTb.TabIndex = 11;
-            this.TrailTargetTb.Text = "500";
-            this.TrailTargetTb.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(25, 229);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(102, 13);
-            this.label5.TabIndex = 10;
-            this.label5.Text = "Ongoing Fee Target";
+            this.label3.Text = "Period";
             // 
             // OkBtn
             // 
@@ -170,18 +127,63 @@
             this.CancelBtn.UseVisualStyleBackColor = true;
             this.CancelBtn.Click += new System.EventHandler(this.CancelBtn_Click);
             // 
+            // ChooseFCIFileBtn
+            // 
+            this.ChooseFCIFileBtn.Location = new System.Drawing.Point(474, 145);
+            this.ChooseFCIFileBtn.Name = "ChooseFCIFileBtn";
+            this.ChooseFCIFileBtn.Size = new System.Drawing.Size(102, 23);
+            this.ChooseFCIFileBtn.TabIndex = 16;
+            this.ChooseFCIFileBtn.Text = "Choose File...";
+            this.ChooseFCIFileBtn.UseVisualStyleBackColor = true;
+            this.ChooseFCIFileBtn.Click += new System.EventHandler(this.ChooseFCIFileBtn_Click);
+            // 
+            // FCIFileTb
+            // 
+            this.FCIFileTb.Location = new System.Drawing.Point(135, 147);
+            this.FCIFileTb.Name = "FCIFileTb";
+            this.FCIFileTb.ReadOnly = true;
+            this.FCIFileTb.Size = new System.Drawing.Size(315, 20);
+            this.FCIFileTb.TabIndex = 15;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(22, 150);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(42, 13);
+            this.label4.TabIndex = 14;
+            this.label4.Text = "FCI File";
+            // 
+            // PeriodDDL
+            // 
+            this.PeriodDDL.FormattingEnabled = true;
+            this.PeriodDDL.Location = new System.Drawing.Point(135, 196);
+            this.PeriodDDL.Name = "PeriodDDL";
+            this.PeriodDDL.Size = new System.Drawing.Size(315, 21);
+            this.PeriodDDL.TabIndex = 17;
+            // 
+            // addPeriodBtn
+            // 
+            this.addPeriodBtn.Location = new System.Drawing.Point(474, 194);
+            this.addPeriodBtn.Name = "addPeriodBtn";
+            this.addPeriodBtn.Size = new System.Drawing.Size(102, 23);
+            this.addPeriodBtn.TabIndex = 18;
+            this.addPeriodBtn.Text = "Add New...";
+            this.addPeriodBtn.UseVisualStyleBackColor = true;
+            this.addPeriodBtn.Click += new System.EventHandler(this.addPeriodBtn_Click);
+            // 
             // MLFSDirRepForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(633, 317);
+            this.Controls.Add(this.addPeriodBtn);
+            this.Controls.Add(this.PeriodDDL);
+            this.Controls.Add(this.ChooseFCIFileBtn);
+            this.Controls.Add(this.FCIFileTb);
+            this.Controls.Add(this.label4);
             this.Controls.Add(this.CancelBtn);
             this.Controls.Add(this.OkBtn);
-            this.Controls.Add(this.TrailTargetTb);
-            this.Controls.Add(this.label5);
-            this.Controls.Add(this.InitialTb);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.DateTb);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.ChoosePlansFileBtn);
             this.Controls.Add(this.PlansFileTb);
@@ -205,12 +207,12 @@
         private System.Windows.Forms.TextBox PlansFileTb;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.DateTimePicker DateTb;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.TextBox InitialTb;
-        private System.Windows.Forms.TextBox TrailTargetTb;
-        private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Button OkBtn;
         private System.Windows.Forms.Button CancelBtn;
+        private System.Windows.Forms.Button ChooseFCIFileBtn;
+        private System.Windows.Forms.TextBox FCIFileTb;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.ComboBox PeriodDDL;
+        private System.Windows.Forms.Button addPeriodBtn;
     }
 }

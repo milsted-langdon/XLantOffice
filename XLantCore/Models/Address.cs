@@ -25,7 +25,7 @@ namespace XLantCore.Models
             County = obj.address.county.name;
             Postcode = obj.address.postalcode;
         }
-
+        public int Id { get; set; }
         public String PrimaryID { get; set; }
         public Boolean IsPrimary { get; set; }
         public String Line1 { get; set; }

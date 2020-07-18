@@ -6,35 +6,37 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using XLantCore.Models;
 
-namespace XLantDataStore.Controllers
+namespace XLantDataStore.API.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class IntelligentOfficeController : ControllerBase
     {
         private readonly ILogger<IntelligentOfficeController> _logger;
+        private readonly Repository.IMLFSClientRepository _clientRepository;
 
         public IntelligentOfficeController(ILogger<IntelligentOfficeController> logger)
         {
             _logger = logger;
+            _clientRepository = new Repository.MLFSClientRepository();
         }
 
         [HttpGet]
         [Route("GetClient")]
-        public MLFSClient GetClient(string clientId)
+        public async Task<MLFSClient> GetClient(string clientId)
         {
-            MLFSClient client = Repository.MLFSClientRepository.GetMLFSClient(clientId);
+            MLFSClient client = await _clientRepository.GetClient(clientId);
             return client;
         }
 
         [HttpGet]
         [Route("GetClients")]
-        public List<MLFSClient> GetClients(string[] clientIds)
+        public async Task<List<MLFSClient>> GetClients(string[] clientIds)
         {
             List<MLFSClient> clients = new List<MLFSClient>();
             foreach(string id in clientIds)
             {
-                MLFSClient client = Repository.MLFSClientRepository.GetMLFSClient(id);
+                MLFSClient client = await _clientRepository.GetClient(id);
                 clients.Add(client);
             }
             return clients;

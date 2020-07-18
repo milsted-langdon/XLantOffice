@@ -8,7 +8,7 @@ using System.Reflection;
 using System.Text;
 using System.Xml.Linq;
 
-namespace XLant
+namespace XLantCore
 {
     public class XLVirtualCabinet
     {

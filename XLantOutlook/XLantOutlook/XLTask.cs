@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Outlook = Microsoft.Office.Interop.Outlook;
 using Office = Microsoft.Office.Core;
-using XLant;
+using XLantCore;
 using System.Windows.Forms;
 
 namespace XLantOutlook
@@ -39,7 +39,7 @@ namespace XLantOutlook
             }
             catch (Exception ex)
             {
-                XLant.XLtools.LogException("CreateToDo", ex.ToString());
+                XLantCore.XLtools.LogException("CreateToDo", ex.ToString());
                 MessageBox.Show("Could not add To Do", "Add To Do", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
@@ -110,7 +110,7 @@ namespace XLantOutlook
             }
             catch (Exception ex)
             {
-                XLant.XLtools.LogException("CreateVCFolder", ex.ToString());
+                XLantCore.XLtools.LogException("CreateVCFolder", ex.ToString());
                 MessageBox.Show("Could not add task folder", "Add Folder", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -127,7 +127,7 @@ namespace XLantOutlook
                 }
 
                 //get the current todos
-                List<XLVirtualCabinet.FileInfo> newToDos = XLant.XLVirtualCabinet.GetToDos(user.name);
+                List<XLVirtualCabinet.FileInfo> newToDos = XLantCore.XLVirtualCabinet.GetToDos(user.name);
 
                 //input the ids into an array for comparison with our existing list
                 List<string> newtds = new List<string>();
@@ -171,7 +171,7 @@ namespace XLantOutlook
             }
             catch (Exception ex)
             {
-                XLant.XLtools.LogException("CheckToDos", ex.ToString());
+                XLantCore.XLtools.LogException("CheckToDos", ex.ToString());
                 MessageBox.Show("Could not check To Dos", "Failure", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }

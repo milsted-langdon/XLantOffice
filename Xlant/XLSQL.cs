@@ -7,7 +7,7 @@ using System.Xml.Linq;
 using System.Diagnostics;
 using System.Data;
 
-namespace XLant
+namespace XLantCore
 {
     public class XLSQL
     {

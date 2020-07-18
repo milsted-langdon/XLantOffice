@@ -22,6 +22,7 @@ namespace XLantCore.Models
             IsPrimary = obj.isDefault;
         }
 
+        public int Id { get; set; }
         public String PrimaryID { get; set; }
         public string Address { get; set; }
         public string DisplayName { get; set; }

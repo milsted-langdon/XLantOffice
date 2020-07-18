@@ -14,6 +14,7 @@ namespace XLantCore.Models
             EmailAddresses = new List<EmailAddress>();
         }
 
+        public int Id { get; set; }
         public string PrimaryID { get; set; }
         public Title Title { get; set; }
         public string Name { get; set; }

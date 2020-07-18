@@ -6,7 +6,7 @@ using System.Xml.Linq;
 using Word = Microsoft.Office.Interop.Word;
 using Office = Microsoft.Office.Core;
 using Microsoft.Office.Tools.Word;
-using XLant;
+using XLantCore;
 using System.Windows.Forms;
 
 namespace XlantWord

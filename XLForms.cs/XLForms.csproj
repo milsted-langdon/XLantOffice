@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>XLForms</RootNamespace>
     <AssemblyName>XLForms</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -29,6 +30,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -56,6 +58,18 @@
     </Compile>
     <Compile Include="ClientForm.Designer.cs">
       <DependentUpon>ClientForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MLFSDirRepForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MLFSDirRepForm.Designer.cs">
+      <DependentUpon>MLFSDirRepForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MLFSReportingPeriodAdd.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MLFSReportingPeriodAdd.Designer.cs">
+      <DependentUpon>MLFSReportingPeriodAdd.cs</DependentUpon>
     </Compile>
     <Compile Include="SelectForm.cs">
       <SubType>Form</SubType>
@@ -109,6 +123,12 @@
     <EmbeddedResource Include="ClientForm.resx">
       <DependentUpon>ClientForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="MLFSDirRepForm.resx">
+      <DependentUpon>MLFSDirRepForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MLFSReportingPeriodAdd.resx">
+      <DependentUpon>MLFSReportingPeriodAdd.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="SelectForm.resx">
       <DependentUpon>SelectForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -130,6 +150,12 @@
     <EmbeddedResource Include="VCForm.resx">
       <DependentUpon>VCForm.cs</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\XLantCore\XLantCore.csproj">
+      <Project>{33ef9c33-ab88-4056-b948-88d43f419494}</Project>
+      <Name>XLantCore</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

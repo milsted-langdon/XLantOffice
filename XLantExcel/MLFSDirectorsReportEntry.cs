@@ -4,7 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using XLant;
+using XLantCore;
 
 namespace XLantExcel
 {

@@ -11,70 +11,6 @@ namespace XLantCore.Models.Tests
     public class MLFSSaleTests
     {
         [TestMethod()]
-        public void MLFSSaleCreateFromDataRowTest()
-        {
-            //arrange
-            DataTable table = new DataTable();
-            table.Columns.Add("Id", typeof(int));
-            table.Columns.Add("IOReference", typeof(string));
-            table.Columns.Add("ReportingPeriodId", typeof(int));
-            table.Columns.Add("Organisation", typeof(string));
-            table.Columns.Add("ClientName", typeof(string));
-            table.Columns.Add("ClientId", typeof(string));
-            table.Columns.Add("JointClientName", typeof(string));
-            table.Columns.Add("JointClientId", typeof(string));
-            table.Columns.Add("AdvisorId", typeof(string));
-            table.Columns.Add("AdvisorName", typeof(string));
-            table.Columns.Add("ProviderName", typeof(string));
-            table.Columns.Add("PlanType", typeof(string));
-            table.Columns.Add("IsNew", typeof(bool));
-            table.Columns.Add("RelevantDate", typeof(DateTime));
-            table.Columns.Add("NetAmount", typeof(decimal));
-            table.Columns.Add("VAT", typeof(decimal));
-            table.Columns.Add("Investment", typeof(decimal));
-            table.Columns.Add("OngoingPercentage", typeof(decimal));
-            table.Columns.Add("Paid", typeof(decimal));
-            table.Columns.Add("Adjusted", typeof(decimal));
-            table.Columns.Add("NotTakenUp", typeof(bool));
-            table.Columns.Add("IncomeId", typeof(int));
-            table.Columns.Add("PlanReference", typeof(string));
-
-
-            DataRow row = table.NewRow();
-            row["Id"] = 1;
-            row["IOReference"] = "IOF123456";
-            row["ReportingPeriodId"] = 4;
-            row["Organisation"] = "MLFS";
-            row["ClientName"] = "Jeff Bloggs";
-            row["ClientId"] = 5;
-            row["JointClientName"] = "Jane Bloggs";
-            row["JointClientId"] = 6;
-            row["AdvisorId"] = 4;
-            row["AdvisorName"] = "Joe Smith";
-            row["ProviderName"] = "Elevate";
-            row["PlanType"] = "Pension";
-            row["IsNew"] = true;
-            row["RelevantDate"] = DateTime.Now;
-            row["NetAmount"] = 1000;
-            row["VAT"] = 100;
-            row["Investment"] = 10000;
-            row["OngoingPercentage"] = (decimal)0.10;
-            row["Paid"] = 0;
-            row["Adjusted"] = 0;
-            row["NotTakenUp"] = false;
-            row["IncomeId"] = 2;
-            row["PlanReference"] = "IOB123564";
-            table.Rows.Add(row);
-        
-            //act
-            MLFSSale sale = new MLFSSale(row, false);
-
-            //assert
-            Assert.AreEqual("Elevate", sale.ProviderName, "Provider doesn't match");
-            Assert.AreEqual(1100, sale.GrossAmount, "Gross amount does not match");
-        }
-
-        [TestMethod()]
         public void MLFSSaleCreateFromIODataRowTest()
         {
             //arrange
@@ -111,7 +47,7 @@ namespace XLantCore.Models.Tests
             table.Rows.Add(row);
 
             //act
-            MLFSSale sale = new MLFSSale(row, true);
+            MLFSSale sale = new MLFSSale(row);
 
             //assert
             Assert.AreEqual("Joe Smith", sale.AdvisorName, "Advisor doesn't match");

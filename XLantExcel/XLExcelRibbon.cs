@@ -6,7 +6,9 @@ using System.Text;
 using System.Windows.Forms;
 using Microsoft.Office.Tools.Ribbon;
 using Newtonsoft.Json.Linq;
-using XLant;
+using XLantCore;
+using XLantCore.Models;
+using XLForms;
 
 namespace XLantExcel
 {
@@ -65,13 +67,34 @@ namespace XLantExcel
             }
         }
 
-        private void MLFSDirRepBtn_Click(object sender, RibbonControlEventArgs e)
+        private async void MLFSDirRepBtn_Click(object sender, RibbonControlEventArgs e)
         {
-            MLFSDirRepForm form = new MLFSDirRepForm();
+            APIAccess.Result result = APIAccess.GetDataFromXLAPI<List<MLFSReportingPeriod>>("/MLFSReportingPeriod/GetCurrentPeriods");
+            MLFSDirRepForm form = new MLFSDirRepForm((List<MLFSReportingPeriod>)result.Data);
             form.ShowDialog();
-            if (!String.IsNullOrEmpty(form.PlansFile) && !String.IsNullOrEmpty(form.FeesFile) && form.PeriodDate != null)
+            if (form.NewPeriods != null)
             {
-                XLSheet.BuildMLFSDirectorsReport(form.FeesFile, form.PlansFile, form.PeriodDate, form.InitialTarget, form.TrailTarget);
+                //post the new periods
+                foreach (MLFSReportingPeriod period in form.NewPeriods)
+                {
+                    APIAccess.PostDataToXLAPI("/MLFSReportPeriod/Put", period);
+                }
+            }
+            if (!String.IsNullOrEmpty(form.PlansFile) && !String.IsNullOrEmpty(form.FeesFile) && form.PeriodId != null && !String.IsNullOrEmpty(form.FCIFile))
+            {
+                string response = await XLSheet.BuildMLFSDirectorsReport(1, form.FeesFile, form.PlansFile, form.FCIFile);
+                if (response == "Success")
+                {
+                    MessageBox.Show("Data Uploaded");
+                }
+                else
+                {
+                    MessageBox.Show("Upload Unsuccessful, check your data");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Upload Unsuccessful, check your data");
             }
         }
     }

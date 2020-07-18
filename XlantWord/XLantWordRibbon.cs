@@ -5,7 +5,7 @@ using System.Text;
 using Microsoft.Office.Tools.Ribbon;
 using Microsoft.Office.Interop.Word;
 using System.Windows.Forms;
-using XLant;
+using XLantCore;
 using XLForms;
 using System.Xml.Linq;
 using Microsoft.Office.Core;
@@ -831,7 +831,7 @@ namespace XlantWord
             catch (Exception ex)
             {
                 MessageBox.Show("Cancelled PDF Creation");
-                XLant.XLtools.LogException("Word - PDFCreation", ex.Message);
+                XLantCore.XLtools.LogException("Word - PDFCreation", ex.Message);
             }
         }
 

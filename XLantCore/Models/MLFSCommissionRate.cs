@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Data;
-using XLant;
+using XLantCore;
 
 namespace XLantCore.Models
 {
@@ -12,15 +12,6 @@ namespace XLantCore.Models
         public MLFSCommissionRate()
         {
 
-        }
-
-        public MLFSCommissionRate(DataRow row)
-        {
-            Id = (int)row["Id"];
-            AdvisorId = (int)row["AdvisorId"];
-            StartingValue = XLtools.HandleNull(row["StartingValue"].ToString());
-            EndingValue = XLtools.HandleNull(row["EndingValue"].ToString());
-            Percentage = XLtools.HandleNull(row["Percentage"].ToString());
         }
 
         public int Id { get; set; }
