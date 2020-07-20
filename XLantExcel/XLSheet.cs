@@ -11,6 +11,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using XLantCore;
+using XLantCore.Models;
 
 namespace XLantExcel
 {
@@ -25,7 +26,7 @@ namespace XLantExcel
         /// <param name="isJsonData">Whether the data is json or SQL, sql data has more information about data types</param>
         /// <param name="firstNumberColumn">If provided everything after this will be formatted as a number</param>
         /// <param name="extraWideColumns">The columns with lots of text in</param>
-        public static void CreateWorkSheet(System.Data.DataTable table, string sheetName, string splitTableOn = "", bool isJsonData = false, string firstNumberColumn = "", int[] extraWideColumns = null)
+        public static void CreateWorkSheet(System.Data.DataTable table, string sheetName, string splitTableOn = "", bool isJsonData = false, string firstNumberColumn = "", int[] extraWideColumns = null, bool addTotalRow = true)
         {
             Microsoft.Office.Interop.Excel.Worksheet worksheet = new Microsoft.Office.Interop.Excel.Worksheet();
             List<System.Data.DataTable> tables = new List<System.Data.DataTable>();
@@ -61,7 +62,7 @@ namespace XLantExcel
             {
                 RemoveNonDisplayColumns(t);
                 Microsoft.Office.Interop.Excel.Range rng = AddDataToSheet(t, worksheet, lastRow);
-                AddExcelTable(rng, t, t.TableName, true, isJsonData, firstNumberColumn);
+                AddExcelTable(rng, t, t.TableName, addTotalRow, isJsonData, firstNumberColumn);
                 FormatTable(t, rng, isJsonData, firstNumberColumn, extraWideColumns);
                 lastRow += t.Rows.Count + 8; //allow for total and a gap
             }
@@ -372,7 +373,7 @@ namespace XLantExcel
             var content = new MultipartFormDataContent();
             content.Add(new StreamContent(saleStream), "salesCSV", Path.GetFileName(feeCSV));
             content.Add(new StreamContent(planStream), "planCSV", Path.GetFileName(planCSV));
-            content.Add(new StreamContent(fciStream), "feeCSV", Path.GetFileName(fciCSV));
+            content.Add(new StreamContent(fciStream), "fciCSV", Path.GetFileName(fciCSV));
 
             var client = new HttpClient();
             HttpResponseMessage response = await client.PostAsync(webApi, content);
@@ -384,6 +385,97 @@ namespace XLantExcel
             {
                 return "Failure";
             }
+        }
+
+        public static string RunReports(int periodId)
+        {
+            APIAccess.Result result = APIAccess.GetDataFromXLAPI<System.Data.DataTable>("/MLFSIncome/GetIncome?currentMonthId=" + periodId);
+            if (result.WasSuccessful)
+            {
+                System.Data.DataTable table = (System.Data.DataTable)result.Data;
+                CreateWorkSheet(table, "IncomeRawData", firstNumberColumn: "new Amount", addTotalRow: false);
+                CreatePivot("IncomeRawData", new int[]{ 2, 3, 4 }, new int[] { 1 }, new int[] { 6, 7 }, "AutoPivot", new string[] { "campaign", "organisation" });
+                return "Success";
+            }
+            else
+            {
+                return "Failed";
+            }
+            
+        }
+
+        public static void CreatePivot(string tableSource, int[] pageFields, int[] rowFields, int[] dataFields, string pivotTableName = "Pivot Table", string[] slicerColumns = null)
+        {
+            Microsoft.Office.Interop.Excel.Worksheet worksheet = new Microsoft.Office.Interop.Excel.Worksheet();
+            worksheet = Globals.ThisAddIn.Application.Worksheets.Add(After: Globals.ThisAddIn.Application.ActiveSheet);
+            worksheet.Name = "Pivot";
+            ListObject table = GetTable(tableSource);
+            Range rng = table.Range;
+            worksheet.PivotTableWizard(
+                XlPivotTableSourceType.xlDatabase,
+                rng,
+                worksheet.Range["A1"],
+                pivotTableName                
+                );
+            PivotTable pivot = (PivotTable)worksheet.PivotTables(pivotTableName);
+            pivot.HasAutoFormat = true;
+            pivot.ColumnGrand = true;
+            pivot.RowGrand = true;
+            for(int i = 0; i < pageFields.Length; i++)
+            {
+                PivotField field1 = pivot.PivotFields(pageFields[i]);
+                field1.Orientation = XlPivotFieldOrientation.xlPageField;
+                field1.Position = i + 1;
+                field1.CurrentPage = "(All)";
+            }
+            for (int i = 0; i < rowFields.Length; i++)
+            {
+                PivotField field1 = pivot.PivotFields(rowFields[i]);
+                field1.Orientation = XlPivotFieldOrientation.xlRowField;
+                field1.Position = i + 1;
+            }
+            for (int i = 0; i < dataFields.Length; i++)
+            {
+                PivotField field1 = pivot.PivotFields(dataFields[i]);
+                field1.Orientation = XlPivotFieldOrientation.xlDataField;
+                field1.Position = i + 1;
+                field1.Function = XlConsolidationFunction.xlSum;
+            }
+            //Add Slicers
+            SlicerCaches cashes = Globals.ThisAddIn.Application.ActiveWorkbook.SlicerCaches;
+            int counter = 1;
+            if (slicerColumns != null)
+            {
+                foreach (string s in slicerColumns)
+                {
+                    SlicerCache cache = cashes.Add(table, s, s);
+                    Slicer slicer = cache.Slicers.Add(worksheet, Type.Missing, s, s, 160 * counter, 10, 144, 200);
+                    i++;
+                }
+            }
+        }
+
+        public static List<ListObject> GetTables()
+        {
+            List<ListObject> tables = new List<ListObject>();
+            var app = Globals.ThisAddIn.Application;
+            var workbook = app.ActiveWorkbook;
+            int numberOfSheets = workbook.Worksheets.Count;
+            for (int i = 1; i <= numberOfSheets; i++)
+            {
+                Worksheet sheet = workbook.Worksheets[i];
+                foreach (ListObject table in sheet.ListObjects)
+                {
+                    tables.Add(table);
+                }
+            }
+            return tables;
+        }
+
+        private static ListObject GetTable(string tableName)
+        {
+            List<ListObject> tables = GetTables();
+            return tables.Where(x => x.DisplayName == tableName).FirstOrDefault();
         }
     }
 }

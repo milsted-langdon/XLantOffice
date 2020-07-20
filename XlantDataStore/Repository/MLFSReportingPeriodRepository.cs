@@ -27,10 +27,24 @@ namespace XLantDataStore.Repository
             return period;
         }
 
-        public void InsertPeriod(MLFSReportingPeriod period)
+        public async Task<int> InsertPeriod(MLFSReportingPeriod period)
         {
             _db.MLFSReportingPeriods.Add(period);
-            _db.SaveChangesAsync();
+            await _db.SaveChangesAsync();
+            return period.Id;
+        }
+
+        public void Update(MLFSReportingPeriod period)
+        {
+            _db.Entry(period).State = EntityState.Modified;
+            _db.SaveChanges();
+        }
+
+        public void Delete(int id)
+        {
+            MLFSReportingPeriod period = _db.MLFSReportingPeriods.Find(id);
+            _db.MLFSReportingPeriods.Remove(period);
+            _db.SaveChanges();
         }
 
     }

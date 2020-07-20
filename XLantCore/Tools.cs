@@ -181,5 +181,16 @@ namespace XLantCore
             }
             return table;
         }
+
+        public static Dictionary<int, string> MonthsList()
+        {
+            Dictionary<int, string> months = new Dictionary<int, string>();
+            string[] monthArray = { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
+            for (int i = 0; i < 12; i++)
+            {
+                months.Add(i + 1, monthArray[i]);
+            }
+            return months;
+        }
     }
 }

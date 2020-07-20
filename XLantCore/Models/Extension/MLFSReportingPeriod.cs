@@ -16,5 +16,16 @@ namespace XLantCore.Models
                 return start;
             }
         }
+
+        public string PriorYear
+        {
+            get
+            {
+                int startOfThisYear = int.Parse(FinancialYear.Substring(0, 2));
+                string value = (startOfThisYear -1).ToString().Substring(2);
+                value += "/" + (startOfThisYear).ToString().Substring(2);
+                return value;
+            }
+        }
     }
 }

@@ -41,7 +41,8 @@
             this.FCIFileTb = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.PeriodDDL = new System.Windows.Forms.ComboBox();
-            this.addPeriodBtn = new System.Windows.Forms.Button();
+            this.addNewBtn = new System.Windows.Forms.Button();
+            this.RefreshBtn = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label1
@@ -162,22 +163,33 @@
             this.PeriodDDL.Size = new System.Drawing.Size(315, 21);
             this.PeriodDDL.TabIndex = 17;
             // 
-            // addPeriodBtn
+            // addNewBtn
             // 
-            this.addPeriodBtn.Location = new System.Drawing.Point(474, 194);
-            this.addPeriodBtn.Name = "addPeriodBtn";
-            this.addPeriodBtn.Size = new System.Drawing.Size(102, 23);
-            this.addPeriodBtn.TabIndex = 18;
-            this.addPeriodBtn.Text = "Add New...";
-            this.addPeriodBtn.UseVisualStyleBackColor = true;
-            this.addPeriodBtn.Click += new System.EventHandler(this.addPeriodBtn_Click);
+            this.addNewBtn.Location = new System.Drawing.Point(474, 194);
+            this.addNewBtn.Name = "addNewBtn";
+            this.addNewBtn.Size = new System.Drawing.Size(102, 23);
+            this.addNewBtn.TabIndex = 18;
+            this.addNewBtn.Text = "Add New...";
+            this.addNewBtn.UseVisualStyleBackColor = true;
+            this.addNewBtn.Click += new System.EventHandler(this.AddNewBtn_Click);
+            // 
+            // RefreshBtn
+            // 
+            this.RefreshBtn.Location = new System.Drawing.Point(474, 238);
+            this.RefreshBtn.Name = "RefreshBtn";
+            this.RefreshBtn.Size = new System.Drawing.Size(102, 23);
+            this.RefreshBtn.TabIndex = 19;
+            this.RefreshBtn.Text = "Refresh";
+            this.RefreshBtn.UseVisualStyleBackColor = true;
+            this.RefreshBtn.Visible = false;
+            this.RefreshBtn.Click += new System.EventHandler(this.RefreshBtn_Click);
             // 
             // MLFSDirRepForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(633, 317);
-            this.Controls.Add(this.addPeriodBtn);
+            this.Controls.Add(this.RefreshBtn);
             this.Controls.Add(this.PeriodDDL);
             this.Controls.Add(this.ChooseFCIFileBtn);
             this.Controls.Add(this.FCIFileTb);
@@ -191,6 +203,7 @@
             this.Controls.Add(this.ChooseFeeFileBtn);
             this.Controls.Add(this.FeesFileTb);
             this.Controls.Add(this.label1);
+            this.Controls.Add(this.addNewBtn);
             this.Name = "MLFSDirRepForm";
             this.Text = "Directors\' Report";
             this.ResumeLayout(false);
@@ -213,6 +226,7 @@
         private System.Windows.Forms.TextBox FCIFileTb;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.ComboBox PeriodDDL;
-        private System.Windows.Forms.Button addPeriodBtn;
+        private System.Windows.Forms.Button addNewBtn;
+        private System.Windows.Forms.Button RefreshBtn;
     }
 }

@@ -55,10 +55,10 @@ namespace XLantCore
                 result.Data = JsonConvert.DeserializeObject<TEntity>(rawData);
                 result.WasSuccessful = true;
             }
-            catch
+            catch (Exception ex)
             {
                 result.WasSuccessful = false;
-                result.Message = "Unable to reach server";
+                result.Message = "Unable to reach server : " + ex.Message;
             }
             finally
             {
@@ -75,13 +75,14 @@ namespace XLantCore
             {
                 string content = JsonConvert.SerializeObject(itemToPost);
                 Uri address = new Uri(baseURL + url);
-                web.UploadStringAsync(address, content);
+                string response = web.UploadString(address, content);
+                result.Data = response;
                 result.WasSuccessful = true;
             }
-            catch
+            catch (Exception ex)
             {
                 result.WasSuccessful = false;
-                result.Message = "Unable to reach server";
+                result.Message = "Unable to reach server : " + ex.ToString();
             }
             finally
             {

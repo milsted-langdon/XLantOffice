@@ -123,7 +123,7 @@ namespace XLantDataStore.Repository
                 url = String.Format("clients/{0}/plans", clientId);
             }
             IRestResponse response = await IOConnection.GetResponse(url);
-            if (response.Content.Length != 0)
+            if (response.Content.Length != 0 && response.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 JArray jarray = Tools.ExtractItemsArrayFromJsonString(response.Content);
                 List<Plan> plans = Plan.CreateList(jarray);
@@ -150,7 +150,7 @@ namespace XLantDataStore.Repository
                 url = String.Format("clients/{0}/fees", clientId);
             }
             IRestResponse response = await IOConnection.GetResponse(url);
-            if (response.Content.Length != 0)
+            if (response.Content.Length != 0 && response.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 JArray jarray = Tools.ExtractItemsArrayFromJsonString(response.Content);
                 fees = Fee.CreateList(jarray);

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Windows.Forms;
+using XLantCore;
 using XLantCore.Models;
 
 namespace XLForms
@@ -11,10 +13,15 @@ namespace XLForms
 
         public MLFSDirRepForm(List<MLFSReportingPeriod> repPeriods)
         {
-            NewPeriods = new List<MLFSReportingPeriod>();
             Periods = new List<MLFSReportingPeriod>();
             InitializeComponent();
             Periods = repPeriods;
+            BindPeriods();
+            AddingNew = false;
+        }
+
+        private void BindPeriods()
+        {
             PeriodDDL.DataSource = Periods;
             PeriodDDL.DisplayMember = "Description";
             PeriodDDL.ValueMember = "Id";
@@ -24,8 +31,8 @@ namespace XLForms
         public string PlansFile { get; set; }
         public string FCIFile { get; set; }
         public string PeriodId { get; set; }
+        public bool AddingNew { get; set; }
         private List<MLFSReportingPeriod> Periods { get; set; }
-        public List<MLFSReportingPeriod> NewPeriods { get; set; }
 
 
         private void ChooseFeeFileBtn_Click(object sender, EventArgs e)
@@ -75,17 +82,24 @@ namespace XLForms
             }
         }
 
-        private void addPeriodBtn_Click(object sender, EventArgs e)
+        private void AddNewBtn_Click(object sender, EventArgs e)
         {
-            MLFSReportingPeriodAdd addForm = new MLFSReportingPeriodAdd(Periods);
-            addForm.ShowDialog();
-            if (addForm.newPeriod != null)
-            {
-                MLFSReportingPeriod period = addForm.newPeriod;
-                NewPeriods.Add(period);
-                Periods.Add(period);
-            }
-            
+            //Call the Process.Start method to open the default browser
+            //with a URL:
+            string url = APIAccess.baseURL;
+            url = url.Substring(0, url.LastIndexOf("/"));
+            url += "/MLFSReportingPeriods/Create";
+            AddingNew = true;
+            RefreshBtn.Visible = true;
+            Process.Start("explorer.exe", url);
+        }
+
+        private void RefreshBtn_Click(object sender, EventArgs e)
+        {
+            APIAccess.Result result = APIAccess.GetDataFromXLAPI<List<MLFSReportingPeriod>>("/MLFSReportingPeriod/GetCurrent");
+            Periods = (List<MLFSReportingPeriod>)result.Data;
+            BindPeriods();
+            AddingNew = false;
         }
     }
 }

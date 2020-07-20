@@ -23,7 +23,7 @@ namespace XLantDataStore.Repository
             return income;
         }
 
-        public async Task<IEnumerable<MLFSIncome>> GetIncome(MLFSReportingPeriod period)
+        public async Task<List<MLFSIncome>> GetIncome(MLFSReportingPeriod period)
         {
             return await _db.MLFSIncome.Where(x => x.MLFSReportPeriodId == period.Id).ToListAsync();
         }
@@ -45,5 +45,11 @@ namespace XLantDataStore.Repository
             await _db.SaveChangesAsync();
             return returnedTrans;
         }
+
+        public async Task<List<MLFSIncome>> GetIncome()
+        {
+            return await _db.MLFSIncome.ToListAsync();
+        }
+
     }
 }

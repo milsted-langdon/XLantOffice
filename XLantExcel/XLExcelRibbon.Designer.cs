@@ -42,6 +42,8 @@
             this.PERawDataBtn = this.Factory.CreateRibbonButton();
             this.group3 = this.Factory.CreateRibbonGroup();
             this.MLFSUploadBtn = this.Factory.CreateRibbonButton();
+            this.ReportsBtn = this.Factory.CreateRibbonButton();
+            this.button1 = this.Factory.CreateRibbonButton();
             this.tab1.SuspendLayout();
             this.group1.SuspendLayout();
             this.group2.SuspendLayout();
@@ -91,6 +93,8 @@
             // group3
             // 
             this.group3.Items.Add(this.MLFSUploadBtn);
+            this.group3.Items.Add(this.ReportsBtn);
+            this.group3.Items.Add(this.button1);
             this.group3.Label = "MLFS";
             this.group3.Name = "group3";
             // 
@@ -99,6 +103,18 @@
             this.MLFSUploadBtn.Label = "Month End Upload";
             this.MLFSUploadBtn.Name = "MLFSUploadBtn";
             this.MLFSUploadBtn.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.MLFSDirRepBtn_Click);
+            // 
+            // ReportsBtn
+            // 
+            this.ReportsBtn.Label = "Reports";
+            this.ReportsBtn.Name = "ReportsBtn";
+            this.ReportsBtn.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.ReportsBtn_Click);
+            // 
+            // button1
+            // 
+            this.button1.Label = "Find Tables";
+            this.button1.Name = "button1";
+            this.button1.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.button1_Click);
             // 
             // XLExcelRibbon
             // 
@@ -128,6 +144,8 @@
         internal Microsoft.Office.Tools.Ribbon.RibbonButton PERawDataBtn;
         internal Microsoft.Office.Tools.Ribbon.RibbonGroup group3;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton MLFSUploadBtn;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton ReportsBtn;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton button1;
     }
 
     partial class ThisRibbonCollection

@@ -59,14 +59,21 @@ namespace XLantDataStore.Repository
                 }
                 if (selectedPlan == null)
                 {
-                    List<Plan> plansFromIO = await _clientRepository.GetClientPlans(sale.ClientId);
-                    Plan selectedPlanFromIO = plansFromIO.Where(x => x.Reference == sale.IOReference).FirstOrDefault();
-                    
-                    if (selectedPlanFromIO != null)
+                    try
                     {
-                        List<Fee> feesFromIO = await _clientRepository.GetClientFees(sale.ClientId);
-                        Fee selectedFeeFromIO = feesFromIO.Where(x => x.Plan.PrimaryID == selectedPlanFromIO.PrimaryID && x.IsRecurring).FirstOrDefault();
-                        sale.AddPlanData(selectedPlanFromIO, selectedFeeFromIO); 
+                        List<Plan> plansFromIO = await _clientRepository.GetClientPlans(sale.ClientId);
+                        Plan selectedPlanFromIO = plansFromIO.Where(x => x.Reference == sale.IOReference).FirstOrDefault();
+
+                        if (selectedPlanFromIO != null)
+                        {
+                            List<Fee> feesFromIO = await _clientRepository.GetClientFees(sale.ClientId);
+                            Fee selectedFeeFromIO = feesFromIO.Where(x => x.Plan.PrimaryID == selectedPlanFromIO.PrimaryID && x.IsRecurring).FirstOrDefault();
+                            sale.AddPlanData(selectedPlanFromIO, selectedFeeFromIO);
+                        }
+                    }
+                    catch
+                    {
+                        //No IO data found
                     }
                 }
                 else

@@ -11,6 +11,8 @@ namespace XLantDataStore.Repository
     {
         Task<List<MLFSReportingPeriod>> GetPeriods();
         Task<MLFSReportingPeriod> GetPeriodById(int periodId);
-        void InsertPeriod(MLFSReportingPeriod period);
+        Task<int> InsertPeriod(MLFSReportingPeriod period);
+        void Update(MLFSReportingPeriod period);
+        void Delete(int Id);
     }
 }

@@ -12,17 +12,21 @@ namespace XLantDataStore.Controllers
 {
     public class DataMapsController : Controller
     {
-        private readonly XLantDbContext _context;
+        private readonly Repository.IDataMapRepository _dataMap;
 
         public DataMapsController(XLantDbContext context)
         {
-            _context = context;
+            _dataMap = new Repository.DataMapRepository(context);
         }
 
-        // GET: DataMaps
-        public async Task<IActionResult> Index()
+        /// <summary>
+        /// GET: Returns datamaps based on the filename given
+        /// </summary>
+        /// <param name="csvFile">the filename of the CSV you are mapping to an object</param>
+        /// <returns>a List of DataMaps</returns>
+        public async Task<IActionResult> Index(string csvFile)
         {
-            return View(await _context.DataMaps.ToListAsync());
+            return View(await _dataMap.GetMaps(csvFile));
         }
 
         // GET: DataMaps/Details/5
@@ -32,9 +36,7 @@ namespace XLantDataStore.Controllers
             {
                 return NotFound();
             }
-
-            var dataMap = await _context.DataMaps
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var dataMap = await _dataMap.GetDataMapById((int)id);
             if (dataMap == null)
             {
                 return NotFound();
@@ -54,13 +56,12 @@ namespace XLantDataStore.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,ClassName,SourceName,InternalFieldName,ExternalFieldName")] DataMap dataMap)
+        public IActionResult Create([Bind("Id,ClassName,SourceName,InternalFieldName,ExternalFieldName")] DataMap dataMap)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(dataMap);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                _dataMap.Insert(dataMap);
+                return RedirectToAction("Index", new { csvFile = dataMap.SourceName });
             }
             return View(dataMap);
         }
@@ -73,7 +74,7 @@ namespace XLantDataStore.Controllers
                 return NotFound();
             }
 
-            var dataMap = await _context.DataMaps.FindAsync(id);
+            var dataMap = await _dataMap.GetDataMapById((int)id);
             if (dataMap == null)
             {
                 return NotFound();
@@ -86,7 +87,7 @@ namespace XLantDataStore.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,ClassName,SourceName,InternalFieldName,ExternalFieldName")] DataMap dataMap)
+        public IActionResult Edit(int id, [Bind("Id,ClassName,SourceName,InternalFieldName,ExternalFieldName")] DataMap dataMap)
         {
             if (id != dataMap.Id)
             {
@@ -97,21 +98,13 @@ namespace XLantDataStore.Controllers
             {
                 try
                 {
-                    _context.Update(dataMap);
-                    await _context.SaveChangesAsync();
+                    _dataMap.Update(dataMap);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!DataMapExists(dataMap.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    throw;
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", new { dataMap.SourceName });
             }
             return View(dataMap);
         }
@@ -124,8 +117,7 @@ namespace XLantDataStore.Controllers
                 return NotFound();
             }
 
-            var dataMap = await _context.DataMaps
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var dataMap = await _dataMap.GetDataMapById((int)id);
             if (dataMap == null)
             {
                 return NotFound();
@@ -139,15 +131,10 @@ namespace XLantDataStore.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var dataMap = await _context.DataMaps.FindAsync(id);
-            _context.DataMaps.Remove(dataMap);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
-        private bool DataMapExists(int id)
-        {
-            return _context.DataMaps.Any(e => e.Id == id);
+            var dataMap = await _dataMap.GetDataMapById((int)id);
+            string source = dataMap.SourceName;
+            _dataMap.Delete(id);
+            return RedirectToAction("Index", new { csvFile = source });
         }
     }
 }

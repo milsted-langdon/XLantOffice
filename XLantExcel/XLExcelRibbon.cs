@@ -72,17 +72,14 @@ namespace XLantExcel
             APIAccess.Result result = APIAccess.GetDataFromXLAPI<List<MLFSReportingPeriod>>("/MLFSReportingPeriod/GetCurrentPeriods");
             MLFSDirRepForm form = new MLFSDirRepForm((List<MLFSReportingPeriod>)result.Data);
             form.ShowDialog();
-            if (form.NewPeriods != null)
+            if (form.AddingNew)
             {
-                //post the new periods
-                foreach (MLFSReportingPeriod period in form.NewPeriods)
-                {
-                    APIAccess.PostDataToXLAPI("/MLFSReportPeriod/Put", period);
-                }
+                MessageBox.Show("Reopen form once added");
+                return;
             }
-            if (!String.IsNullOrEmpty(form.PlansFile) && !String.IsNullOrEmpty(form.FeesFile) && form.PeriodId != null && !String.IsNullOrEmpty(form.FCIFile))
+            if (!String.IsNullOrEmpty(form.PlansFile) && !String.IsNullOrEmpty(form.FeesFile) && !String.IsNullOrEmpty(form.FCIFile) && int.TryParse(form.PeriodId, out int i))
             {
-                string response = await XLSheet.BuildMLFSDirectorsReport(1, form.FeesFile, form.PlansFile, form.FCIFile);
+                string response = await XLSheet.BuildMLFSDirectorsReport(i, form.FeesFile, form.PlansFile, form.FCIFile);
                 if (response == "Success")
                 {
                     MessageBox.Show("Data Uploaded");
@@ -96,6 +93,17 @@ namespace XLantExcel
             {
                 MessageBox.Show("Upload Unsuccessful, check your data");
             }
+        }
+
+        private void ReportsBtn_Click(object sender, RibbonControlEventArgs e)
+        {
+            XLSheet.RunReports(4);
+        }
+
+        private void button1_Click(object sender, RibbonControlEventArgs e)
+        {
+            var tables = XLSheet.GetTables();
+            MessageBox.Show(tables.Count().ToString() + "tables");
         }
     }
 }

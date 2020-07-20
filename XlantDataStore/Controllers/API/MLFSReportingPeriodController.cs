@@ -28,12 +28,14 @@ namespace XLantDataStore.API.Controllers
 
         [HttpPost]
         [Route("Put")]
-        public void Put(MLFSReportingPeriod period)
+        public async Task<int> Put([FromBody] MLFSReportingPeriod period)
         {
             if (period != null)
             {
-                _periodRepository.InsertPeriod(period);
+                int periodId = await _periodRepository.InsertPeriod(period);
+                return periodId;
             }
+            return 0;
         }
 
         [HttpGet]
