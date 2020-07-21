@@ -407,7 +407,8 @@ namespace XLantExcel
         public static void CreatePivot(string tableSource, int[] pageFields, int[] rowFields, int[] dataFields, string pivotTableName = "Pivot Table", string[] slicerColumns = null)
         {
             Microsoft.Office.Interop.Excel.Worksheet worksheet = new Microsoft.Office.Interop.Excel.Worksheet();
-            worksheet = Globals.ThisAddIn.Application.Worksheets.Add(After: Globals.ThisAddIn.Application.ActiveSheet);
+            Workbook workbook = Globals.ThisAddIn.Application.ActiveWorkbook;
+            worksheet = workbook.Worksheets.Add(After: workbook.ActiveSheet);
             worksheet.Name = "Pivot";
             ListObject table = GetTable(tableSource);
             Range rng = table.Range;
@@ -418,7 +419,7 @@ namespace XLantExcel
                 pivotTableName                
                 );
             PivotTable pivot = (PivotTable)worksheet.PivotTables(pivotTableName);
-            pivot.HasAutoFormat = true;
+            //pivot.HasAutoFormat = true;
             pivot.ColumnGrand = true;
             pivot.RowGrand = true;
             for(int i = 0; i < pageFields.Length; i++)
@@ -434,23 +435,27 @@ namespace XLantExcel
                 field1.Orientation = XlPivotFieldOrientation.xlRowField;
                 field1.Position = i + 1;
             }
+            PivotField columnField = pivot.PivotFields();
+            columnField.Orientation = XlPivotFieldOrientation.xlColumnField;
+            columnField.Position = 1;
             for (int i = 0; i < dataFields.Length; i++)
             {
                 PivotField field1 = pivot.PivotFields(dataFields[i]);
                 field1.Orientation = XlPivotFieldOrientation.xlDataField;
-                field1.Position = i + 1;
+                field1.Position = 1 + i;
                 field1.Function = XlConsolidationFunction.xlSum;
             }
             //Add Slicers
-            SlicerCaches cashes = Globals.ThisAddIn.Application.ActiveWorkbook.SlicerCaches;
+            SlicerCaches caches = workbook.SlicerCaches;
             int counter = 1;
             if (slicerColumns != null)
             {
                 foreach (string s in slicerColumns)
                 {
-                    SlicerCache cache = cashes.Add(table, s, s);
-                    Slicer slicer = cache.Slicers.Add(worksheet, Type.Missing, s, s, 160 * counter, 10, 144, 200);
-                    i++;
+                    SlicerCache cache = caches.Add(pivot, s, s);
+                    Slicers slicers = cache.Slicers;
+                    Slicer slicer = slicers.Add(worksheet, Type.Missing, s, s, 160 * counter, 10, 144, 200);
+                    counter++;
                 }
             }
         }
