@@ -21,7 +21,7 @@ namespace XLantDataStore.Repository
                                 select map).FirstOrDefault();
             if (setting != null)
             {
-                conn = "user id=XLantLogin;password=mswlBtCk11OF;server=";
+                conn = "user id=XLantLogin;password=;server=";
                 conn += setting.Attribute("Server").Value;
                 conn += ";database=";
                 conn += setting.Attribute("db").Value;
