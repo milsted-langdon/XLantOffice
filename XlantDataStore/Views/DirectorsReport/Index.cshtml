@@ -1,0 +1,115 @@
+﻿@model IEnumerable<XLantDataStore.ViewModels.DirectorsReport>
+
+@{
+    ViewData["Title"] = "Directors' Report";
+}
+
+    <div class="ibox-heading">
+        <a class="btn btn-primary" asp-action="UpdateData" asp-controller="MLFSSale" asp-route-periodId="@Model.FirstOrDefault().ReportingPeriodId">Update Data from IO</a>
+    </div>
+    <div class="ibox-content">
+        <table class="table xlantDataTable">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Advisor)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ClientName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Provider)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.NewExisting)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.InitialFee)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Investment)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.OngoingPercentage)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.TwelveMonthsTrail)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.InitialPassed)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.OngoingPassed)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.OtherIncome)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    string classStr = "";
+                    if (item.OngoingPassed == "Passed" && item.InitialPassed == "Passed")
+                    {
+                        classStr = "#1ab394;color:white";
+                    }
+                    else if (item.OngoingPassed == "Passed"  || item.InitialPassed == "Passed")
+                    {
+                        classStr = "#f8ac59";
+                    }
+                    else
+                    {
+                        classStr = "#ed5565;color:white";
+                    }
+                    <tr style="background:@classStr">
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Advisor)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ClientName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Provider)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.NewExisting)
+                        </td>
+                        <td align="right">
+                            @Html.DisplayFor(modelItem => item.InitialFee)
+                        </td>
+                        <td align="right">
+                            @Html.DisplayFor(modelItem => item.Investment)
+                        </td>
+                        <td align="right">
+                            @Html.DisplayFor(modelItem => item.OngoingPercentage)
+                        </td>
+                        <td align="right">
+                            @Html.DisplayFor(modelItem => item.TwelveMonthsTrail)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.InitialPassed)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.OngoingPassed)
+                        </td>
+                        <td align="right">
+                            @Html.DisplayFor(modelItem => item.OtherIncome)
+                        </td>
+                        <td>
+                            <div class="dropdown">
+                                <button class="btn btn-primary dropdown-toggle" aria-haspopup="true" data-toggle="dropdown" aria-expanded="false">Action</button>
+                                <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                                    <li><a target="_blank" href="https://www.intelligent-office.net/nio/clientfees/@item.ClientId/Index">View Client in IO</a></li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+
+            </tfoot>
+        </table>
+    </div>

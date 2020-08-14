@@ -65,6 +65,12 @@
     <Compile Include="MLFSDirRepForm.Designer.cs">
       <DependentUpon>MLFSDirRepForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="MLFSReportingPeriodForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MLFSReportingPeriodForm.Designer.cs">
+      <DependentUpon>MLFSReportingPeriodForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="SelectForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -119,6 +125,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="MLFSDirRepForm.resx">
       <DependentUpon>MLFSDirRepForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MLFSReportingPeriodForm.resx">
+      <DependentUpon>MLFSReportingPeriodForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SelectForm.resx">
       <DependentUpon>SelectForm.cs</DependentUpon>

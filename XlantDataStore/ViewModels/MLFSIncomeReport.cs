@@ -22,7 +22,7 @@ namespace XLantDataStore.ViewModels
             }
             Organisation = income.Organisation;
             Campaign = income.Campaign;
-            if (income.IsNew)
+            if (income.IsNewBusiness)
             {
                 New_Amount = income.Amount;
                 Recurring_Amount = 0;

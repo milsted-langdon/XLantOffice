@@ -387,21 +387,23 @@ namespace XLantExcel
             }
         }
 
-        public static string RunReports(int periodId)
+        public static void RunReports(int periodId)
         {
-            APIAccess.Result result = APIAccess.GetDataFromXLAPI<System.Data.DataTable>("/MLFSIncome/GetIncome?currentMonthId=" + periodId);
+            //first get the income data
+            APIAccess.Result result = APIAccess.GetDataFromXLAPI<System.Data.DataTable>("/MLFSReports/SalesReport?periodId=" + periodId);
             if (result.WasSuccessful)
             {
                 System.Data.DataTable table = (System.Data.DataTable)result.Data;
-                CreateWorkSheet(table, "IncomeRawData", firstNumberColumn: "new Amount", addTotalRow: false);
-                CreatePivot("IncomeRawData", new int[]{ 2, 3, 4 }, new int[] { 1 }, new int[] { 6, 7 }, "AutoPivot", new string[] { "campaign", "organisation" });
-                return "Success";
+                CreateWorkSheet(table, "Sales Report", firstNumberColumn: "new Amount", addTotalRow: false);
+                //CreatePivot("IncomeRawData", new int[]{ 2, 3, 4 }, new int[] { 1 }, new int[] { 6, 7 }, "AutoPivot", new string[] { "campaign", "organisation" });
             }
-            else
+            //then the directors' report data
+            result = APIAccess.GetDataFromXLAPI<System.Data.DataTable>("/MLFSReports/DirectorsReport?periodId=" + periodId);
+            if (result.WasSuccessful)
             {
-                return "Failed";
+                System.Data.DataTable table = (System.Data.DataTable)result.Data;
+                CreateWorkSheet(table, "Directors Report", firstNumberColumn: "Budget", addTotalRow: false);
             }
-            
         }
 
         public static void CreatePivot(string tableSource, int[] pageFields, int[] rowFields, int[] dataFields, string pivotTableName = "Pivot Table", string[] slicerColumns = null)

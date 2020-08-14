@@ -18,32 +18,32 @@ namespace XlantWord
     {
         public class Header
         {
-            public string description { get; set; }
-            public string firmname { get; set; }
-            public int headerRightIndent { get; set; }
-            public int headerLeftIndent { get; set; }
-            public int footerRightIndent { get; set; }
-            public int footerLeftIndent { get; set; }
-            public List<Line> headerLines { get; set; }
-            public List<Line> footerLines { get; set; }
+            public string Description { get; set; }
+            public string Firmname { get; set; }
+            public int HeaderRightIndent { get; set; }
+            public int HeaderLeftIndent { get; set; }
+            public int FooterRightIndent { get; set; }
+            public int FooterLeftIndent { get; set; }
+            public List<Line> HeaderLines { get; set; }
+            public List<Line> FooterLines { get; set; }
         }
 
         public class Line
         {
-            public string text { get; set; }
-            public string font { get; set; }
-            public int size { get; set; }
+            public string Text { get; set; }
+            public string Font { get; set; }
+            public int Size { get; set; }
         }
 
         public class ListItem
         {
-            public string name { get; set; }
-            public string dbTag { get; set; }
+            public string Name { get; set; }
+            public string DbTag { get; set; }
 
             public ListItem(string newName, string newTag)
             {
-                name = newName;
-                dbTag = newTag;
+                Name = newName;
+                DbTag = newTag;
             }
         }
 
@@ -52,12 +52,10 @@ namespace XlantWord
         public static Microsoft.Office.Interop.Word.View currentView;
         private static Microsoft.Office.Interop.Word.Application app = Globals.ThisAddIn.Application;
 
-        //########################The following declarations and methods are different in .NET 3.5######################//
-
         private static Range CurrentRange()
         {
             //reference to Global replaced with app
-            Microsoft.Office.Interop.Word.Range CurrRange = Globals.ThisAddIn.Application.Selection.Range;
+            Microsoft.Office.Interop.Word.Range CurrRange = app.Selection.Range;
             return CurrRange;
         }
 
@@ -65,27 +63,25 @@ namespace XlantWord
         {
             Document NewDoc = new Document();
             //reference to Global replaced with app
-            NewDoc = Globals.ThisAddIn.Application.Documents.Open(name, ReadOnly: readOnly, AddToRecentFiles: recent, Visible: visible);
+            NewDoc = app.Documents.Open(name, ReadOnly: readOnly, AddToRecentFiles: recent, Visible: visible);
             return NewDoc;
         }
 
         public static void UpdateCurrentDoc()
         {
-            currentDoc = Globals.ThisAddIn.Application.ActiveDocument;
+            currentDoc = app.ActiveDocument;
         }
 
         public static Document GetCurrentDoc()
         {
-            currentDoc = Globals.ThisAddIn.Application.ActiveDocument;
+            currentDoc = app.ActiveDocument;
             return currentDoc;
         }
 
         public static void UpdateCurrentView()
         {
-            currentView = Globals.ThisAddIn.Application.ActiveWindow.View;
+            currentView = app.ActiveWindow.View;
         }
-
-        //###################After this point all code is identical in both versions############################//
 
         public static void openTemplate(string type)
         {
@@ -126,18 +122,25 @@ namespace XlantWord
             }
         }
 
-        public static string TempSave(string fileType = ".docx")
+        public static string TempSave(string fileType = ".docx", string fileLocation = "")
         {
             try
             {
-                XLDocument.UpdateCurrentDoc();
                 string location;
-                string folder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\XLant\\temp\\";
+                XLDocument.UpdateCurrentDoc();
+                if (String.IsNullOrEmpty(fileLocation))
+                {
+                    string folder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\XLant\\temp\\";
 
-                if (!Directory.Exists(folder))
-                    Directory.CreateDirectory(folder);
+                    if (!Directory.Exists(folder))
+                        Directory.CreateDirectory(folder);
 
-                location = TempFileName(folder, fileType);
+                    location = TempFileName(folder, fileType);
+                }
+                else
+                {
+                    location = fileLocation;
+                }
                 if (fileType == ".docx")
                 {
                     currentDoc.SaveAs(location, WdSaveFormat.wdFormatXMLDocument);
@@ -165,16 +168,16 @@ namespace XlantWord
                 ext = "." + ext;
             }
             Random rnd = new Random();
-            string filename = DateTime.Now.ToString("yyyy-MM-dd");
+            string filename = DateTime.Now.ToString("yyyyMMdd");
             int id = rnd.Next(1000, 9999); //provides a four digit id
-            filename += "-" + id.ToString();
+            filename += id.ToString();
             filename += ext;
             //If that file already exists try again until it doesn't
             while (File.Exists(folder + filename))
             {
-                filename = DateTime.Now.ToString("yyyy-MM-dd");
+                filename = DateTime.Now.ToString("yyyyMMdd");
                 id = rnd.Next(1000, 9999); //provides a four digit id
-                filename += "-" + id.ToString();
+                filename += id.ToString();
                 filename += ext;
             }
             location = folder + filename;
@@ -364,8 +367,8 @@ namespace XlantWord
                 foreach (XElement xHeading in xHeadings.Descendants("Heading"))
                 {
                     Header header = new Header();
-                    header.description = xHeading.Attribute("Description").Value;
-                    header.firmname = xHeading.Attribute("Firm").Value;
+                    header.Description = xHeading.Attribute("Description").Value;
+                    header.Firmname = xHeading.Attribute("Firm").Value;
                     foreach (XElement xLines in xHeading.Descendants("Lines"))
                     {
                         if (xLines.Attribute("Type").Value == "Header")
@@ -373,27 +376,27 @@ namespace XlantWord
                             foreach (XElement xLine in xHeading.Descendants("HeaderLine"))
                             {
                                 Line line = new Line();
-                                line.text = xLine.Value;
-                                line.size = xLine.AttributeIntNull("Size");
-                                line.font = xLine.AttributeValueNull("Font");
+                                line.Text = xLine.Value;
+                                line.Size = xLine.AttributeIntNull("Size");
+                                line.Font = xLine.AttributeValueNull("Font");
                                 hLines.Add(line);
                             }
                         }
                         //It is only either a header or a footer
                         else
                         {
-                            header.footerRightIndent = 150;
+                            header.FooterRightIndent = 150;
                             foreach (XElement xLine in xHeading.Descendants("FooterLine"))
                             {
                                 Line line = new Line();
-                                line.text = xLine.Value;
-                                line.size = xLine.AttributeIntNull("Size");
-                                line.font = xLine.AttributeValueNull("Font");
+                                line.Text = xLine.Value;
+                                line.Size = xLine.AttributeIntNull("Size");
+                                line.Font = xLine.AttributeValueNull("Font");
                                 fLines.Add(line);
                             }
                         }
-                        header.headerLines = hLines;
-                        header.footerLines = fLines;
+                        header.HeaderLines = hLines;
+                        header.FooterLines = fLines;
                     }
                     headings.Add(header);
                 }
@@ -426,8 +429,8 @@ namespace XlantWord
                                             where (string)heading.Attribute("Description").Value == selectedMap.Attribute("Header").Value
                                             select heading).FirstOrDefault();
                     //then build the object
-                    selectedHeader.description = foundHeader.Attribute("Description").Value;
-                    selectedHeader.firmname = foundHeader.Attribute("Firm").Value;
+                    selectedHeader.Description = foundHeader.Attribute("Description").Value;
+                    selectedHeader.Firmname = foundHeader.Attribute("Firm").Value;
                     foreach (XElement xLines in foundHeader.Descendants("Lines"))
                     {
                         if (xLines.Attribute("Type").Value == "Header")
@@ -435,27 +438,27 @@ namespace XlantWord
                             foreach (XElement xLine in foundHeader.Descendants("HeaderLine"))
                             {
                                 Line line = new Line();
-                                line.text = xLine.Value;
-                                line.size = xLine.AttributeIntNull("Size");
-                                line.font = xLine.AttributeValueNull("Font");
+                                line.Text = xLine.Value;
+                                line.Size = xLine.AttributeIntNull("Size");
+                                line.Font = xLine.AttributeValueNull("Font");
                                 hLines.Add(line);
                             }
                         }
                         //It is only either a header or a footer
                         else
                         {
-                            selectedHeader.footerRightIndent = xLines.AttributeIntNull("RightIndent");
+                            selectedHeader.FooterRightIndent = xLines.AttributeIntNull("RightIndent");
                             foreach (XElement xLine in foundHeader.Descendants("FooterLine"))
                             {
                                 Line line = new Line();
-                                line.text = xLine.Value;
-                                line.size = xLine.AttributeIntNull("Size");
-                                line.font = xLine.AttributeValueNull("Font");
+                                line.Text = xLine.Value;
+                                line.Size = xLine.AttributeIntNull("Size");
+                                line.Font = xLine.AttributeValueNull("Font");
                                 fLines.Add(line);
                             }
                         }
-                        selectedHeader.headerLines = hLines;
-                        selectedHeader.footerLines = fLines;
+                        selectedHeader.HeaderLines = hLines;
+                        selectedHeader.FooterLines = fLines;
                     }
                 }
                 else
@@ -491,8 +494,8 @@ namespace XlantWord
                                             where (string)heading.Attribute("Description").Value == selectedMap.Attribute("Header").Value
                                             select heading).FirstOrDefault();
                     //then build the object
-                    selectedHeader.description = foundHeader.Attribute("Description").Value;
-                    selectedHeader.firmname = foundHeader.Attribute("Firm").Value;
+                    selectedHeader.Description = foundHeader.Attribute("Description").Value;
+                    selectedHeader.Firmname = foundHeader.Attribute("Firm").Value;
                     foreach (XElement xLines in foundHeader.Descendants("Lines"))
                     {
                         if (xLines.Attribute("Type").Value == "Header")
@@ -500,27 +503,27 @@ namespace XlantWord
                             foreach (XElement xLine in foundHeader.Descendants("HeaderLine"))
                             {
                                 Line line = new Line();
-                                line.text = xLine.Value;
-                                line.size = xLine.AttributeIntNull("Size");
-                                line.font = xLine.AttributeValueNull("Font");
+                                line.Text = xLine.Value;
+                                line.Size = xLine.AttributeIntNull("Size");
+                                line.Font = xLine.AttributeValueNull("Font");
                                 hLines.Add(line);
                             }
                         }
                         //It is only either a header or a footer
                         else
                         {
-                            selectedHeader.footerRightIndent = xLines.AttributeIntNull("RightIndent");
+                            selectedHeader.FooterRightIndent = xLines.AttributeIntNull("RightIndent");
                             foreach (XElement xLine in foundHeader.Descendants("FooterLine"))
                             {
                                 Line line = new Line();
-                                line.text = xLine.Value;
-                                line.size = xLine.AttributeIntNull("Size");
-                                line.font = xLine.AttributeValueNull("Font");
+                                line.Text = xLine.Value;
+                                line.Size = xLine.AttributeIntNull("Size");
+                                line.Font = xLine.AttributeValueNull("Font");
                                 fLines.Add(line);
                             }
                         }
-                        selectedHeader.headerLines = hLines;
-                        selectedHeader.footerLines = fLines;
+                        selectedHeader.HeaderLines = hLines;
+                        selectedHeader.FooterLines = fLines;
                     }
                 }
                 else
@@ -558,15 +561,15 @@ namespace XlantWord
                 //Clear any existing header
                 rng = currentDoc.Sections[1].Headers[WdHeaderFooterIndex.wdHeaderFooterFirstPage].Range;
                 rng.Delete();
-                rng.ParagraphFormat.RightIndent = header.headerRightIndent;
-                rng.ParagraphFormat.LeftIndent = header.headerLeftIndent;
+                rng.ParagraphFormat.RightIndent = header.HeaderRightIndent;
+                rng.ParagraphFormat.LeftIndent = header.HeaderLeftIndent;
                 //Then build the new one line by line
-                foreach (Line line in header.headerLines)
+                foreach (Line line in header.HeaderLines)
                 {
                     para = currentDoc.Sections[1].Headers[WdHeaderFooterIndex.wdHeaderFooterFirstPage].Range.Paragraphs.Add();
-                    para.Range.Font.Name = line.font;
-                    para.Range.Font.Size = line.size;
-                    para.Range.Text = line.text + Environment.NewLine;
+                    para.Range.Font.Name = line.Font;
+                    para.Range.Font.Size = line.Size;
+                    para.Range.Text = line.Text + Environment.NewLine;
                 }
                 //Then look for bolds
                 //reset the range to get the whole header/footer
@@ -578,15 +581,15 @@ namespace XlantWord
                 //First delete and existing footer
                 rng = currentDoc.Sections[1].Footers[WdHeaderFooterIndex.wdHeaderFooterFirstPage].Range;
                 rng.Delete();
-                rng.ParagraphFormat.RightIndent = header.footerRightIndent;
-                rng.ParagraphFormat.LeftIndent = header.footerLeftIndent;
+                rng.ParagraphFormat.RightIndent = header.FooterRightIndent;
+                rng.ParagraphFormat.LeftIndent = header.FooterLeftIndent;
                 //Then build the new one line by line
-                foreach (Line line in header.footerLines)
+                foreach (Line line in header.FooterLines)
                 {
                     para = currentDoc.Sections[1].Footers[WdHeaderFooterIndex.wdHeaderFooterFirstPage].Range.Paragraphs.Add();
-                    para.Range.Font.Name = line.font;
-                    para.Range.Font.Size = line.size;
-                    para.Range.Text = line.text + Environment.NewLine;
+                    para.Range.Font.Name = line.Font;
+                    para.Range.Font.Size = line.Size;
+                    para.Range.Text = line.Text + Environment.NewLine;
                 }
                 //Then look for bolds
                 //reset the range to get the whole header/footer
@@ -782,15 +785,14 @@ namespace XlantWord
             }
         }
 
-        public static string CreatePdf()
+        public static string CreatePdf(string fileString = "")
         {
             try
             {
-                string filestring = "";
                 //use tempsave to create a pdf file and return location.
-                filestring = TempSave(".pdf");
+                fileString = TempSave(".pdf", fileString);
 
-                return filestring;
+                return fileString;
             }
             catch (Exception e)
             {
@@ -872,6 +874,11 @@ namespace XlantWord
             }
         }
 
+        internal static void AddBio(XLMain.Staff staff)
+        {
+            throw new NotImplementedException();
+        }
+
         public static string AddAttachments(List<string> fileStrings)
         {
             //create a filelocation for the new file
@@ -921,15 +928,6 @@ namespace XlantWord
             {
                 //get the info of the original file
                 XLVirtualCabinet.FileInfo fileInfo = XLVirtualCabinet.FileIndex(origFileID);
-                //update the description (index03) to include the PDF suffix
-                foreach (XLVirtualCabinet.IndexPair pair in fileInfo.Indexes)
-                {
-                    //alter description
-                    if (pair.index == "INDEX03")
-                    {
-                        pair.value = pair.value + " - PDF";
-                    }
-                }
                 XLVirtualCabinet.BondResult result = XLVirtualCabinet.IndexDocument(filestring, fileInfo);
 
                 if (result.ExitCode != 0)

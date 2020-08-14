@@ -792,6 +792,7 @@ namespace XlantWord
             try
             {
                 List<Tuple<string, string>> selectedDocs = new List<Tuple<string, string>>();
+                
                 if (withAttachments)
                 {
                     //get available documents
@@ -801,13 +802,9 @@ namespace XlantWord
                     attachmentsForm.ShowDialog();
                     selectedDocs = attachmentsForm.selectedDocuments;
                 }
-
+                
                 //get the id for later use and before the original is closed.
                 string fileID = XLDocument.GetFileID();
-                if (String.IsNullOrEmpty(fileID))
-                {
-                    return;
-                }
                 //save the document as a pdf and get location
                 string file = XLDocument.CreatePdf();
                 //close the original, it isn't required any more
@@ -825,8 +822,26 @@ namespace XlantWord
                     }
                     file = XLDocument.AddAttachments(docs);
                 }
-                //index the combined file using the data from the original
-                XLDocument.IndexPDFCopy(file, fileID);
+                if (String.IsNullOrEmpty(fileID))
+                {
+                    string finalLocation = "";
+                    SaveFileDialog sDialog = new SaveFileDialog();
+                    sDialog.FileName = "NewPdf.pdf";
+                    sDialog.DefaultExt = ".pdf";
+                    sDialog.Title = "Save PDF as...";
+                    if (sDialog.ShowDialog() == DialogResult.OK)
+                    {
+                        finalLocation = sDialog.FileName;
+                    }
+
+                    System.IO.File.Copy(file, finalLocation);
+                }
+                else
+                {
+                    //index the combined file using the data from the original
+                    XLDocument.IndexPDFCopy(file, fileID);
+                }
+                    
             }
             catch (Exception ex)
             {
@@ -845,5 +860,12 @@ namespace XlantWord
             CreatePrettyPdf("watermark-MLFP.pdf", true);
         }
 
+        private void BioBtn_Click(object sender, RibbonControlEventArgs e)
+        {
+            XLForms.StaffForm selectForm = new StaffForm();
+            selectForm.ShowDialog();
+            XLMain.Staff staff = selectForm.selectedContact;
+            XLDocument.AddBio(staff);
+        }
     }
 }

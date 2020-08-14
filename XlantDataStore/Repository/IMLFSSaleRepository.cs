@@ -9,9 +9,11 @@ namespace XLantDataStore.Repository
 {
     public interface IMLFSSaleRepository
     {
-        Task<IEnumerable<MLFSSale>> GetSales(MLFSReportingPeriod period);
+        Task<List<MLFSSale>> GetDebtors();
+        Task<List<MLFSSale>> GetSales(MLFSReportingPeriod period);
         Task<MLFSSale> GetSaleById(int saleId);
         Task<List<MLFSSale>> UploadSalesForPeriod(MLFSReportingPeriod period, DataTable sales, DataTable plans);
+        void Update(MLFSSale sale);
 
     }
 }

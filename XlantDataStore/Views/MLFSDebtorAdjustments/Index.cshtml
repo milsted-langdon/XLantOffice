@@ -1,0 +1,64 @@
+﻿@model IEnumerable<XLantCore.Models.MLFSDebtorAdjustment>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ReportingPeriod)
+            </th>
+            <th>
+                Receipt
+            </th>
+            <th>
+                Variance
+            </th>
+            <th>
+                Adjustment
+            </th>
+            <th>
+                Not Taken Up
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ReportingPeriod.Description)
+            </td>
+            <td>
+                @if (item.ReceiptId != null)
+                {
+                    @Html.DisplayFor(modelItem => item.Amount)
+                }
+            </td>
+            <td>
+                @if (item.IsVariance)
+                {
+                    @Html.DisplayFor(modelItem => item.Amount)
+                }
+            </td>
+            <td>
+                @if (!item.IsVariance && !item.NotTakenUp && item.ReceiptId == null)
+                {
+                    @Html.DisplayFor(modelItem => item.Amount)
+                }
+            </td>
+            <td>
+                @if (!item.NotTakenUp)
+                {
+                    @Html.DisplayFor(modelItem => item.Amount)
+                }
+            </td>
+            <td>
+                <a asp-action="Reverse" asp-route-id="@item.Id">Reverse</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

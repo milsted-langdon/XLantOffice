@@ -10,5 +10,6 @@ namespace XLantDataStore.Repository
     public interface IMLFSAdvisorRepository
     {
         Task<MLFSAdvisor> GetAdvisor(string id);
+        Task<List<MLFSAdvisor>> GetAdvisors();
     }
 }

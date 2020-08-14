@@ -8,7 +8,11 @@ namespace XLantCore.Models
 {
     public partial class Address
     {
-
+        /// <summary>
+        /// Create a list of addresses when provided with a JSON array of data from IO
+        /// </summary>
+        /// <param name="_array">the array stripped from the json object</param>
+        /// <returns>a list of address objects</returns>
         public static List<Address> CreateList(JArray _array)
         {
             List<Address> addresses = new List<Address>();

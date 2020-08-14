@@ -16,7 +16,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.3" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.4" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="RestSharp" Version="106.11.4" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.1" />
@@ -24,6 +24,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\XLantCore\XLantCore.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Business Logic\" />
+    <Folder Include="Migrations\" />
   </ItemGroup>
 
 </Project>

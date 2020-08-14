@@ -17,7 +17,7 @@ namespace XLantDataStore
         public DbSet<MLFSIncome> MLFSIncome { get; set; }
         public DbSet<MLFSReportingPeriod> MLFSReportingPeriods { get; set; }
         public DbSet<DataMap> DataMaps { get; set; }
-
+        public DbSet<MLFSDebtorAdjustment> MLFSDebtorAdjustments { get; set; }
         public XLantDbContext(DbContextOptions<XLantDbContext> options) : base(options)
         {
 

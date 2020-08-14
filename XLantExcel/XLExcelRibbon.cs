@@ -97,7 +97,20 @@ namespace XLantExcel
 
         private void ReportsBtn_Click(object sender, RibbonControlEventArgs e)
         {
-            XLSheet.RunReports(4);
+            APIAccess.Result result = APIAccess.GetDataFromXLAPI<List<MLFSReportingPeriod>>("/MLFSReportingPeriod/GetCurrentPeriods");
+            if (result.WasSuccessful)
+            {
+                MLFSReportingPeriodForm form = new MLFSReportingPeriodForm((List<MLFSReportingPeriod>)result.Data);
+                form.ShowDialog();
+                if (form.PeriodId != null)
+                {
+                    XLSheet.RunReports((int)form.PeriodId);
+                } 
+            }
+            else
+            {
+                MessageBox.Show("Unable to reach server");
+            }
         }
 
         private void button1_Click(object sender, RibbonControlEventArgs e)

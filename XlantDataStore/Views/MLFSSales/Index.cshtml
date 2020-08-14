@@ -1,0 +1,143 @@
+﻿@model IEnumerable<XLantCore.Models.MLFSSale>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.IOId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IOReference)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Organisation)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ClientName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ClientId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.JointClientName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.JointClientId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProviderName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PlanType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsNew)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RelevantDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NetAmount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.VAT)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Investment)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OnGoingPercentage)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PlanReference)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EstimatedOtherIncome)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Advisor)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ReportingPeriod)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.IOId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IOReference)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Organisation)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ClientName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ClientId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.JointClientName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.JointClientId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProviderName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PlanType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsNew)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RelevantDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NetAmount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.VAT)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Investment)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OnGoingPercentage)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PlanReference)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EstimatedOtherIncome)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Advisor.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ReportingPeriod.Id)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -19,45 +19,16 @@ namespace XLantDataStore.API.Controllers
     public class MLFSIncomeController : ControllerBase
     {
         private readonly ILogger<IntelligentOfficeController> _logger;
-        private readonly IMLFSReportingPeriodRepository _periodRepository;
-        private readonly IMLFSIncomeRepository _incomeRepository;
+        private readonly IMLFSReportingPeriodRepository _periodData;
+        private readonly IMLFSIncomeRepository _incomeData;
+        private readonly IMLFSBudgetRepository _budgetData;
 
         public MLFSIncomeController(ILogger<IntelligentOfficeController> logger, XLantDbContext context)
         {
             _logger = logger;
-            _periodRepository = new MLFSReportingPeriodRepository(context);
-            _incomeRepository = new MLFSIncomeRepository(context);
-        }
-
-        [HttpPost]
-        [Route("PostMonthlyIncome")]
-        public async Task<List<MLFSIncome>> PostMonthlyIncome(IFormFile fciCSV, string periodId)
-        {
-            //convert our csv into datatable
-            string newFCIFilePath = Path.GetTempFileName();
-            if (fciCSV.Length > 0)
-            {
-                using (var fileStream = new FileStream(newFCIFilePath, FileMode.Create))
-                {
-                    await fciCSV.CopyToAsync(fileStream);
-                }
-            }
-            else
-            {
-                //send response no file
-            }
-            int pId = 0;
-            if (periodId == null || !int.TryParse(periodId, out pId))
-            {
-                //send response invalid id
-            }
-            DataTable fciDt = Tools.ConvertCSVToDataTable(newFCIFilePath);
-            //Get the period we are using
-            MLFSReportingPeriod period = await _periodRepository.GetPeriodById(pId);
-            //load data to database and get response
-            List<MLFSIncome> incomeList = await _incomeRepository.UploadIncomeForPeriod(period, fciDt);
-            //return list of sales
-            return incomeList;
+            _periodData = new MLFSReportingPeriodRepository(context);
+            _incomeData = new MLFSIncomeRepository(context);
+            _budgetData = new MLFSBudgetRepository(context);
         }
 
         /// <summary>
@@ -71,36 +42,66 @@ namespace XLantDataStore.API.Controllers
         [Route("GetIncome")]
         public async Task<List<MLFSIncomeReport>> GetIncome(int currentMonthId, bool currentFY = false, bool last12periods = false)
         {
-            MLFSReportingPeriod period = await _periodRepository.GetPeriodById(currentMonthId);
+            MLFSReportingPeriod period = await _periodData.GetPeriodById(currentMonthId);
             List<MLFSIncome> incomeLines = new List<MLFSIncome>();
             List<MLFSIncomeReport> reportLines = new List<MLFSIncomeReport>();
             if (!currentFY && !last12periods)
             {
-                incomeLines = await _incomeRepository.GetIncome(period);
+                incomeLines = period.Receipts;
             }
             else
             {
-                incomeLines = await _incomeRepository.GetIncome();
-                List<MLFSReportingPeriod> periods = await _periodRepository.GetPeriods();
+                List<MLFSReportingPeriod> periods = new List<MLFSReportingPeriod>();
                 if (currentFY)
                 {
-                    periods = periods.Where(x => x.FinancialYear == period.FinancialYear).ToList();
+                    periods = await _periodData.GetFinancialYear(period);
                 }
                 else if (last12periods)
                 {
-                    periods = periods.Where(x => x.FinancialYear == period.FinancialYear || (x.FinancialYear == period.PriorYear && x.ReportOrder > period.ReportOrder)).ToList();
+                    periods = await _periodData.GetLast12Months(period);
                 }
-                else
-                {
-                    return null;
-                }
-                incomeLines = incomeLines.Where(x => x.MLFSReportPeriodId != null && periods.Select(y => y.Id).ToList().Contains((int)x.MLFSReportPeriodId)).ToList();
+                incomeLines = periods.SelectMany(x => x.Receipts).ToList();
             }
             foreach (MLFSIncome income in incomeLines)
             {
                 reportLines.Add(new MLFSIncomeReport(income));
             }
             return reportLines;
+        }
+
+        /// <summary>
+        /// Returns a "pivoted" set of data by either advisor or organisation
+        /// </summary>
+        /// <param name="periodId">an array of integers representing the ids of the periods you want to report for</param>
+        /// <param name="byAdvisor">If true then it will pivot on the advisor</param>
+        /// <param name="byOrganisation">if true it will pivot on the organisation</param>
+        /// <returns>The IncomeReport lines for the period pivoted</returns>
+        [HttpGet]
+        [Route("IncomeReport")]
+        public async Task<List<IncomeReport>> IncomeReport(int[] periodId, bool byAdvisor = false, bool byOrganisation = false)
+        {
+            List<MLFSReportingPeriod> periods = new List<MLFSReportingPeriod>();
+            List<IncomeReport> report = new List<IncomeReport>();
+
+            for (int i = 0; i < periodId.Length; i++)
+            {
+                MLFSReportingPeriod period = await _periodData.GetPeriodById(periodId[i]);
+                periods.Add(period);
+            }
+            
+            if (byAdvisor && !byOrganisation)
+            {
+                report = ViewModels.IncomeReport.CreateReportByAdvisor(periods);
+            }
+            else if (byOrganisation && !byAdvisor)
+            {
+                report = ViewModels.IncomeReport.CreateReportByOrganisation(periods);
+            }
+            else
+            {
+                report = ViewModels.IncomeReport.CreateFromList(periods.SelectMany(x => x.Receipts).ToList());
+            }
+            return report;
         }
 
     }

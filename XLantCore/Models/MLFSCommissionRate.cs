@@ -19,5 +19,7 @@ namespace XLantCore.Models
         public decimal StartingValue { get; set; }
         public decimal EndingValue { get; set; }
         public decimal Percentage { get; set; }
+
+        public virtual MLFSAdvisor Advisor { get; set; }
     }
 }

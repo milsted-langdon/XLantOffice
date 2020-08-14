@@ -10,21 +10,21 @@ namespace XLantCore.Models
     {
         public MLFSClient()
         {
-            Plans = new List<Plan>();
-            Fees = new List<Fee>();
+            Plans = new List<MLFSPlan>();
+            Fees = new List<MLFSFee>();
         }
 
         public MLFSClient(string id)
         {
-            Plans = new List<Plan>();
-            Fees = new List<Fee>();
+            Plans = new List<MLFSPlan>();
+            Fees = new List<MLFSFee>();
             PrimaryID = id;
         }
 
         public MLFSClient(JToken jsonResponse)
         {
-            Plans = new List<Plan>();
-            Fees = new List<Fee>();
+            Plans = new List<MLFSPlan>();
+            Fees = new List<MLFSFee>();
             
             dynamic obj = jsonResponse;
             if (obj != null)
@@ -45,7 +45,14 @@ namespace XLantCore.Models
                 {
                     IsIndividual = true;
                     Person = new Person();
-                    Person.Title = obj.person.title;
+                    if (obj.person.title.Value != "")
+                    {
+                        Person.Title = Models.Person.ParseTitle(obj.person.title.Value); 
+                    }
+                    else
+                    {
+                        Person.Title = Title.Mr;
+                    }
                     Person.FirstName = obj.person.firstName;
                     Person.LastName = obj.person.lastName;
                     Person.DateOfBirth = obj.person.dateOFBirth;
@@ -69,7 +76,8 @@ namespace XLantCore.Models
                     ParaPlanner = new Staff(paraId, paraName);
                 }
                 Category = obj.category;
-                Type = obj.Type;
+                Type = obj.type;
+                CreatedOn = Tools.HandleStringToDate(obj.createdAt.ToString());
             }
         }
 
@@ -78,8 +86,9 @@ namespace XLantCore.Models
         public Staff Advisor { get; set; }
         public string Category { get; set; }
         public string Type { get; set; }
+        public DateTime? CreatedOn { get; set; } 
 
-        public List<Plan> Plans { get; set; }
-        public List<Fee> Fees { get; set; }
+        public List<MLFSPlan> Plans { get; set; }
+        public List<MLFSFee> Fees { get; set; }
     }
 }

@@ -1,48 +1,184 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - XLant Data Store</title>
+    <title>@ViewData["Title"]</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <!-- Add local styles, mostly for plugins css file -->
+    @if (IsSectionDefined("Styles"))
+    {@RenderSection("Styles", required: false)}
+
+<environment names="Development">
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
-    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/lib/font-awesome/css/font-awesome.css" />
+    <link rel="stylesheet" href="~/css/animate.css" />
+    <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/lib/Buttons-1.6.2/css/buttons.bootstrap4.css" />
+    <link rel="stylesheet" href="~/lib/DataTables-1.10.21/css/dataTables.bootstrap4.css" />
+</environment>
+<environment names="Staging,Production">
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/font-awesome/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="~/css/animate.css" />
+    <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/lib/Buttons-1.6.2/css/buttons.bootstrap4.min.css" />
+    <link rel="stylesheet" href="~/lib/DataTables-1.10.21/css/dataTables.bootstrap4.min.css" />
+</environment>
+
+
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">XLant Data Store</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
+
+
+    <!-- Wrapper-->
+    <div id="wrapper" class="@Html.PageClass()">
+
+        <!-- Navigation -->
+        <partial name="_Navigation" />
+
+        <!-- Page wraper -->
+        <div id="page-wrapper" class="gray-bg @ViewBag.SpecialClass">
+
+            <!-- Top Navbar -->
+            <partial name="_TopNavbar" />
+
+            <!-- Main view  -->
+            @RenderBody()
+
+            <!-- Footer -->
+            <partial name="_Footer" />
+
+        </div>
+        <!-- End page wrapper-->
+
+    </div>
+    <!-- End wrapper-->
+    @*A generic modal group for calling*@
+    <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="modalLabel">Heading</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="modalLoader" class="sk-spinner sk-spinner-rotating-plane"></div>
+                    <div id="modalPlaceholder">
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
             </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+        </div>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2020 - XLant - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @RenderSection("Scripts", required: false)
+
+    <environment names="Development">
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/Popper/popper.min.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap-multiselect.js"></script>
+        <script src="~/lib/metisMenu/dist/jquery.metisMenu.js"></script>
+        <script src="~/lib/slimScroll/jquery.slimscroll.js"></script>
+        <script src="~/lib/pace/pace.js"></script>
+        <script src="~/js/script.js" asp-append-version="true"></script>
+        <script src="~/js/moment.min.js"></script>
+        <script src="~/lib/DataTables-1.10.21/js/jquery.dataTables.js"></script>
+        <script src="~/lib/DataTables-1.10.21/js/dataTables.bootstrap4.js"></script>
+        <script src="~/lib/DataTables-1.10.21/js/datetime-moment.js"></script>
+        <script src="~/lib/DataTables-1.10.21/js/jquery.dataTables.yadcf.js"></script>
+        <script src="~/lib/Buttons-1.6.2/js/dataTables.buttons.js"></script>
+        <script src="~/lib/Buttons-1.6.2/js/buttons.html5.js"></script>
+        <script src="~/lib/Buttons-1.6.2/js/buttons.print.js"></script>
+        <script src="~/lib/Buttons-1.6.2/js/buttons.colvis.js"></script>
+        <script src="~/lib/Buttons-1.6.2/js/buttons.bootstrap4.js"></script>
+        <script src="~/js/xlantDataTables.js"></script>
+        <script src="~/js/xlantModal.js"></script>
+        <script src="~/js/xlantVC.js"></script>
+        <!-- Only for demo purpose -->
+        <script src="~/js/skin.config.js"></script>
+    </environment>
+    <environment names="Staging,Production">
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/lib/Popper/popper.min.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap-multiselect.js"></script>
+        <script src="~/lib/metisMenu/dist/jquery.metisMenu.js"></script>
+        <script src="~/lib/pace/pace.min.js"></script>
+        <script src="~/lib/slimScroll/jquery.slimscroll.min.js"></script>
+        <script src="~/js/script.js" asp-append-version="true"></script>
+        <script src="~/js/moment.min.js"></script>
+        <script src="~/lib/DataTables-1.10.21/js/jquery.dataTables.js"></script>
+        <script src="~/lib/DataTables-1.10.21/js/dataTables.bootstrap4.min.js"></script>
+        <script src="~/lib/DataTables-1.10.21/js/datetime-moment.js"></script>
+        <script src="~/lib/DataTables-1.10.21/js/jquery.dataTables.yadcf.js"></script>
+        <script src="~/lib/Buttons-1.6.2/js/dataTables.buttons.min.js"></script>
+        <script src="~/lib/Buttons-1.6.2/js/buttons.html5.min.js"></script>
+        <script src="~/lib/Buttons-1.6.2/js/buttons.print.min.js"></script>
+        <script src="~/lib/Buttons-1.6.2/js/buttons.colVis.min.js"></script>
+        <script src="~/lib/Buttons-1.6.2/js/buttons.bootstrap4.min.js"></script>
+        <script src="~/js/xlantDataTables.js"></script>
+        <script src="~/js/xlantModal.js"></script>
+        <script src="~/js/xlantVC.js"></script>
+    </environment>
+
+    @RenderSection("scripts", required: false)
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+
+            //add loading icon to submit and save button
+            $('[type=submit]').click(function () {
+                $(this).button('loading');
+            });
+
+            //Handle any errors passed back from modals
+            var error = '@TempData["Error"]';
+            if (error != "") {
+                toastr.options = {
+                    "positionClass": "toast-top-right",
+                    "timeOut": 8000
+                }
+                toastr.error(error, 'Error');
+                $('.custom-alert').fadeIn();
+                $('.custom-alert-active').fadeOut();
+            }
+
+            ////set the jquery validation to use GB date format
+            //$(function () {
+            //    $.validator.methods.date = function (value, element) {
+            //        Globalize.culture("en-GB");
+            //        return this.optional(element) || Globalize.parseDate(value) !== null;
+            //    }
+            //});
+
+            //search for VCLinks
+            $('p').html(function (index, oldText) {
+                var array = new Array();
+                array = oldText.match(/VC[0-9]+/g);
+                var newText = oldText;
+                if (array == null) {
+                    return oldText;
+                }
+                else {
+                    for (i = 0; i < array.length; i++) {
+                        var id = array[i].substring(2, array[i].length);
+                        newText = newText + " - <a href=vclink://" + id + "/1/1>View</a>";
+                    }
+                    return newText;
+                }
+            });
+
+            FormatDataTables();
+
+            // $(".modal-dialog").draggable({
+            //    handle: ".modal-header"
+            //});
+        })
+    </script>
 </body>
 </html>

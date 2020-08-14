@@ -8,6 +8,11 @@ namespace XLantCore.Models
 {
     public partial class EmailAddress
     {
+        /// <summary>
+        /// Creates a list of email addresses from IO jarray data
+        /// </summary>
+        /// <param name="jarray">the array of "items" representing the email address</param>
+        /// <returns>the completed list</returns>
         public static List<EmailAddress> CreateList(JArray jarray)
         {
             List<EmailAddress> emails = new List<EmailAddress>();

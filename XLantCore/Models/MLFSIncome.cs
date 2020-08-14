@@ -13,12 +13,14 @@ namespace XLantCore.Models
 
         }
 
-        public MLFSIncome(DataRow row)
+        public MLFSIncome(DataRow row, List<MLFSAdvisor> advisors)
         {
             IOReference = row["IORef"].ToString();
             RelevantDate = Tools.HandleStringToDate(row["Submitted"].ToString());
             Organisation = row["GroupOne"].ToString();
-            AdvisorId = row["CRMContactId"].ToString();
+            MLFSAdvisor adv = MLFSAdvisor.Assign(row["CRMContactId"].ToString(), advisors);
+            AdvisorId = adv.Id;
+            Advisor = adv;
             ProviderName = row["Provider"].ToString();
             ClientName = row["ClientName"].ToString();
             ClientId = row["ClientId"].ToString();
@@ -44,10 +46,10 @@ namespace XLantCore.Models
 
         public int? Id { get; set; }
         public string IOReference { get; set; }
-        public int? MLFSReportPeriodId { get; set; }
+        public int? ReportingPeriodId { get; set; }
         public DateTime? RelevantDate { get; set; }
         public string Organisation { get; set; }
-        public string AdvisorId { get; set; }
+        public int AdvisorId { get; set; }
         public string ProviderName { get; set; }
         public string ClientName { get; set; }
         public string ClientId { get; set; }
@@ -61,6 +63,9 @@ namespace XLantCore.Models
         public string PlanNumber { get; set; }
         public bool IsTopUp { get; set; }
         public string IncomeType { get; set; }
+        public DateTime? ClientOnBoardDate { get; set; }
+        public bool IsClawBack { get; set; }
+        public bool IsAdjustment { get; set; }
 
         public virtual MLFSAdvisor Advisor { get; set; }
         [NotMapped]

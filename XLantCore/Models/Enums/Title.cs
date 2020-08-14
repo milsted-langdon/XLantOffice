@@ -16,6 +16,8 @@ namespace XLantCore.Models
         Sir,
         Lady,
         Dr,
-        Prof
+        Prof,
+        Reverend,
+        Unknown
     }
 }

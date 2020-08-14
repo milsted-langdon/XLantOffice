@@ -14,8 +14,11 @@ namespace XLantCore.Models
         }
 
         public int Id { get; set; }
-        public string AdvisorId { get; set; }
-        public int MLFSReportPeriodId { get; set; }
+        public int ReportingPeriodId { get; set; }
         public decimal Budget { get; set; }
+        public int AdvisorId { get; set; }
+
+        public virtual MLFSAdvisor Advisor { get; set; }
+        public virtual MLFSReportingPeriod ReportingPeriod { get; set; }
     }
 }

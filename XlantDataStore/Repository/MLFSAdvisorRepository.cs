@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Linq;
 using RestSharp;
 using System;
 using System.Collections.Generic;
@@ -26,6 +27,12 @@ namespace XLantDataStore.Repository
         {
             MLFSAdvisor adv = await _db.MLFSAdvisors.FindAsync(id);
             return adv;
+        }
+
+        public async Task<List<MLFSAdvisor>> GetAdvisors()
+        {
+            List<MLFSAdvisor> advisors = await _db.MLFSAdvisors.ToListAsync();
+            return advisors;
         }
     }
 }

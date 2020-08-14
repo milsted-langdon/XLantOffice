@@ -7,6 +7,7 @@ using RestSharp;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using XLantCore;
+using System.Web;
 
 namespace XLantDataStore.Repository
 {
@@ -26,9 +27,12 @@ namespace XLantDataStore.Repository
             //then get the plans
             client.Plans = await GetClientPlans(client.PrimaryID);
             //for each plan get the other owners but only basic data
-            foreach(Plan plan in client.Plans)
+            foreach(MLFSPlan plan in client.Plans)
             {
-                plan.ContributionsToDate = await GetContributionTotal(plan);
+                if (plan.ContributionsToDate == 0)
+                {
+                    plan.ContributionsToDate = await GetContributionTotal(plan); 
+                }
                 for (int i = 0; i < plan.Clients.Count; i++)
                 {
                     if (plan.Clients[i].PrimaryID != client.PrimaryID)
@@ -45,7 +49,7 @@ namespace XLantDataStore.Repository
             return client;
         }
 
-        private async Task<decimal> GetContributionTotal(Plan plan)
+        private async Task<decimal> GetContributionTotal(MLFSPlan plan)
         {
             string url = String.Format("clients/{0}/plans/{1}/contributions", plan.Clients[0].PrimaryID, plan.PrimaryID);
             IRestResponse response = await IOConnection.GetResponse(url);
@@ -116,7 +120,7 @@ namespace XLantDataStore.Repository
             }
         }
 
-        public async Task<List<Plan>> GetClientPlans(string clientId, string url = "")
+        public async Task<List<MLFSPlan>> GetClientPlans(string clientId, string url = "")
         {
             if (String.IsNullOrEmpty(url))
             {
@@ -126,8 +130,8 @@ namespace XLantDataStore.Repository
             if (response.Content.Length != 0 && response.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 JArray jarray = Tools.ExtractItemsArrayFromJsonString(response.Content);
-                List<Plan> plans = Plan.CreateList(jarray);
-                foreach (Plan p in plans)
+                List<MLFSPlan> plans = MLFSPlan.CreateList(jarray);
+                foreach (MLFSPlan p in plans)
                 {
                     url = String.Format("clients/{0}/plans/{1}/contributions", clientId, p.PrimaryID);
                     response = await IOConnection.GetResponse(url);
@@ -142,9 +146,9 @@ namespace XLantDataStore.Repository
             }
         }
 
-        public async Task<List<Fee>> GetClientFees(string clientId, string url = "")
+        public async Task<List<MLFSFee>> GetClientFees(string clientId, string url = "")
         {
-            List<Fee> fees = new List<Fee>();
+            List<MLFSFee> fees = new List<MLFSFee>();
             if (String.IsNullOrEmpty(url))
             {
                 url = String.Format("clients/{0}/fees", clientId);
@@ -153,8 +157,34 @@ namespace XLantDataStore.Repository
             if (response.Content.Length != 0 && response.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 JArray jarray = Tools.ExtractItemsArrayFromJsonString(response.Content);
-                fees = Fee.CreateList(jarray);
+                fees = MLFSFee.CreateList(jarray);
                 return fees; 
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public async Task<List<MLFSClient>> GetClients(string idString)
+        {
+            idString = HttpUtility.UrlEncode(idString);
+            string url = String.Format("clients?filter=id in {0}", idString);
+            IRestResponse response = await IOConnection.GetResponse(url);
+            if (response.Content.Length != 0 && response.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                JToken token = JToken.Parse(response.Content);
+                JArray clients = Tools.ExtractItemsArrayFromJsonString(response.Content);
+                if (clients.Count > 0)
+                {
+                    List<MLFSClient> clientList = MLFSClient.CreateList(clients);
+                    return clientList;
+                }
+                else
+                {
+                    return null;
+                }
+                
             }
             else
             {

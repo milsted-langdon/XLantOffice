@@ -15,18 +15,18 @@ namespace XLantDataStore.Controllers
     [Route("[controller]")]
     public class MLFSReportingPeriodsController : Controller
     {
-        private readonly Repository.IMLFSReportingPeriodRepository _context;
+        private readonly Repository.IMLFSReportingPeriodRepository _periodData;
 
         public MLFSReportingPeriodsController(XLantDbContext context)
         {
-            _context = new Repository.MLFSReportingPeriodRepository(context);
+            _periodData = new Repository.MLFSReportingPeriodRepository(context);
         }
 
         [Route("Index")]
         // GET: MLFSReportingPeriods
         public async Task<IActionResult> Index()
         {
-            return View(await _context.GetPeriods());
+            return View(await _periodData.GetPeriods());
         }
 
         [Route("Details")]
@@ -38,7 +38,7 @@ namespace XLantDataStore.Controllers
                 return NotFound();
             }
 
-            var mLFSReportingPeriod = await _context.GetPeriodById((int)id);
+            var mLFSReportingPeriod = await _periodData.GetPeriodById((int)id);
             if (mLFSReportingPeriod == null)
             {
                 return NotFound();
@@ -67,7 +67,7 @@ namespace XLantDataStore.Controllers
             if (ModelState.IsValid)
             {
                 MLFSReportingPeriod period = new MLFSReportingPeriod(mLFSReportingPeriod.Month, mLFSReportingPeriod.Year);
-                await _context.InsertPeriod(period);
+                await _periodData.InsertPeriod(period);
                 return RedirectToAction(nameof(Index));
             }
             return View(mLFSReportingPeriod);
@@ -82,7 +82,7 @@ namespace XLantDataStore.Controllers
                 return NotFound();
             }
 
-            var mLFSReportingPeriod = await _context.GetPeriodById((int)id);
+            var mLFSReportingPeriod = await _periodData.GetPeriodById((int)id);
             if (mLFSReportingPeriod == null)
             {
                 return NotFound();
@@ -107,7 +107,7 @@ namespace XLantDataStore.Controllers
             {
                 try
                 {
-                    _context.Update(mLFSReportingPeriod);
+                    _periodData.Update(mLFSReportingPeriod);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -126,7 +126,7 @@ namespace XLantDataStore.Controllers
             {
                 return NotFound();
             }
-            var mLFSReportingPeriod = await _context.GetPeriodById((int)id);
+            var mLFSReportingPeriod = await _periodData.GetPeriodById((int)id);
             if (mLFSReportingPeriod == null)
             {
                 return NotFound();
@@ -138,9 +138,23 @@ namespace XLantDataStore.Controllers
         [HttpPost, ActionName("Delete")]
         [Route("Delete")]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int? id)
         {
-            _context.Delete(id);
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var mLFSReportingPeriod = await _periodData.GetPeriodById((int)id);
+            if (mLFSReportingPeriod == null)
+            {
+                return NotFound();
+            }
+            if (mLFSReportingPeriod.Receipts.Count > 0 || mLFSReportingPeriod.Sales.Count > 0)
+            {
+                //Don't delete if we have attached sales
+                return NotFound();
+            }
+            _periodData.Delete((int)id);
             return RedirectToAction(nameof(Index));
         }
     }

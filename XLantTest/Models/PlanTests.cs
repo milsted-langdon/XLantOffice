@@ -18,7 +18,7 @@ namespace XLantCore.Models.Tests
             JObject obj = JObject.Parse(jsonResponse);
 
             //act
-            Plan plan = new Plan(obj);
+            MLFSPlan plan = new MLFSPlan(obj);
 
             //assert
             Assert.AreEqual("LoansRUs", plan.ProductName);
@@ -32,7 +32,7 @@ namespace XLantCore.Models.Tests
             JArray jarray = Tools.ExtractItemsArrayFromJsonString(jsonResponse);
 
             //act
-            List<Plan> plans = Plan.CreateList(jarray);
+            List<MLFSPlan> plans = MLFSPlan.CreateList(jarray);
 
             //assert
             Assert.AreEqual(2, plans.Count);

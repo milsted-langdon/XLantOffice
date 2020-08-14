@@ -10,11 +10,16 @@ namespace XLantCore.Models
     {
         public MLFSReportingPeriod()
         {
-        
+            Sales = new List<MLFSSale>();
+            Receipts = new List<MLFSIncome>();
+            Budgets = new List<MLFSBudget>();
         }
 
         public MLFSReportingPeriod(int month, int year)
         {
+            Sales = new List<MLFSSale>();
+            Receipts = new List<MLFSIncome>();
+            Budgets = new List<MLFSBudget>();
             Dictionary<int, string> months = Tools.MonthsList();
             string monthName = months[month];
             Month = month;
@@ -43,5 +48,10 @@ namespace XLantCore.Models
         public string FinancialYear { get; set; }
         [Display(Name = "Report Order")]
         public int ReportOrder { get; set; }
+        public bool Locked { get; set; }
+
+        public virtual List<MLFSSale> Sales { get; set; }
+        public virtual List<MLFSIncome> Receipts { get; set; }
+        public virtual List<MLFSBudget> Budgets { get; set; }
     }
 }

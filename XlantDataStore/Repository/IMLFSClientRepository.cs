@@ -10,8 +10,8 @@ namespace XLantDataStore.Repository
     public interface IMLFSClientRepository
     {
         Task<MLFSClient> GetClient(string id);
-        Task<List<Plan>> GetClientPlans(string clientId, string url=null);
-        Task<List<Fee>> GetClientFees(string clientId, string url=null);
-
+        Task<List<MLFSPlan>> GetClientPlans(string clientId, string url=null);
+        Task<List<MLFSFee>> GetClientFees(string clientId, string url=null);
+        Task<List<MLFSClient>> GetClients(string idString);
     }
 }

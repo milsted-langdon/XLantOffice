@@ -162,21 +162,20 @@ namespace XLantDataStore.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("AdvisorId")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("AdvisorId")
+                        .HasColumnType("int");
 
                     b.Property<decimal>("Budget")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int?>("MLFSAdvisorId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MLFSReportPeriodId")
+                    b.Property<int>("ReportingPeriodId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MLFSAdvisorId");
+                    b.HasIndex("AdvisorId");
+
+                    b.HasIndex("ReportingPeriodId");
 
                     b.ToTable("MLFSBudgets");
                 });
@@ -194,9 +193,6 @@ namespace XLantDataStore.Migrations
                     b.Property<decimal>("EndingValue")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int?>("MLFSAdvisorId")
-                        .HasColumnType("int");
-
                     b.Property<decimal>("Percentage")
                         .HasColumnType("decimal(18,2)");
 
@@ -205,9 +201,45 @@ namespace XLantDataStore.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MLFSAdvisorId");
+                    b.HasIndex("AdvisorId");
 
                     b.ToTable("MLFSCommissionRates");
+                });
+
+            modelBuilder.Entity("XLantCore.Models.MLFSDebtorAdjustment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("DebtorId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsVariance")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("NotTakenUp")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("ReceiptId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ReportingPeriodId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DebtorId");
+
+                    b.HasIndex("ReceiptId");
+
+                    b.HasIndex("ReportingPeriodId");
+
+                    b.ToTable("MLFSDebtorAdjustments");
                 });
 
             modelBuilder.Entity("XLantCore.Models.MLFSIncome", b =>
@@ -217,10 +249,7 @@ namespace XLantDataStore.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("AdvisorId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("AdvisorId1")
+                    b.Property<int>("AdvisorId")
                         .HasColumnType("int");
 
                     b.Property<decimal>("Amount")
@@ -238,6 +267,9 @@ namespace XLantDataStore.Migrations
                     b.Property<string>("ClientName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime?>("ClientOnBoardDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("FeeStatus")
                         .HasColumnType("nvarchar(max)");
 
@@ -247,6 +279,12 @@ namespace XLantDataStore.Migrations
                     b.Property<string>("IncomeType")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsAdjustment")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsClawBack")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsTopUp")
                         .HasColumnType("bit");
 
@@ -255,9 +293,6 @@ namespace XLantDataStore.Migrations
 
                     b.Property<string>("JointClientName")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("MLFSReportPeriodId")
-                        .HasColumnType("int");
 
                     b.Property<string>("Organisation")
                         .HasColumnType("nvarchar(max)");
@@ -279,7 +314,7 @@ namespace XLantDataStore.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AdvisorId1");
+                    b.HasIndex("AdvisorId");
 
                     b.HasIndex("ReportingPeriodId");
 
@@ -298,6 +333,9 @@ namespace XLantDataStore.Migrations
 
                     b.Property<string>("FinancialYear")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Locked")
+                        .HasColumnType("bit");
 
                     b.Property<int>("Month")
                         .HasColumnType("int");
@@ -320,23 +358,17 @@ namespace XLantDataStore.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<decimal>("Adjusted")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("AdvisorId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("AdvisorId1")
+                    b.Property<int>("AdvisorId")
                         .HasColumnType("int");
-
-                    b.Property<string>("AdvisorName")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ClientId")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ClientName")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("EstimatedOtherIncome")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("IOId")
                         .HasColumnType("nvarchar(max)");
@@ -362,17 +394,11 @@ namespace XLantDataStore.Migrations
                     b.Property<decimal>("NetAmount")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<bool>("NotTakenUp")
-                        .HasColumnType("bit");
-
                     b.Property<decimal>("OnGoingPercentage")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Organisation")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("Paid")
-                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("PlanReference")
                         .HasColumnType("nvarchar(max)");
@@ -386,9 +412,6 @@ namespace XLantDataStore.Migrations
                     b.Property<DateTime>("RelevantDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("ReportPeriodId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("ReportingPeriodId")
                         .HasColumnType("int");
 
@@ -397,7 +420,7 @@ namespace XLantDataStore.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AdvisorId1");
+                    b.HasIndex("AdvisorId");
 
                     b.HasIndex("IncomeId");
 
@@ -451,26 +474,57 @@ namespace XLantDataStore.Migrations
 
             modelBuilder.Entity("XLantCore.Models.MLFSBudget", b =>
                 {
-                    b.HasOne("XLantCore.Models.MLFSAdvisor", null)
+                    b.HasOne("XLantCore.Models.MLFSAdvisor", "Advisor")
                         .WithMany("Budget")
-                        .HasForeignKey("MLFSAdvisorId");
+                        .HasForeignKey("AdvisorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("XLantCore.Models.MLFSReportingPeriod", "ReportingPeriod")
+                        .WithMany("Budgets")
+                        .HasForeignKey("ReportingPeriodId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("XLantCore.Models.MLFSCommissionRate", b =>
                 {
-                    b.HasOne("XLantCore.Models.MLFSAdvisor", null)
+                    b.HasOne("XLantCore.Models.MLFSAdvisor", "Advisor")
                         .WithMany("CommissionRates")
-                        .HasForeignKey("MLFSAdvisorId");
+                        .HasForeignKey("AdvisorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("XLantCore.Models.MLFSDebtorAdjustment", b =>
+                {
+                    b.HasOne("XLantCore.Models.MLFSSale", "Debtor")
+                        .WithMany("Adjustments")
+                        .HasForeignKey("DebtorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("XLantCore.Models.MLFSIncome", "Receipt")
+                        .WithMany()
+                        .HasForeignKey("ReceiptId");
+
+                    b.HasOne("XLantCore.Models.MLFSReportingPeriod", "ReportingPeriod")
+                        .WithMany()
+                        .HasForeignKey("ReportingPeriodId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("XLantCore.Models.MLFSIncome", b =>
                 {
                     b.HasOne("XLantCore.Models.MLFSAdvisor", "Advisor")
                         .WithMany()
-                        .HasForeignKey("AdvisorId1");
+                        .HasForeignKey("AdvisorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("XLantCore.Models.MLFSReportingPeriod", "ReportingPeriod")
-                        .WithMany()
+                        .WithMany("Receipts")
                         .HasForeignKey("ReportingPeriodId");
                 });
 
@@ -478,14 +532,16 @@ namespace XLantDataStore.Migrations
                 {
                     b.HasOne("XLantCore.Models.MLFSAdvisor", "Advisor")
                         .WithMany()
-                        .HasForeignKey("AdvisorId1");
+                        .HasForeignKey("AdvisorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("XLantCore.Models.MLFSIncome", "Income")
                         .WithMany()
                         .HasForeignKey("IncomeId");
 
                     b.HasOne("XLantCore.Models.MLFSReportingPeriod", "ReportingPeriod")
-                        .WithMany()
+                        .WithMany("Sales")
                         .HasForeignKey("ReportingPeriodId");
                 });
 
