@@ -38,6 +38,7 @@ namespace XLantDataStore
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                DotNetEnv.Env.Load("../.env");
             }
 
             app.UseHttpsRedirection();

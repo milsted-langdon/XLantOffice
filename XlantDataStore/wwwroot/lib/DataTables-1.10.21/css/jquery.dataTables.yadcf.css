@@ -1,0 +1,159 @@
+.hide {
+	display: none;
+}
+
+.inuse, .ui-slider-range .inuse, .yadcf-filter-range-number-slider .inuse {
+	background: #8BBEF0;
+}
+
+.inuse-regex {
+	background: #8BBEF0;
+}
+
+.inuse-exclude {
+	background: #8BBEF0;
+}
+
+.yadcf-filter-reset-button {
+	display: inline-block;
+	background-color: #d9534f;
+	color: white;
+}
+
+.yadcf-filter-reset-button.range-number-slider-reset-button{
+	position: relative;
+	top: -6px;
+}
+
+.yadcf-filter {
+	padding-right: 4px;
+	padding-left: 4px;
+	padding-bottom: 3px;
+	padding-top: 3px;
+}
+
+.yadcf-filter > option{
+    background: white;
+}
+
+.ui-autocomplete .ui-menu {
+	background-color:white;
+}
+.ui-autocomplete .ui-menu-item {
+	font-size:13px;
+	list-style-type:none;
+	background-color:white;
+}
+
+#ui-datepicker-div {
+	font-size:13px;
+}
+.yadcf-filter-wrapper {
+	display: inline-block;
+	white-space: nowrap;
+	margin-left: 2px;
+}
+
+.yadcf-filter-range-number {
+	max-width: 80px;
+	padding-right: 12px;
+	padding-left: 12px;
+	padding-top: 6px;
+	padding-bottom: 6px;
+	border-radius: 4px;
+}
+
+.yadcf-filter-range-number-seperator {
+	margin-left: 5px;
+	margin-right: 5px;
+}
+
+.yadcf-filter-range-date {
+	max-width: 80px;
+	padding-right: 12px;
+	padding-left: 12px;
+	padding-top: 6px;
+	padding-bottom: 6px;
+	border-radius: 4px;
+}
+
+.yadcf-filter-range-date-seperator {
+	margin-left: 5px;
+	margin-right: 5px;
+}
+
+.yadcf-filter-wrapper-inner {
+	display: inline-block;
+	/*width: 80%*/
+}
+
+.yadcf-number-slider-filter-wrapper-inner {
+	display: inline-block;
+	width: 200px;
+	margin-bottom: 7px;
+}
+
+.yadcf-filter-range-number-slider .ui-slider-handle {
+	width: 10px;
+	height: 10px;
+	margin-top: 1px;
+}
+
+.yadcf-filter-range-number-slider .ui-slider-range {
+	position: relative;
+	height: 5px;
+}
+
+.yadcf-filter-range-number-slider {
+	height: 5px;
+	margin-left: 6px;
+	margin-right: 6px;
+}
+
+.yadcf-filter-range-number-slider {
+    overflow: visible;
+}
+
+.yadcf-number-slider-filter-wrapper-inner .yadcf-filter-range-number-slider-min-tip {
+	font-size: 13px;
+	font-weight: normal;
+	position: absolute;
+	outline-style: none;
+}
+
+.yadcf-number-slider-filter-wrapper-inner .yadcf-filter-range-number-slider-max-tip {
+	font-size: 13px;
+	font-weight: normal;
+	position:absolute;
+	outline-style: none;
+}
+
+.yadcf-number-slider-filter-wrapper-inner .yadcf-filter-range-number-slider-min-tip-inner {
+	position:absolute;
+	top: 11px;
+}
+
+.yadcf-number-slider-filter-wrapper-inner .yadcf-filter-range-number-slider-max-tip-inner {
+	position:absolute;
+	top: 11px;
+}
+
+.yadcf-exclude-wrapper {
+	display: inline-block;
+	vertical-align: middle;
+	margin-right: 5px;
+}
+
+.yadcf-regex-wrapper {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 5px;
+}
+
+.yadcf-label.small {
+	font-size: 10px;
+}
+
+.after{
+    margin-left: 10px;
+}

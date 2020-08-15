@@ -20,7 +20,7 @@ namespace XLantCore
                                 select map).FirstOrDefault();
             if (setting != null)
             {
-                conn = "user id=XLantLogin;password=mswlBtCk11OF;server=";
+                conn = String.Format("user id={0};password={1};server=", DotNetEnv.Env.GetString("XLANTLOGIN"), DotNetEnv.Env.GetString("XLANTPASSWORD"));
                 conn += setting.Attribute("Server").Value;
                 conn += ";database=";
                 conn += setting.Attribute("db").Value;

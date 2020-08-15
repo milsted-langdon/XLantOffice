@@ -10,10 +10,10 @@ namespace XLantDataStore.Repository
 {
     public class IOConnection
     {
-        private static string clientId = "app-87d0541-tcf-9ec5dadde6e84f6fb4daea56cca578e6";
-        private static string clientSecret = "WZ@R7GN3K$-_HX3469z$s6s8?!_0QS";
+        private static string clientId = DotNetEnv.Env.GetString("IOCLIENTID");
+        private static string clientSecret = DotNetEnv.Env.GetString("IOCLIENTSECRET");
         private static string tenantId = "10946";//"12551";//
-        private static string apiKey = "app-87d0541-6c93b0849c29424291ce4ff10580935a";
+        private static string apiKey = DotNetEnv.Env.GetString("IOAPIKEY");
         private static string credentials = String.Format("tenant_id={0}&client_id={1}&client_secret={2}", tenantId, clientId, clientSecret);
         private static string tokenUrl = "https://identity.intelliflo.com/core/connect/token";
         private static string apiBaseUrl = "https://api.intelliflo.com/v2/";
