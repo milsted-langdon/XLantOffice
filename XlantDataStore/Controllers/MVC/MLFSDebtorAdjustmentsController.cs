@@ -27,7 +27,7 @@ namespace XLantDataStore.Controllers.MVC
         public async Task<IActionResult> Index(int debtorId)
         {
             List<MLFSDebtorAdjustment> adjs = await _adjustmentData.GetAdjustments(debtorId);
-            return View(adjs);
+            return PartialView(adjs);
         }
 
         // GET: MLFSDebtorAdjustments/Create
@@ -36,11 +36,11 @@ namespace XLantDataStore.Controllers.MVC
             MLFSDebtorAdjustment adj = new MLFSDebtorAdjustment();
             MLFSSale debtor = await _salesData.GetSaleById(debtorId);
             adj.DebtorId = debtorId;
-            adj.Amount = debtor.Outstanding;
+            adj.Amount = debtor.Outstanding * -1;
             adj.IsVariance = true;
             adj.NotTakenUp = false;
-            ViewData["ReportingPeriodId"] = _periodData.SelectList();
-            return View("Create", adj);
+            ViewBag.ReportingPeriodId = await _periodData.SelectList();
+            return PartialView("Create", adj);
         }
 
         // GET: MLFSDebtorAdjustments/Create
@@ -49,11 +49,11 @@ namespace XLantDataStore.Controllers.MVC
             MLFSDebtorAdjustment adj = new MLFSDebtorAdjustment();
             MLFSSale debtor = await _salesData.GetSaleById(debtorId);
             adj.DebtorId = debtorId;
-            adj.Amount = debtor.Outstanding;
+            adj.Amount = debtor.Outstanding * -1;
             adj.IsVariance = false;
             adj.NotTakenUp = false;
-            ViewData["ReportingPeriodId"] = _periodData.SelectList();
-            return View("Create", adj);
+            ViewBag.ReportingPeriodId = await _periodData.SelectList();
+            return PartialView("Create", adj);
         }
 
         [HttpPost]
@@ -71,6 +71,24 @@ namespace XLantDataStore.Controllers.MVC
             return RedirectToAction("Index", "Debtor");
         }
 
+        public async Task<IActionResult> NotTakenUp(int? debtorId)
+        {
+            if (debtorId == null)
+            {
+                return NotFound();
+            }
+
+            MLFSSale mLFSSale = await _salesData.GetSaleById((int)debtorId);
+            if (mLFSSale == null)
+            {
+                return NotFound();
+            }
+            MLFSReportingPeriod period = await _periodData.GetCurrent();
+            MLFSDebtorAdjustment adj = mLFSSale.CreateNTU(period);
+            _adjustmentData.Insert(adj);
+            return RedirectToAction("Index", "Debtor");
+        }
+
         public async Task<IActionResult> Reverse(int? id)
         {
             if (id == null)
@@ -85,6 +103,9 @@ namespace XLantDataStore.Controllers.MVC
             }
             MLFSDebtorAdjustment clone = adj.Clone();
             clone.Amount = adj.Amount * -1;
+            adj.ReceiptId = null;
+            _adjustmentData.Insert(clone);
+            _adjustmentData.Update(adj);
             return RedirectToAction("Index", "Debtor");
         }
 

@@ -4,11 +4,7 @@
     ViewData["Title"] = "Directors' Report";
 }
 
-    <div class="ibox-heading">
-        <a class="btn btn-primary" asp-action="UpdateData" asp-controller="MLFSSale" asp-route-periodId="@Model.FirstOrDefault().ReportingPeriodId">Update Data from IO</a>
-    </div>
-    <div class="ibox-content">
-        <table class="table xlantDataTable">
+        <table class="table directorsTable" style="width:100%">
             <thead>
                 <tr>
                     <th>
@@ -23,7 +19,7 @@
                     <th>
                         @Html.DisplayNameFor(model => model.NewExisting)
                     </th>
-                    <th>
+                    <th class="columnTotal">
                         @Html.DisplayNameFor(model => model.InitialFee)
                     </th>
                     <th>
@@ -32,7 +28,7 @@
                     <th>
                         @Html.DisplayNameFor(model => model.OngoingPercentage)
                     </th>
-                    <th>
+                    <th class="columnTotal">
                         @Html.DisplayNameFor(model => model.TwelveMonthsTrail)
                     </th>
                     <th>
@@ -109,7 +105,20 @@
                 }
             </tbody>
             <tfoot>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td align="right"></td>
+                    <td></td>
+                    <td></td>
+                    <td align="right"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
 
+                </tr>
             </tfoot>
         </table>
-    </div>

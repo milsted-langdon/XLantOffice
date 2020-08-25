@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using XLantCore.Models;
@@ -28,7 +29,7 @@ namespace XLantDataStore.ViewModels
             Renewals = relevantIncome.Where(x => !x.IsNewBusiness).Sum(y => y.Amount);
             Clawback = relevantIncome.Where(x => x.IsClawBack).Sum(y => y.Amount);
             NotTakenUp = relevantAdjustments.Where(x => x.NotTakenUp).Sum(y => y.Amount);
-            Adjustment = 0;
+            Adjustment = relevantIncome.Where(x => x.IsAdjustment).Sum(y => y.Amount);
             Debtors_Adjustment = relevantAdjustments.Where(x => x.ReceiptId == null && !x.NotTakenUp && !x.IsVariance).Sum(y => y.Amount);
             Debtors_Variance = relevantAdjustments.Where(x => x.IsVariance).Sum(y => y.Amount);
             Total = New_Business + Adjustment + Renewals + Clawback + NotTakenUp + Debtors_Adjustment + Debtors_Variance;
@@ -37,12 +38,16 @@ namespace XLantDataStore.ViewModels
         public string Period { get; set; }
         public string Advisor { get; set; }
         public decimal Budget { get; set; }
+        [Display(Name="New Business")]
         public decimal New_Business { get; set; }
         public decimal Renewals { get; set; }
         public decimal Clawback { get; set; }
+        [Display(Name = "Not Taken Up")]
         public decimal NotTakenUp { get; set; }
         public decimal Adjustment { get; set; }
+        [Display(Name = "Debtor Variance")]
         public decimal Debtors_Variance { get; set; }
+        [Display(Name = "Debtor Adjustments")]
         public decimal Debtors_Adjustment { get; set; }
         public decimal Total { get; set; }
 

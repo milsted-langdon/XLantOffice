@@ -79,26 +79,29 @@
             <td>
                 @Html.DisplayFor(modelItem => item.GrossAmount)
             </td>
-            <td>
+            <td align="right">
                 @Html.DisplayFor(modelItem => item.Receipt)
             </td>
-            <td>
+            <td align="right">
                 @Html.DisplayFor(modelItem => item.Variance)
             </td>
-            <td>
+            <td align="right">
                 @Html.DisplayFor(modelItem => item.Adjustment)
             </td>
-            <td>
+            <td align="right">
                 @Html.DisplayFor(modelItem => item.Outstanding)
             </td>
             <td>
                 <div class="dropdown">
                     <button class="btn btn-primary dropdown-toggle" aria-haspopup="true" data-toggle="dropdown" aria-expanded="false">Action</button>
                     <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                        <li><a onclick="LaunchModal('', 'Select One', '@Url.Action("PotentialDebtorMatches", "MLFSIncome", new { debtorid = @item.Id })')">Potential Matches</a></li>
+                        <li><a onclick="LaunchModal('', 'Select One', '@Url.Action("Unmatched", "MLFSIncome", new { debtorid = @item.Id })')">Search for Matches</a></li>
+                        <li><a onclick="LaunchModal('', 'Select One', '@Url.Action("CreateAdjustment", "MLFSDebtorAdjustments", new { debtorid = @item.Id })')">Add Adjustment</a></li>
+                        <li><a onclick="LaunchModal('', 'Select One', '@Url.Action("CreateVariance", "MLFSDebtorAdjustments", new { debtorid = @item.Id })')">Add Variance</a></li>
+                        <li><a asp-action="NotTakenUp" asp-controller="MLFSDebtorAdjustments" asp-route-debtorid="@item.Id">Mark as NTU</a></li>
+                        <li><a onclick="LaunchModal('', 'Transactions', '@Url.Action("Index", "MLFSDebtorAdjustments", new { debtorid = @item.Id })')">View Transactions</a></li>
                         <li><a target="_blank" href="https://www.intelligent-office.net/nio/clientfees/@item.ClientId/Index">View in IO</a></li>
-                        <li><a asp-action="CreateAdjustment" asp-controller="MLFSDebtorAdjustment" asp-route-debtorid="@item.Id">Add Adjustment</a></li>
-                        <li><a asp-action="CreateVariance" asp-controller="MLFSDebtorAdjustment" asp-route-debtorid="@item.Id">Add Variance</a></li>
-                        <li><a asp-action="NotTakenUp" asp-route-id="@item.Id">Mark as Not Taken Up</a></li>
                     </ul>
                 </div>
             </td>

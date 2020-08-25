@@ -15,5 +15,7 @@ namespace XLantDataStore.Repository
         Task<MLFSIncome> GetIncomeById(int incomeId);
         Task<List<MLFSIncome>> UploadIncomeForPeriod(MLFSReportingPeriod period, DataTable income);
         Task UpdateClientOnboardDate(MLFSReportingPeriod period);
+        Task<List<MLFSIncome>> PotentialDebtorMatches(MLFSSale debtor);
+        Task<List<MLFSIncome>> GetUnMatchedIncome();
     }
 }

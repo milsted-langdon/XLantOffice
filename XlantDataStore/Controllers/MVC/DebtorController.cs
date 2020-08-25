@@ -15,12 +15,14 @@ namespace XLantDataStore.Controllers.MVC
         private readonly Repository.IMLFSSaleRepository _debtorData;
         private readonly Repository.IMLFSReportingPeriodRepository _periodData;
         private readonly Repository.IMLFSDebtorAdjustmentRepository _adjustmentData;
+        private readonly Repository.IMLFSIncomeRepository _incomeData;
 
         public DebtorController(XLantDbContext context)
         {
             _debtorData = new Repository.MLFSSaleRepository(context);
             _periodData = new Repository.MLFSReportingPeriodRepository(context);
             _adjustmentData = new Repository.MLFSDebtorAdjustmentRepository(context);
+            _incomeData = new Repository.MLFSIncomeRepository(context);
         }
 
         // GET: Debtor
@@ -45,21 +47,35 @@ namespace XLantDataStore.Controllers.MVC
             return View(mLFSSale);
         }
 
-        public async Task<IActionResult> NotTakenUp(int? id)
+        public async Task<IActionResult> Match(int? id, int? debtorId)
         {
-            if (id == null)
+            if (debtorId == null || id == null)
             {
                 return NotFound();
             }
+            MLFSSale debtor = await _debtorData.GetSaleById((int)debtorId);
+            MLFSIncome receipt = await _incomeData.GetIncomeById((int)id);
+            if (debtor == null || receipt == null)
+            {
+                return NotFound();
+            }
+            List<MLFSDebtorAdjustment> adjs = new List<MLFSDebtorAdjustment>();
+            adjs.Add(new MLFSDebtorAdjustment(debtor, receipt));
+            if (debtor.Outstanding != 0  && (debtor.Outstanding < 0 || debtor.Outstanding/debtor.GrossAmount < (decimal)0.005))
+            {
+                adjs.Add(debtor.ClearToVariance(receipt.ReportingPeriod));
+            }
+            _adjustmentData.InsertList(adjs);
+            return RedirectToAction("Index");
+        }
 
-            MLFSSale mLFSSale = await _debtorData.GetSaleById((int)id);
-            if (mLFSSale == null)
-            {
-                return NotFound();
-            }
-            MLFSReportingPeriod period = await _periodData.GetCurrent();
-            MLFSDebtorAdjustment adj = mLFSSale.CreateNTU(period);
-            _adjustmentData.Update(adj);
+        public async Task<IActionResult> CheckForMatches()
+        {
+            List<MLFSSale> debtors = await _debtorData.GetDebtors();
+            List<MLFSIncome> income = await _incomeData.GetIncome();
+            income = income.Where(x => x.MLFSDebtorAdjustment == null && x.IncomeType.Contains("Initial")).ToList();
+            List<MLFSDebtorAdjustment> adjs = MLFSSale.CheckForReceipts(debtors, income);
+            _adjustmentData.InsertList(adjs);
             return RedirectToAction("Index");
         }
     }

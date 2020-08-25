@@ -30,7 +30,7 @@ namespace XLantDataStore.Repository
 
         public async Task<MLFSSale> GetSaleById(int saleId)
         {
-            MLFSSale sale = await _db.MLFSSales.FindAsync(saleId);
+            MLFSSale sale = await _db.MLFSSales.Include(x => x.ReportingPeriod).Include(y => y.Adjustments).Where(y => y.Id == saleId).FirstOrDefaultAsync();
             return sale;
         }
 
@@ -54,8 +54,8 @@ namespace XLantDataStore.Repository
                 MLFSSale sale = new MLFSSale(row, advisors);
                 sale.ReportingPeriodId = period.Id;
                 sale.ReportingPeriod = period;
-                List<DataRow> planRows = plans.AsEnumerable().Where(x => x.Field<string>("Root Sequential Ref") == sale.PlanReference).ToList();
-                planRows.AddRange(plans.AsEnumerable().Where(x => x.Field<string>("Sequential Ref") == sale.PlanReference).ToList());
+                List<DataRow> planRows = plans.AsEnumerable().Where(x => x.Field<string>("Root Sequential Ref").Contains(sale.PlanReference)).ToList();
+                planRows.AddRange(plans.AsEnumerable().Where(x => x.Field<string>("Sequential Ref").Contains(sale.PlanReference)).ToList());
                 DataRow selectedPlan;
                 if (planRows.Count == 1)
                 {

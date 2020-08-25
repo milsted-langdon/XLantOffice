@@ -73,5 +73,6 @@ namespace XLantCore.Models
         [NotMapped]
         public virtual MLFSClient JointClient { get; set; }
         public virtual MLFSReportingPeriod ReportingPeriod { get; set; }
+        public virtual MLFSDebtorAdjustment MLFSDebtorAdjustment { get; set; }
     }
 }

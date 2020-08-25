@@ -30,25 +30,23 @@ namespace XLantCore.Models
             get
             {
                 bool pass = false;
-                if (Investment != 0)
+                
+                if (NetAmount >= 450)
                 {
-                    if (NetAmount >= 450)
-                    {
-                        pass = true;
-                    }
-                    else
+                    pass = true;
+                }
+                else
+                {
+                    if (Investment != 0)
                     {
                         if (NetAmount / Investment >= (decimal)0.03)
                         {
                             pass = true;
                         }
                     }
-                    return pass;
                 }
-                else
-                {
-                    return pass;
-                }
+                return pass;
+
             }
         }
 
@@ -62,6 +60,7 @@ namespace XLantCore.Models
             {
                 bool pass = false;
                 decimal twelveMonthsIncome = Investment * OnGoingPercentage / 100;
+                twelveMonthsIncome = twelveMonthsIncome + EstimatedOtherIncome;
                 if (twelveMonthsIncome >= 500)
                 {
                     pass = true;
@@ -292,17 +291,38 @@ namespace XLantCore.Models
             for (int i = 0; i < debtors.Count; i++)
             {
                 MLFSSale debtor = debtors[i];
-                foreach (MLFSIncome receipt in receipts)
+                for (int j = 0; j < receipts.Count; j++)
                 {
+                    MLFSIncome receipt = receipts[j];
                     if (receipt.IOReference == debtor.IOReference || (receipt.IOReference == debtor.PlanReference && receipt.Amount == debtor.GrossAmount))
                     {
                         MLFSDebtorAdjustment adj = new MLFSDebtorAdjustment(debtor, receipt);
+                        receipts.Remove(receipt);
                         debtor.Adjustments.Add(adj);
                         adjs.Add(adj);
                     }
                 }
             }
             return adjs;
+        }
+
+        /// <summary>
+        /// "writes off" anyoutstanding balance as a variance
+        /// </summary>
+        public MLFSDebtorAdjustment ClearToVariance(MLFSReportingPeriod period)
+        {
+            MLFSDebtorAdjustment variance = new MLFSDebtorAdjustment()
+            {
+                ReportingPeriodId = period.Id,
+                ReportingPeriod = period,
+                Debtor = this,
+                DebtorId = (int)Id,
+                Amount = Outstanding * -1,
+                IsVariance = true,
+                NotTakenUp = false
+            };
+            Adjustments.Add(variance);
+            return variance;
         }
     }
 }

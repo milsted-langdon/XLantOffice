@@ -37,7 +37,7 @@ namespace XLantDataStore.Repository
 
         public async Task<List<MLFSDebtorAdjustment>> GetAdjustments(int debtorId)
         {
-            List<MLFSDebtorAdjustment> adjs = await _context.MLFSDebtorAdjustments.Where(x => x.DebtorId == debtorId).ToListAsync();
+            List<MLFSDebtorAdjustment> adjs = await _context.MLFSDebtorAdjustments.Where(x => x.DebtorId == debtorId).Include(y => y.Debtor).Include(z => z.Receipt).Include(a => a.ReportingPeriod).ToListAsync();
             return adjs;
         }
 

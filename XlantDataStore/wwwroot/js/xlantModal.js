@@ -24,53 +24,53 @@
     .done(function () {
         //once the data is rendered run some scripts to make it lovely
 
-        //set the jquery validation to use GB date format
-        $(function () {
-            $.validator.methods.date = function (value, element) {
-                Globalize.culture("en-GB");
-                return this.optional(element) || Globalize.parseDate(value) !== null;
-            }
-        });
+        ////set the jquery validation to use GB date format
+        //$(function () {
+        //    $.validator.methods.date = function (value, element) {
+        //        Globalize.culture("en-GB");
+        //        return this.optional(element) || Globalize.parseDate(value) !== null;
+        //    }
+        //});
 
         //add loading icon to submit and save button
         $('[type=submit]').click(function () {
             $(this).button('loading');
         });
         
-        //handle editable cells
-        $('.edit').editable(function (value, settings) {
-            var url = $(this).data('url');
-            var id = this.id;
-            let detail = id.split('-');
-            $.post(url + "?id=" + id + "&value=" + value, function (data) {
-                data = JSON.parse(data);
-                if (data.Result == "Success") {
+        ////handle editable cells
+        //$('.edit').editable(function (value, settings) {
+        //    var url = $(this).data('url');
+        //    var id = this.id;
+        //    let detail = id.split('-');
+        //    $.post(url + "?id=" + id + "&value=" + value, function (data) {
+        //        data = JSON.parse(data);
+        //        if (data.Result == "Success") {
                 
-                }
-                else{
-                    alert("Data not updated");
-                    console.log(data.Result);
-                    console.log(data.Error);
-                }
-            });
-            return value;
-        },
-        {
-            tooltip: 'Click to edit...'
-        });
-        $('.edit_area').editable(function (value, settings) {
-            var url = $(this).data('url');
-            var id = this.id;
-            $.post(url + "?id=" + id + "&value=" + value);
-            return value;
-        }, {
-            type: 'textarea',
-            height: '80px',
-            cancel: 'Cancel',
-            submit: 'OK',
-            indicator: '<img src="img/indicator.gif">',
-            tooltip: 'Click to edit...'
-        });
+        //        }
+        //        else{
+        //            alert("Data not updated");
+        //            console.log(data.Result);
+        //            console.log(data.Error);
+        //        }
+        //    });
+        //    return value;
+        //},
+        //{
+        //    tooltip: 'Click to edit...'
+        //});
+        //$('.edit_area').editable(function (value, settings) {
+        //    var url = $(this).data('url');
+        //    var id = this.id;
+        //    $.post(url + "?id=" + id + "&value=" + value);
+        //    return value;
+        //}, {
+        //    type: 'textarea',
+        //    height: '80px',
+        //    cancel: 'Cancel',
+        //    submit: 'OK',
+        //    indicator: '<img src="img/indicator.gif">',
+        //    tooltip: 'Click to edit...'
+        //});
 
     });
 };

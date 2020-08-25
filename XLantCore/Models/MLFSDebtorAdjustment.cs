@@ -11,6 +11,11 @@ namespace XLantCore.Models
 
         }
 
+        /// <summary>
+        /// matches the income to the sale/debtor
+        /// </summary>
+        /// <param name="sale"></param>
+        /// <param name="income"></param>
         public MLFSDebtorAdjustment(MLFSSale sale, MLFSIncome income)
         {
             MLFSReportingPeriod period = income.ReportingPeriod;
@@ -22,6 +27,7 @@ namespace XLantCore.Models
             Amount = income.Amount *-1;
             IsVariance = false;
             NotTakenUp = false;
+            sale.Adjustments.Add(this);
         }
 
         public int Id { get; set; }

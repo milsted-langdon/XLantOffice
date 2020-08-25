@@ -1,0 +1,82 @@
+﻿@model IEnumerable<XLantDataStore.ViewModels.FCIReport
+    >
+
+@{
+    ViewData["Title"] = "FCI Report";
+}
+
+    
+        <table class="table fciTable" style="width:100%">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Advisor)
+                    </th>
+                    <th class="columnTotal">
+                        @Html.DisplayNameFor(model => model.Adhoc)
+                    </th>
+                    <th class="columnTotal">
+                        @Html.DisplayNameFor(model => model.Initial)
+                    </th>
+                    <th class="columnTotal">
+                        @Html.DisplayNameFor(model => model.FundBased)
+                    </th>
+                    <th class="columnTotal">
+                        @Html.DisplayNameFor(model => model.Ongoing)
+                    </th>
+                    <th class="columnTotal">
+                        @Html.DisplayNameFor(model => model.Renewal)
+                    </th>
+                    <th class="columnTotal">
+                        @Html.DisplayNameFor(model => model.Other)
+                    </th>
+                    <th class="columnTotal">
+                        @Html.DisplayNameFor(model => model.Total)
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Advisor)
+                    </td>
+                    <td align="right">
+                        @Html.DisplayFor(modelItem => item.Adhoc)
+                    </td>
+                    <td align="right">
+                        @Html.DisplayFor(modelItem => item.Initial)
+                    </td>
+                    <td align="right">
+                        @Html.DisplayFor(modelItem => item.FundBased)
+                    </td>
+                    <td align="right">
+                        @Html.DisplayFor(modelItem => item.Ongoing)
+                    </td>
+                    <td align="right">
+                        @Html.DisplayFor(modelItem => item.Renewal)
+                    </td>
+                    <td align="right">
+                        @Html.DisplayFor(modelItem => item.Other)
+                    </td>
+                    <td align="right">
+                        @Html.DisplayFor(modelItem => item.Total)
+                    </td>
+                </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td></td>
+                    <td align="right"></td>
+                    <td align="right"></td>
+                    <td align="right"></td>
+                    <td align="right"></td>
+                    <td align="right"></td>
+                    <td align="right"></td>
+                    <td align="right"></td>
+                </tr>
+            </tfoot>
+        </table>
+    

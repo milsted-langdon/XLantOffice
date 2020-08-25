@@ -131,15 +131,6 @@ function setDataTableDefaults() {
         "processing": true,
         "stateSave": true,
         "stateDuration": 0,
-        "footerCallback": function (row, data, start, end, display) {
-            var api = $(this).DataTable();
-            $('.columnTotal').each(function () {
-                let column = $(this).closest('td');
-                let visIdx = column.index();
-                let columnIndex = api.column.index('fromVisible', visIdx);
-                totalColumn(api, columnIndex);
-            });
-        },
         initComplete: function () {
             var api = this.api();
             var state = api.state.loaded();
@@ -155,31 +146,36 @@ function setDataTableDefaults() {
                         column.visible(false);
                     }
                 }
+                if (s.includes('columnTotal')) {
+                    columnTotal(api, i);
+                }
             });
 
             $(this).data('selectedArray','');
         }
     });
-    //$.fn.dataTable.moment('DD/MM/YYYY');
+    $.fn.dataTable.moment('DD/MM/YYYY');
 }
 
-function FormatDataTables(tableClass) {
+function FormatDataTables(tableClass, excludeFilterTotal) {
     if (tableClass == null) {
         tableClass = '.xlantDataTable';
     }
-    //add additional rows
-    addFunctionalRows(tableClass);
-
     //init table
-
     var table;
     if ($.fn.dataTable.isDataTable(tableClass)) {
         table = $(tableClass).DataTable();
     }
     else {
+        //add additional rows
+        if (!excludeFilterTotal) {
+            addFunctionalRows(tableClass);
+        }
+        
         table = $(tableClass).DataTable({
 
         });
+
     }
     
     if (columnArray.length > 0) {
@@ -189,22 +185,25 @@ function FormatDataTables(tableClass) {
 }
 
 function addFunctionalRows(tableClass) {
-    let newHeader = '<tr role="row">';
-    let newFooter = '<tr>';
-    //foreach td in the row above
-    $(tableClass).find('thead tr:last').find('th').each(function () {
-        newHeader = newHeader + '<th rowspan="1" colspan="1" align="right"><i class="fa fa-filter" onClick="addTableFilterLauncher(this)"></i></th>';
-        newFooter = newFooter + '<td rowspan="1" colspan="1" align="right"><i class="fa fa-calculator" onClick="totalColumnLauncher(this)"></i></td>';
-    });
-    //lastly
-    newHeader = newHeader + '</tr>';
-    newFooter = newFooter + '</tr>';
+    if (!$(tableClass).find('thead tr').hasClass('.row')) {
 
-    $('thead').append(newHeader);
-    $('tfoot').append(newFooter);
+        let newHeader = '<tr role="row">';
+        let newFooter = '<tr>';
+        //foreach td in the row above
+        $(tableClass).find('thead tr:last').find('th').each(function () {
+            newHeader = newHeader + '<th rowspan="1" colspan="1" align="right"><i class="fa fa-filter" onClick="addTableFilterLauncher(this)"></i></th>';
+            newFooter = newFooter + '<td rowspan="1" colspan="1" align="right"><i class="fa fa-calculator" onClick="columnTotalLauncher(this)"></i></td>';
+        });
+        //lastly
+        newHeader = newHeader + '</tr>';
+        newFooter = newFooter + '</tr>';
+
+        $(tableClass).find('thead').append(newHeader);
+        $(tableClass).find('tfoot').append(newFooter);
+    };
 }
 
-function totalColumn(table, columnIndex) {
+function columnTotal(table, columnIndex) {
     // Total over visible lines
     var column;
     let pageTotal = 0;
@@ -237,12 +236,12 @@ function totalColumn(table, columnIndex) {
     }
 }
 
-function totalColumnLauncher(obj) {
+function columnTotalLauncher(obj) {
     let table = $('.xlantDataTable').DataTable();
     let column = $(obj).closest('td');
     let visIdx = column.index();
     let columnIndex = table.column.index('fromVisible', visIdx);
-    totalColumn(table, columnIndex);
+    columnTotal(table, columnIndex);
 }
 
 function addTableFilter(table, columnIndex) {

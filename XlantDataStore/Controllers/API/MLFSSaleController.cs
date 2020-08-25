@@ -105,7 +105,7 @@ namespace XLantDataStore.API.Controllers
 
             //Allocate Receipts
             List<MLFSSale> debtors = await _salesData.GetDebtors();
-            List<MLFSDebtorAdjustment> adjs = MLFSSale.CheckForReceipts(debtors, receipts);
+            List<MLFSDebtorAdjustment> adjs = MLFSSale.CheckForReceipts(debtors, receipts.Where(x => x.IncomeType.Contains("Initial")).ToList());
             _adjData.InsertList(adjs);
             return Ok();
         }

@@ -1,0 +1,77 @@
+﻿
+@{
+    ViewData["Title"] = "MLFS Reports";
+}
+
+<h1>Reports</h1>
+<div class="row">
+    <div class="col-md-3">
+        <select id="periodId" class="form-control" asp-items="ViewBag.ReportingPeriodId"></select>
+    </div>
+</div>
+
+<div class="ibox-content">
+        <!-- Nav tabs -->
+        <nav class="nav nav-tabs" role="tablist">
+            <a class="nav-item nav-link active" id="directorsTab" href="#directors" aria-controls="directors" role="tab" data-toggle="tab">Director's Report</a></li>
+            <a class="nav-item nav-link" id="salesTab" href="#sales" aria-controls="sales" role="tab" data-toggle="tab">Sales Report</a></li>
+            <a class="nav-item nav-link" id="fciTab" href="#fci" aria-controls="fci" role="tab" data-toggle="tab">FCI Report</a></li>
+        </nav>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane container active" id="directors" style="width:100%">
+                <div id="directorsDiv" style="width:110%" data-url="@Url.Action("DirectorsReport", "MLFSReport")">
+                </div>
+            </div>
+            <div role="tabpanel" class="tab-pane container fade" id="sales" style="width:100%">
+                <div id="salesDiv" style="width:100%" data-url="@Url.Action("SalesReport", "MLFSReport")">
+                </div>
+            </div>
+            <div role="tabpanel" class="tab-pane container fade" id="fci" style="width:100%">
+                <div id="fciDiv" style="width:100%" data-url="@Url.Action("FCIReport", "MLFSReport")">
+                </div>
+            </div>
+        </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            UpdateSections();
+        })
+        $('.nav-tabs').on('click', 'a', function () {
+            UpdateSections($(this).attr('id'));
+        });
+
+        $('#periodId').on('change', function () {
+            $('#directorsDiv').empty();
+            $('#salesDiv').empty();
+            $('#fciDiv').empty();
+            UpdateSections();
+        })
+
+        function UpdateSections(id, force) {
+            if (id === undefined) {
+                id = $('.nav-tabs').find('.active').attr('id');
+            }
+            $(id).addClass('active');
+            let name =  id.substring(0, id.indexOf('T'));
+            let contentDiv = $('#' +name  + 'Div');
+            if ($.trim($(contentDiv).text()) == '' || force) {
+                let url = $(contentDiv).data("url");
+                $(contentDiv).html("<div id='modalLoader' class='sk-spinner sk-spinner-rotating-plane'></div>")
+                let periodId = $('#periodId').val();
+                $.get(url + "?periodId=" + periodId)
+                .done(function (response) {
+                    $(contentDiv).html(response);
+                    FormatDataTables('.' + name + 'Table', true);
+                })
+                .fail(function () {
+                    alert('Update failed');
+                });
+            }
+
+        }
+    </script>
+}
