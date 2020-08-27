@@ -12,7 +12,6 @@ namespace XLantDataStore.ViewModels
         public SalesReport(List<MLFSSale> sales, List<MLFSIncome> income, List<MLFSDebtorAdjustment> adjustments, List<MLFSBudget> budgets, MLFSAdvisor advisor, MLFSReportingPeriod period)
         {
             List<MLFSIncome> relevantIncome = income.Where(x => x.AdvisorId == advisor.Id && x.ReportingPeriodId == period.Id).ToList();
-            List<MLFSSale> relevantSales = sales.Where(x => x.ReportingPeriodId == period.Id && x.AdvisorId == advisor.Id).ToList();
             List<MLFSDebtorAdjustment> relevantAdjustments = adjustments.Where(x => x.ReportingPeriodId == period.Id && x.Debtor.AdvisorId == advisor.Id).ToList();
             Period = period.Description;
             Advisor = advisor.Fullname;
@@ -25,7 +24,7 @@ namespace XLantDataStore.ViewModels
             {
                 Budget = 0;
             }
-            New_Business = relevantSales.Sum(y => y.NetAmount);
+            New_Business = relevantIncome.Where(x => x.IncomeType.Contains("Initial")).Sum(y => y.Amount);
             Renewals = relevantIncome.Where(x => !x.IsNewBusiness).Sum(y => y.Amount);
             Clawback = relevantIncome.Where(x => x.IsClawBack).Sum(y => y.Amount);
             NotTakenUp = relevantAdjustments.Where(x => x.NotTakenUp).Sum(y => y.Amount);

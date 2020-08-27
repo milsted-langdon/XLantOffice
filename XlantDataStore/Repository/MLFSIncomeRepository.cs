@@ -39,23 +39,13 @@ namespace XLantDataStore.Repository
             return await _db.MLFSIncome.Where(x => ids.Contains((int)x.ReportingPeriodId)).ToListAsync();
         }
 
-        public async Task<List<MLFSIncome>> UploadIncomeForPeriod(MLFSReportingPeriod period, DataTable income)
+        public async void InsertList(List<MLFSIncome> income)
         {
-            List<MLFSIncome> returnedTrans = new List<MLFSIncome>();
-            List<MLFSAdvisor> advisors = await _advisorData.GetAdvisors();
-            foreach (DataRow row in income.Rows)
+            foreach (MLFSIncome i in income)
             {
-                MLFSIncome tran = new MLFSIncome(row, advisors)
-                {
-                    ReportingPeriodId = period.Id,
-                    ReportingPeriod = period
-                };
-
-                returnedTrans.Add(tran);
-                _db.MLFSIncome.Add(tran);
+                _db.MLFSIncome.Add(i);
             }
             await _db.SaveChangesAsync();
-            return returnedTrans;
         }
 
         public async Task<List<MLFSIncome>> GetIncome()

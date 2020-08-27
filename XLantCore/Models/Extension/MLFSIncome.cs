@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 
@@ -67,6 +68,29 @@ namespace XLantCore.Models
                     income.ClientOnBoardDate = client.CreatedOn;
                 }
             }
+        }
+
+
+        /// <summary>
+        /// Converts a datatable row into our domain object
+        /// </summary>
+        /// <param name="income">the datatable</param>
+        /// <param name="advisors">the advisors to match</param>
+        /// <param name="period">the period it relates to</param>
+        /// <returns>List or MLFSIncome</returns>
+        public static List<MLFSIncome> CreateFromDataTable(DataTable income, List<MLFSAdvisor> advisors, MLFSReportingPeriod period)
+        {
+            List<MLFSIncome> returnedTrans = new List<MLFSIncome>();
+            foreach (DataRow row in income.Rows)
+            {
+                MLFSIncome tran = new MLFSIncome(row, advisors)
+                {
+                    ReportingPeriodId = period.Id,
+                    ReportingPeriod = period
+                };
+                returnedTrans.Add(tran);
+            }
+            return returnedTrans;
         }
     }
 }

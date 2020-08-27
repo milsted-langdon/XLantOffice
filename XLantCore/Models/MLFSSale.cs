@@ -15,26 +15,56 @@ namespace XLantCore.Models
             Adjustments = new HashSet<MLFSDebtorAdjustment>();
         }
 
-        public MLFSSale(DataRow row, List<MLFSAdvisor> advisors)
+        public MLFSSale(DataRow row, List<MLFSAdvisor> advisors, bool isCommission = false)
         {
-            IOId = row["Id"].ToString();
-            IOReference = row["Reference Number"].ToString();
-            ClientName =  row["Fee Owner.Full Name"].ToString();
-            ClientId = row["Fee Owner.Id"].ToString();
-            JointClientName = row["Fee Owner 2.Full Name"].ToString();
-            JointClientId = row["Fee Owner 2.Id"].ToString();
-            MLFSAdvisor adv = MLFSAdvisor.Assign(row["Selling Adviser.Id"].ToString(), advisors);
-            AdvisorId = adv.Id;
-            Advisor = adv;
-            PlanType = row["Related Plan Type"].ToString();
-            IsNew = false;
-            RelevantDate = DateTime.Parse(row["Invoice Date"].ToString());
-            NetAmount = Tools.HandleNull(row["Net Amount"].ToString());
-            VAT = Tools.HandleNull(row["VAT"].ToString());
-            PlanReference = row["Related Plan Reference"].ToString();
-            Investment = 0;
-            OnGoingPercentage = 0;
-            EstimatedOtherIncome = 0;
+            if (isCommission)
+            {
+                PlanReference = "IOB" + row["Id"].ToString();
+                IOReference = "";
+                ClientName = row["Owner.Full Name"].ToString();
+                ClientId = row["Owner.Id"].ToString();
+                JointClientName = row["Owner 2.Full Name"].ToString();
+                JointClientId = row["Owner 2.Id"].ToString();
+                MLFSAdvisor adv = MLFSAdvisor.Assign(row["Selling Adviser.Id"].ToString(), advisors);
+                AdvisorId = adv.Id;
+                Advisor = adv;
+                PlanType = row["Plan Type"].ToString();
+                ProviderName = row["Provdier.Name"].ToString();
+                IsNew = false;
+                RelevantDate = DateTime.Parse(row["Submitted Date"].ToString());
+                NetAmount = Tools.HandleNull(row["Expected Commission - Total Initial"].ToString());
+                VAT = 0;
+                DateTime creationDate = DateTime.Parse(row["Owner 1.Creation Date"].ToString());
+                if (creationDate > ReportingPeriod.StartDate.AddMonths(-9))
+                {
+                    IsNew = true;
+                }
+                Investment = Tools.HandleNull(row["Total Premiums to Date"].ToString());
+                OnGoingPercentage = Tools.HandleNull(row["On-going Fee Percentage"].ToString());
+                Organisation = row["Selling Adviser.Group.Name"].ToString();
+                EstimatedOtherIncome = 0;
+            }
+            else
+            {
+                IOId = row["Id"].ToString();
+                IOReference = row["Reference Number"].ToString();
+                ClientName = row["Fee Owner.Full Name"].ToString();
+                ClientId = row["Fee Owner.Id"].ToString();
+                JointClientName = row["Fee Owner 2.Full Name"].ToString();
+                JointClientId = row["Fee Owner 2.Id"].ToString();
+                MLFSAdvisor adv = MLFSAdvisor.Assign(row["Selling Adviser.Id"].ToString(), advisors);
+                AdvisorId = adv.Id;
+                Advisor = adv;
+                PlanType = row["Related Plan Type"].ToString();
+                IsNew = false;
+                RelevantDate = DateTime.Parse(row["Invoice Date"].ToString());
+                NetAmount = Tools.HandleNull(row["Net Amount"].ToString());
+                VAT = Tools.HandleNull(row["VAT"].ToString());
+                PlanReference = row["Related Plan Reference"].ToString();
+                Investment = 0;
+                OnGoingPercentage = 0;
+                EstimatedOtherIncome = 0; 
+            }
         }
 
         public int? Id { get; set; }

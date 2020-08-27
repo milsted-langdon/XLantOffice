@@ -45,41 +45,16 @@ namespace XLantDataStore.Repository
             _db.SaveChanges();
         }
 
-        public async Task<List<MLFSSale>> UploadSalesForPeriod(MLFSReportingPeriod period, DataTable sales, DataTable plans)
+        public async void InsertList(List<MLFSSale> sales)
         {
-            List<MLFSSale> returnedSales = new List<MLFSSale>();
-            List<MLFSAdvisor> advisors = await _advisorData.GetAdvisors();
-            foreach (DataRow row in sales.Rows)
+            foreach (MLFSSale sale in sales)
             {
-                MLFSSale sale = new MLFSSale(row, advisors);
-                sale.ReportingPeriodId = period.Id;
-                sale.ReportingPeriod = period;
-                List<DataRow> planRows = plans.AsEnumerable().Where(x => x.Field<string>("Root Sequential Ref").Contains(sale.PlanReference)).ToList();
-                planRows.AddRange(plans.AsEnumerable().Where(x => x.Field<string>("Sequential Ref").Contains(sale.PlanReference)).ToList());
-                DataRow selectedPlan;
-                if (planRows.Count == 1)
-                {
-                    selectedPlan = planRows.FirstOrDefault();
-                }
-                else
-                {
-                    //match against fee ref
-                    if (planRows.Where(x => x.Field<string>("Related Fee Reference").Contains(sale.IOReference)).Count() > 0)
-                    {
-                        selectedPlan = planRows.Where(x => x.Field<string>("Related Fee Reference").Contains(sale.IOReference)).FirstOrDefault();
-                    }
-                    else
-                    {
-                        selectedPlan = planRows.FirstOrDefault();
-                    }
-                }
-                if (selectedPlan == null)
+                if (string.IsNullOrEmpty(sale.ProviderName))
                 {
                     try
                     {
                         List<MLFSPlan> plansFromIO = await _clientData.GetClientPlans(sale.ClientId);
                         MLFSPlan selectedPlanFromIO = plansFromIO.Where(x => x.PrimaryID == sale.IOReference).FirstOrDefault();
-
                         if (selectedPlanFromIO != null)
                         {
                             List<MLFSFee> feesFromIO = await _clientData.GetClientFees(sale.ClientId);
@@ -92,15 +67,9 @@ namespace XLantDataStore.Repository
                         //No IO data found
                     }
                 }
-                else
-                {
-                    sale.AddPlanData(selectedPlan);
-                }
-                returnedSales.Add(sale);
                 _db.MLFSSales.Add(sale);
             }
             await _db.SaveChangesAsync();
-            return returnedSales;
         }
     }
 }

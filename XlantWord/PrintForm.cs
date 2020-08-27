@@ -68,17 +68,10 @@ namespace XlantWord
                         currentDoc.PageSetup.OtherPagesTray = GetTray(printer, "continuation");
                     }
                 }
-                else if (paper == "continuation")
-                {
-
-                        currentDoc.PageSetup.FirstPageTray = GetTray(printer, "continuation");
-                        currentDoc.PageSetup.OtherPagesTray = GetTray(printer, "continuation");
-                    
-                }
                 else
                 {
-                    currentDoc.PageSetup.FirstPageTray = GetTray(printer, "plain");
-                    currentDoc.PageSetup.OtherPagesTray = GetTray(printer, "plain");
+                    currentDoc.PageSetup.FirstPageTray = GetTray(printer, paper);
+                    currentDoc.PageSetup.OtherPagesTray = GetTray(printer, paper);
                 }
                 //Globals.ThisAddIn.Application.ActivePrinter = printer;
                 object basic = Globals.ThisAddIn.Application.WordBasic;
