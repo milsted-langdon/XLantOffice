@@ -28,7 +28,8 @@
     <RootNamespace>XLantOutlook</RootNamespace>
     <AssemblyName>XLantOutlook</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <DefineConstants>VSTO40</DefineConstants>
     <IsWebBootstrapper>False</IsWebBootstrapper>
     <FileUpgradeFlags>

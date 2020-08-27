@@ -33,6 +33,7 @@ namespace XlantWord
             public string Text { get; set; }
             public string Font { get; set; }
             public int Size { get; set; }
+            public int Bold { get; set; }
         }
 
         public class ListItem
@@ -163,7 +164,7 @@ namespace XlantWord
         private static string TempFileName(string folder, string ext)
         {
             string location = "";
-            if(!ext.Contains("."))
+            if (!ext.Contains("."))
             {
                 ext = "." + ext;
             }
@@ -376,9 +377,10 @@ namespace XlantWord
                             foreach (XElement xLine in xHeading.Descendants("HeaderLine"))
                             {
                                 Line line = new Line();
-                                line.Text = xLine.Value;
-                                line.Size = xLine.AttributeIntNull("Size");
-                                line.Font = xLine.AttributeValueNull("Font");
+                                line.text = xLine.Value;
+                                line.size = xLine.AttributeIntNull("Size");
+                                line.font = xLine.AttributeValueNull("Font");
+                                line.bold = xLine.AttributeIntNull("Bold");
                                 hLines.Add(line);
                             }
                         }
@@ -389,9 +391,10 @@ namespace XlantWord
                             foreach (XElement xLine in xHeading.Descendants("FooterLine"))
                             {
                                 Line line = new Line();
-                                line.Text = xLine.Value;
-                                line.Size = xLine.AttributeIntNull("Size");
-                                line.Font = xLine.AttributeValueNull("Font");
+                                line.text = xLine.Value;
+                                line.size = xLine.AttributeIntNull("Size");
+                                line.font = xLine.AttributeValueNull("Font");
+                                line.bold = xLine.AttributeIntNull("Bold");
                                 fLines.Add(line);
                             }
                         }
@@ -438,9 +441,10 @@ namespace XlantWord
                             foreach (XElement xLine in foundHeader.Descendants("HeaderLine"))
                             {
                                 Line line = new Line();
-                                line.Text = xLine.Value;
-                                line.Size = xLine.AttributeIntNull("Size");
-                                line.Font = xLine.AttributeValueNull("Font");
+                                line.text = xLine.Value;
+                                line.size = xLine.AttributeIntNull("Size");
+                                line.font = xLine.AttributeValueNull("Font");
+                                line.bold = xLine.AttributeIntNull("Bold");
                                 hLines.Add(line);
                             }
                         }
@@ -451,9 +455,10 @@ namespace XlantWord
                             foreach (XElement xLine in foundHeader.Descendants("FooterLine"))
                             {
                                 Line line = new Line();
-                                line.Text = xLine.Value;
-                                line.Size = xLine.AttributeIntNull("Size");
-                                line.Font = xLine.AttributeValueNull("Font");
+                                line.text = xLine.Value;
+                                line.size = xLine.AttributeIntNull("Size");
+                                line.font = xLine.AttributeValueNull("Font");
+                                line.bold = xLine.AttributeIntNull("Bold");
                                 fLines.Add(line);
                             }
                         }
@@ -503,9 +508,10 @@ namespace XlantWord
                             foreach (XElement xLine in foundHeader.Descendants("HeaderLine"))
                             {
                                 Line line = new Line();
-                                line.Text = xLine.Value;
-                                line.Size = xLine.AttributeIntNull("Size");
-                                line.Font = xLine.AttributeValueNull("Font");
+                                line.text = xLine.Value;
+                                line.size = xLine.AttributeIntNull("Size");
+                                line.font = xLine.AttributeValueNull("Font");
+                                line.bold = xLine.AttributeIntNull("Bold");
                                 hLines.Add(line);
                             }
                         }
@@ -516,9 +522,10 @@ namespace XlantWord
                             foreach (XElement xLine in foundHeader.Descendants("FooterLine"))
                             {
                                 Line line = new Line();
-                                line.Text = xLine.Value;
-                                line.Size = xLine.AttributeIntNull("Size");
-                                line.Font = xLine.AttributeValueNull("Font");
+                                line.text = xLine.Value;
+                                line.size = xLine.AttributeIntNull("Size");
+                                line.font = xLine.AttributeValueNull("Font");
+                                line.bold = xLine.AttributeIntNull("Bold");
                                 fLines.Add(line);
                             }
                         }
@@ -561,21 +568,18 @@ namespace XlantWord
                 //Clear any existing header
                 rng = currentDoc.Sections[1].Headers[WdHeaderFooterIndex.wdHeaderFooterFirstPage].Range;
                 rng.Delete();
-                rng.ParagraphFormat.RightIndent = header.HeaderRightIndent;
-                rng.ParagraphFormat.LeftIndent = header.HeaderLeftIndent;
+                rng.ParagraphFormat.RightIndent = header.headerRightIndent;
+                rng.ParagraphFormat.LeftIndent = header.headerLeftIndent;
+                rng.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphRight;
                 //Then build the new one line by line
                 foreach (Line line in header.HeaderLines)
                 {
                     para = currentDoc.Sections[1].Headers[WdHeaderFooterIndex.wdHeaderFooterFirstPage].Range.Paragraphs.Add();
-                    para.Range.Font.Name = line.Font;
-                    para.Range.Font.Size = line.Size;
-                    para.Range.Text = line.Text + Environment.NewLine;
+                    para.Range.Font.Name = line.font;
+                    para.Range.Font.Size = line.size;
+                    para.Range.Font.Bold = line.bold;
+                    para.Range.Text = line.text + Environment.NewLine;
                 }
-                //Then look for bolds
-                //reset the range to get the whole header/footer
-                rng = currentDoc.Sections[1].Headers[WdHeaderFooterIndex.wdHeaderFooterFirstPage].Range;
-                FormatRange(rng);
-
 
                 //Setting First page footer
                 //First delete and existing footer
@@ -587,14 +591,12 @@ namespace XlantWord
                 foreach (Line line in header.FooterLines)
                 {
                     para = currentDoc.Sections[1].Footers[WdHeaderFooterIndex.wdHeaderFooterFirstPage].Range.Paragraphs.Add();
-                    para.Range.Font.Name = line.Font;
-                    para.Range.Font.Size = line.Size;
-                    para.Range.Text = line.Text + Environment.NewLine;
+                    para.Range.Font.Name = line.font;
+                    para.Range.Font.Size = line.size;
+                    para.Range.Font.Bold = line.bold;
+                    para.Range.Font.Color = WdColor.wdColorGray50;
+                    para.Range.Text = line.text + Environment.NewLine;
                 }
-                //Then look for bolds
-                //reset the range to get the whole header/footer
-                rng = currentDoc.Sections[1].Footers[WdHeaderFooterIndex.wdHeaderFooterFirstPage].Range;
-                FormatRange(rng);
             }
             catch (Exception e)
             {
@@ -743,49 +745,7 @@ namespace XlantWord
             }
         }
 
-        public static void FormatRange(Range rng)
-        {
-            try
-            {
-                Boolean nextWordBold = false;
-                foreach (Range word in rng.Words)
-                {
-                    //First decide whether this word should be bold
-                    if (word.Text.Trim().Equals("|", StringComparison.CurrentCultureIgnoreCase))
-                    {
-                        word.Delete(WdUnits.wdWord, 1);
-                    }
-                    else if (nextWordBold)
-                    {
-                        word.Font.Bold = 1;
-                        nextWordBold = false;
-                    }
-                    else
-                    {
-
-                        if (word.Text.Trim().Equals("NextWordBold", StringComparison.CurrentCultureIgnoreCase))
-                        {
-                            word.Delete(WdUnits.wdWord, 1);
-                            nextWordBold = true;
-                        }
-                        else if (word.Text.Trim().Equals("MLBlob", StringComparison.CurrentCultureIgnoreCase))
-                        {
-                            word.Delete(WdUnits.wdWord, 1);
-                            word.InsertSymbol(183, Unicode: true);
-                            word.MoveEnd(WdUnits.wdCharacter, 1);
-                            word.InsertAfter(" ");
-                        }
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show("Unable to format range");
-                XLtools.LogException("FormatRange", rng.Text + "-" + e.ToString());
-            }
-        }
-
-        public static string CreatePdf(string fileString = "")
+        public static string CreatePdf()
         {
             try
             {
