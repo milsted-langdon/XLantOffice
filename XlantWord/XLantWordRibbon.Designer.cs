@@ -62,6 +62,7 @@
             this.StaffSig = this.Factory.CreateRibbonButton();
             this.SigViewBtn = this.Factory.CreateRibbonButton();
             this.group3 = this.Factory.CreateRibbonGroup();
+            this.BioBtn = this.Factory.CreateRibbonButton();
             this.TempSaveBtn = this.Factory.CreateRibbonButton();
             this.PdfBtn = this.Factory.CreateRibbonSplitButton();
             this.pdfAttachmentsBtn = this.Factory.CreateRibbonButton();
@@ -79,7 +80,6 @@
             this.Merge3Btn = this.Factory.CreateRibbonButton();
             this.Merge4Btn = this.Factory.CreateRibbonButton();
             this.InvoiceBtn = this.Factory.CreateRibbonButton();
-            this.BioBtn = this.Factory.CreateRibbonButton();
             this.XLantDataTab.SuspendLayout();
             this.group1.SuspendLayout();
             this.group2.SuspendLayout();
@@ -338,6 +338,15 @@
             this.group3.Label = "Other";
             this.group3.Name = "group3";
             // 
+            // BioBtn
+            // 
+            this.BioBtn.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+            this.BioBtn.Enabled = false;
+            this.BioBtn.Label = "Add Bio";
+            this.BioBtn.Name = "BioBtn";
+            this.BioBtn.ShowImage = true;
+            this.BioBtn.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.BioBtn_Click);
+            // 
             // TempSaveBtn
             // 
             this.TempSaveBtn.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
@@ -469,14 +478,6 @@
             this.InvoiceBtn.Label = "Merge Invoice";
             this.InvoiceBtn.Name = "InvoiceBtn";
             this.InvoiceBtn.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.InvoiceBtn_Click);
-            // 
-            // BioBtn
-            // 
-            this.BioBtn.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
-            this.BioBtn.Label = "Add Bio";
-            this.BioBtn.Name = "BioBtn";
-            this.BioBtn.ShowImage = true;
-            this.BioBtn.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.BioBtn_Click);
             // 
             // XLantWordRibbon
             // 

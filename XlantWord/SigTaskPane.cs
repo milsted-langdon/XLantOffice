@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using Microsoft.Office.Interop.Word;
-using XLantCore;
+using XLant;
 
 namespace XlantWord
 {

@@ -5,7 +5,7 @@ using System.Text;
 using System.Xml.Linq;
 using Microsoft.Office.Tools.Ribbon;
 using Outlook = Microsoft.Office.Interop.Outlook;
-using XLantCore;
+using XLant;
 using XLForms;
 using System.Windows.Forms;
 using System.IO;

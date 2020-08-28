@@ -7,7 +7,7 @@ using Microsoft.Office.Interop.Word;
 using Microsoft.Office.Core;
 using System.Windows.Forms;
 using System.IO;
-using XLantCore;
+using XLant;
 using System.Diagnostics;
 using System.Reflection;
 using System.Net;
@@ -377,10 +377,10 @@ namespace XlantWord
                             foreach (XElement xLine in xHeading.Descendants("HeaderLine"))
                             {
                                 Line line = new Line();
-                                line.text = xLine.Value;
-                                line.size = xLine.AttributeIntNull("Size");
-                                line.font = xLine.AttributeValueNull("Font");
-                                line.bold = xLine.AttributeIntNull("Bold");
+                                line.Text = xLine.Value;
+                                line.Size = xLine.AttributeIntNull("Size");
+                                line.Font = xLine.AttributeValueNull("Font");
+                                line.Bold = xLine.AttributeIntNull("Bold");
                                 hLines.Add(line);
                             }
                         }
@@ -391,10 +391,10 @@ namespace XlantWord
                             foreach (XElement xLine in xHeading.Descendants("FooterLine"))
                             {
                                 Line line = new Line();
-                                line.text = xLine.Value;
-                                line.size = xLine.AttributeIntNull("Size");
-                                line.font = xLine.AttributeValueNull("Font");
-                                line.bold = xLine.AttributeIntNull("Bold");
+                                line.Text = xLine.Value;
+                                line.Size = xLine.AttributeIntNull("Size");
+                                line.Font = xLine.AttributeValueNull("Font");
+                                line.Bold = xLine.AttributeIntNull("Bold");
                                 fLines.Add(line);
                             }
                         }
@@ -441,10 +441,10 @@ namespace XlantWord
                             foreach (XElement xLine in foundHeader.Descendants("HeaderLine"))
                             {
                                 Line line = new Line();
-                                line.text = xLine.Value;
-                                line.size = xLine.AttributeIntNull("Size");
-                                line.font = xLine.AttributeValueNull("Font");
-                                line.bold = xLine.AttributeIntNull("Bold");
+                                line.Text = xLine.Value;
+                                line.Size = xLine.AttributeIntNull("Size");
+                                line.Font = xLine.AttributeValueNull("Font");
+                                line.Bold = xLine.AttributeIntNull("Bold");
                                 hLines.Add(line);
                             }
                         }
@@ -455,10 +455,10 @@ namespace XlantWord
                             foreach (XElement xLine in foundHeader.Descendants("FooterLine"))
                             {
                                 Line line = new Line();
-                                line.text = xLine.Value;
-                                line.size = xLine.AttributeIntNull("Size");
-                                line.font = xLine.AttributeValueNull("Font");
-                                line.bold = xLine.AttributeIntNull("Bold");
+                                line.Text = xLine.Value;
+                                line.Size = xLine.AttributeIntNull("Size");
+                                line.Font = xLine.AttributeValueNull("Font");
+                                line.Bold = xLine.AttributeIntNull("Bold");
                                 fLines.Add(line);
                             }
                         }
@@ -508,10 +508,10 @@ namespace XlantWord
                             foreach (XElement xLine in foundHeader.Descendants("HeaderLine"))
                             {
                                 Line line = new Line();
-                                line.text = xLine.Value;
-                                line.size = xLine.AttributeIntNull("Size");
-                                line.font = xLine.AttributeValueNull("Font");
-                                line.bold = xLine.AttributeIntNull("Bold");
+                                line.Text = xLine.Value;
+                                line.Size = xLine.AttributeIntNull("Size");
+                                line.Font = xLine.AttributeValueNull("Font");
+                                line.Bold = xLine.AttributeIntNull("Bold");
                                 hLines.Add(line);
                             }
                         }
@@ -522,10 +522,10 @@ namespace XlantWord
                             foreach (XElement xLine in foundHeader.Descendants("FooterLine"))
                             {
                                 Line line = new Line();
-                                line.text = xLine.Value;
-                                line.size = xLine.AttributeIntNull("Size");
-                                line.font = xLine.AttributeValueNull("Font");
-                                line.bold = xLine.AttributeIntNull("Bold");
+                                line.Text = xLine.Value;
+                                line.Size = xLine.AttributeIntNull("Size");
+                                line.Font = xLine.AttributeValueNull("Font");
+                                line.Bold = xLine.AttributeIntNull("Bold");
                                 fLines.Add(line);
                             }
                         }
@@ -568,17 +568,17 @@ namespace XlantWord
                 //Clear any existing header
                 rng = currentDoc.Sections[1].Headers[WdHeaderFooterIndex.wdHeaderFooterFirstPage].Range;
                 rng.Delete();
-                rng.ParagraphFormat.RightIndent = header.headerRightIndent;
-                rng.ParagraphFormat.LeftIndent = header.headerLeftIndent;
+                rng.ParagraphFormat.RightIndent = header.HeaderRightIndent;
+                rng.ParagraphFormat.LeftIndent = header.HeaderLeftIndent;
                 rng.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphRight;
                 //Then build the new one line by line
                 foreach (Line line in header.HeaderLines)
                 {
                     para = currentDoc.Sections[1].Headers[WdHeaderFooterIndex.wdHeaderFooterFirstPage].Range.Paragraphs.Add();
-                    para.Range.Font.Name = line.font;
-                    para.Range.Font.Size = line.size;
-                    para.Range.Font.Bold = line.bold;
-                    para.Range.Text = line.text + Environment.NewLine;
+                    para.Range.Font.Name = line.Font;
+                    para.Range.Font.Size = line.Size;
+                    para.Range.Font.Bold = line.Bold;
+                    para.Range.Text = line.Text + Environment.NewLine;
                 }
 
                 //Setting First page footer
@@ -591,11 +591,11 @@ namespace XlantWord
                 foreach (Line line in header.FooterLines)
                 {
                     para = currentDoc.Sections[1].Footers[WdHeaderFooterIndex.wdHeaderFooterFirstPage].Range.Paragraphs.Add();
-                    para.Range.Font.Name = line.font;
-                    para.Range.Font.Size = line.size;
-                    para.Range.Font.Bold = line.bold;
+                    para.Range.Font.Name = line.Font;
+                    para.Range.Font.Size = line.Size;
+                    para.Range.Font.Bold = line.Bold;
                     para.Range.Font.Color = WdColor.wdColorGray50;
-                    para.Range.Text = line.text + Environment.NewLine;
+                    para.Range.Text = line.Text + Environment.NewLine;
                 }
             }
             catch (Exception e)
@@ -745,7 +745,7 @@ namespace XlantWord
             }
         }
 
-        public static string CreatePdf()
+        public static string CreatePdf(string fileString = "")
         {
             try
             {

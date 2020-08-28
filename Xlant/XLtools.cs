@@ -9,7 +9,7 @@ using System.Text;
 using System.Xml;
 using System.Xml.Linq;
 
-namespace XLantCore
+namespace XLant
 {
     public static class XLtools
     {

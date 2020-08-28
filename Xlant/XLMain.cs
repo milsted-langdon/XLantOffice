@@ -6,7 +6,7 @@ using System.Data.SqlClient;
 using System.Data;
 using System.DirectoryServices.AccountManagement;
 
-namespace XLantCore
+namespace XLant
 {
     public class XLMain
     {

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 
-namespace XLantCore
+namespace XLant
 {
     public class XLAPI
     {
