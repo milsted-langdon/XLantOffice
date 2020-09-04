@@ -27,7 +27,6 @@ namespace XLantCore.Models
             Amount = income.Amount *-1;
             IsVariance = false;
             NotTakenUp = false;
-            sale.Adjustments.Add(this);
         }
 
         public int Id { get; set; }

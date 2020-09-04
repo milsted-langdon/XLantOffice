@@ -52,7 +52,7 @@ namespace XLantDataStore.Controllers.MVC
             return PartialView("_DirectorsReport", report);
         }
 
-        public async Task<IActionResult> SalesReport(int? periodId)
+        public async Task<IActionResult> SalesReport(int? periodId, string pivot = "Advisor")
         {
             MLFSReportingPeriod period;
             List<SalesReport> report = new List<SalesReport>();
@@ -70,16 +70,31 @@ namespace XLantDataStore.Controllers.MVC
             //get advsiors
             List<MLFSAdvisor> advisors = await _advisorData.GetAdvisors();
             List<MLFSIncome> income = await _incomeData.GetIncome(period);
-            List<MLFSSale> sales = await _salesData.GetSales(period);
             List<MLFSDebtorAdjustment> adjs = await _adjustmentData.GetAdjustments(period);
             List<MLFSBudget> budgets = await _budgetData.GetBudgets(period);
 
-            foreach (MLFSAdvisor adv in advisors)
+            if (pivot.ToLower() == "advisor")
             {
-                SalesReport line = new SalesReport(sales, income, adjs, budgets, adv, period);
-                report.Add(line);
+                foreach (MLFSAdvisor adv in advisors)
+                {
+                    SalesReport line = new SalesReport(income, adjs, budgets, adv, period);
+                    report.Add(line);
+                } 
             }
-            return PartialView("_SalesReport", report.OrderBy(x => x.Advisor));
+            else if (pivot.ToLower() == "organisation")
+            {
+                report = ViewModels.SalesReport.CreateByOrganisation(income, adjs, period);
+            }
+            else if (pivot.ToLower() == "campaign")
+            {
+                report = ViewModels.SalesReport.CreateByCampaign(income, period);
+            }
+            else
+            {
+                return NotFound();
+            }
+
+            return PartialView("_SalesReport", report.OrderBy(x => x.PivotEntity));
         }
 
         public async Task<IActionResult> FCIReport(int? periodId)

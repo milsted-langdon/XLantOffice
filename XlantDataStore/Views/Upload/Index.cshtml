@@ -5,6 +5,7 @@
 }
 
 <h1>Upload Month End Data</h1>
+<h2>@ViewBag.Result</h2>
 
 <form asp-action="Index">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -12,12 +13,48 @@
         <label asp-for="ReportingPeriodId" class="control-label"></label>
         <select asp-for="ReportingPeriodId" class="form-control" asp-items="ViewBag.ReportingPeriodId"></select>
     </div>
-    <div class="custom-file">
-        <input type="file" class="custom-file-input" id="customFile">
-        <label class="custom-file-label" for="customFile">Choose files</label>
+    <div class="form-group">
+        <div class="custom-file">
+            <input type="file" class="custom-file-input" multiple id="filesToUpload">
+            <label class="custom-file-label" for="customFile">Choose files</label>
+        </div>
     </div>
     <div class="form-group">
-        <input type="submit" value="Create" class="btn btn-primary" />
+        <input type="button" id="btnUpload" value="Upload" class="btn btn-primary" />
     </div>
 </form>
 
+@section scripts{
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#btnUpload').on('click', function () {
+            $('#btnUpload').val("Loading...");
+            var files = $('#filesToUpload').prop("files");
+            var fdata = new FormData();
+            for (var i = 0; i < files.length; i++) {
+                fdata.append("files", files[i]);
+            }
+            fdata.append("ReportingPeriodId", $('#ReportingPeriodId').val());
+            if (files.length > 0) {
+                $.ajax({
+                    type: "POST",
+                    url: "/upload/Index",
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader("XSRF-TOKEN",
+                            $('input:hidden[name="__RequestVerificationToken"]').val());
+                    },
+                    data: fdata,
+                    contentType: false,
+                    processData: false,
+                    success: function (response) {
+                        alert('File Uploaded Successfully.')
+                    }
+                });
+            }
+            else {
+                alert('Please select a file.')
+            }
+        })
+    });
+</script>
+}

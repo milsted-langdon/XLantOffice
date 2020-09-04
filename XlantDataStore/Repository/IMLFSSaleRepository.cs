@@ -13,6 +13,6 @@ namespace XLantDataStore.Repository
         Task<List<MLFSSale>> GetSales(MLFSReportingPeriod period);
         Task<MLFSSale> GetSaleById(int saleId);
         void Update(MLFSSale sale);
-        void InsertList(List<MLFSSale> sales);
+        Task<string> InsertList(List<MLFSSale> sales);
     }
 }

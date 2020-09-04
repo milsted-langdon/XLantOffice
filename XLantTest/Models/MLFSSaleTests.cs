@@ -66,9 +66,13 @@ namespace XLantCore.Models.Tests
                 Username = "unknown"
             };
             advisors.Add(unknownAdvisor);
+            MLFSReportingPeriod period = new MLFSReportingPeriod(1, 2020)
+            {
+                Id = 2
+            };
 
             //act
-            MLFSSale sale = new MLFSSale(row, advisors);
+            MLFSSale sale = new MLFSSale(row, advisors, period);
 
             //assert
             Assert.AreEqual("Joe Smith", sale.Advisor.Fullname, "Advisor doesn't match");
@@ -303,6 +307,69 @@ namespace XLantCore.Models.Tests
             Assert.AreEqual(11000, sale.Investment, "Investment incorrect");
             Assert.AreEqual((decimal)0.1, sale.OnGoingPercentage, "Percentage incorrect");
             Assert.AreEqual((decimal)22000, sale.EstimatedOtherIncome, "Other income not calculated correctly");
+        }
+
+        [TestMethod()]
+        public void MatchPlanTest()
+        {
+            //arrange
+            MLFSReportingPeriod period = new MLFSReportingPeriod(1, 2020)
+            {
+                Id = 2
+            };
+            MLFSSale sale = new MLFSSale()
+            {
+                Id = 1,
+                ClientId = "IOB123",
+                ClientName = "John",
+                ReportingPeriod = period,
+                ReportingPeriodId = period.Id,
+                NetAmount = 100,
+                VAT = 20,
+                PlanReference = "IOP123",
+                IOReference = "IOF345",
+                RelevantDate = DateTime.Parse("01/02/2020")
+            };
+            DataTable table = new DataTable();
+            table.Columns.Add("Id", typeof(int));
+            table.Columns.Add("Provider.Name", typeof(string));
+            table.Columns.Add("Owner 1.Creation Date", typeof(string));
+            table.Columns.Add("Total Premiums to Date", typeof(string));
+            table.Columns.Add("On-going Fee Percentage", typeof(string));
+            table.Columns.Add("Selling Adviser.Group.Name", typeof(string));
+            table.Columns.Add("Root Sequential Ref", typeof(string));
+            table.Columns.Add("Sequential Ref", typeof(string));
+            table.Columns.Add("Related Fee Reference", typeof(string));
+
+            DataRow firstRow = table.NewRow();
+            firstRow["Id"] = "123465";
+            firstRow["Provider.Name"] = "Elevate";
+            firstRow["Owner 1.Creation Date"] = "01/01/2020";
+            firstRow["Total Premiums to Date"] = "10000";
+            firstRow["On-going Fee Percentage"] = "0.01";
+            firstRow["Selling Adviser.Group.Name"] = "Milsted Langdon Financial Services";
+            firstRow["Sequential Ref"] = "IOP123";
+            firstRow["Root Sequential Ref"] = "IOP124";
+            firstRow["Related Fee Reference"] = "IOF345";
+            table.Rows.Add(firstRow);
+
+            DataRow secondRow = table.NewRow();
+            secondRow["Id"] = "123465";
+            secondRow["Provider.Name"] = "Elevate";
+            secondRow["Owner 1.Creation Date"] = "01/01/2020";
+            secondRow["Total Premiums to Date"] = "20000";
+            secondRow["On-going Fee Percentage"] = "0.01";
+            secondRow["Selling Adviser.Group.Name"] = "Milsted Langdon Financial Services";
+            secondRow["Sequential Ref"] = "IOP123";
+            secondRow["Root Sequential Ref"] = "IOP124";
+            secondRow["Related Fee Reference"] = "IOF346";
+            table.Rows.Add(secondRow);
+
+            //act
+            sale.MatchPlan(table);
+
+            //assert
+            Assert.AreEqual((decimal)10000, sale.Investment, "Investment doesn't match");
         }
     }
 }

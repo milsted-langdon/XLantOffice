@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using XLantDataStore.ViewModels;
 using XLantCore.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace XLantDataStore.Controllers.MVC
 {
@@ -25,9 +26,9 @@ namespace XLantDataStore.Controllers.MVC
             _advisorData = new Repository.MLFSAdvisorRepository(context);
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            ViewBag.ReportingPeriodId = _periodData.SelectList();
+            ViewBag.ReportingPeriodId = await _periodData.SelectList();
             return View();
         }
 
@@ -43,7 +44,9 @@ namespace XLantDataStore.Controllers.MVC
             {
                 return NotFound();
             }
-            if (upload.Files.Count == 4)
+            upload.ReportingPeriod = period;
+            upload.ReportingPeriodId = period.Id;
+            if (upload.Files == null || upload.Files.Count != 4)
             {
                 return NotFound();
             }
@@ -53,11 +56,11 @@ namespace XLantDataStore.Controllers.MVC
             {
                 return NotFound();
             }
-            _salesData.InsertList(upload.Sales);
-            _incomeData.InsertList(upload.Income);
+            await _salesData.InsertList(upload.Sales);
+            await _incomeData.InsertList(upload.Income);
             List<MLFSDebtorAdjustment> adjs = MLFSSale.CheckForReceipts(upload.Sales, upload.Income);
             _adjustmentData.InsertList(adjs);
-            ViewBag.Result("Uploaded Successfully");
+            ViewBag.Result = "Uploaded Successfully";
             return RedirectToAction("Index");
         }
     }

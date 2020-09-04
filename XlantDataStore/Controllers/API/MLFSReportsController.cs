@@ -66,13 +66,12 @@ namespace XLantDataStore.API.Controllers
             //get advsiors
             List<MLFSAdvisor> advisors = await _advisorData.GetAdvisors();
             List<MLFSIncome> income = await _incomeData.GetIncome(period);
-            List<MLFSSale> sales = await _salesData.GetSales(period);
             List<MLFSDebtorAdjustment> adjs = await _adjustmentData.GetAdjustments(period);
             List<MLFSBudget> budgets = await _budgetData.GetBudgets(period);
 
             foreach (MLFSAdvisor adv in advisors)
             {
-                SalesReport line = new SalesReport(sales, income, adjs, budgets, adv, period);
+                SalesReport line = new SalesReport(income, adjs, budgets, adv, period);
                 report.Add(line);
             }
             return report;

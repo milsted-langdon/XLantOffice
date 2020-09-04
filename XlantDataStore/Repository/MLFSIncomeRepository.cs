@@ -30,7 +30,7 @@ namespace XLantDataStore.Repository
 
         public async Task<List<MLFSIncome>> GetIncome(MLFSReportingPeriod period)
         {
-            return await _db.MLFSIncome.Where(x => x.ReportingPeriodId == period.Id).Include(y => y.Advisor).ToListAsync();
+            return await _db.MLFSIncome.Where(x => x.ReportingPeriodId == period.Id).Include(z=> z.MLFSDebtorAdjustment).Include(y => y.Advisor).ToListAsync();
         }
 
         public async Task<List<MLFSIncome>> GetIncome(List<MLFSReportingPeriod> periods)
@@ -39,13 +39,14 @@ namespace XLantDataStore.Repository
             return await _db.MLFSIncome.Where(x => ids.Contains((int)x.ReportingPeriodId)).ToListAsync();
         }
 
-        public async void InsertList(List<MLFSIncome> income)
+        public async Task<string> InsertList(List<MLFSIncome> income)
         {
             foreach (MLFSIncome i in income)
             {
                 _db.MLFSIncome.Add(i);
             }
             await _db.SaveChangesAsync();
+            return "Success";
         }
 
         public async Task<List<MLFSIncome>> GetIncome()

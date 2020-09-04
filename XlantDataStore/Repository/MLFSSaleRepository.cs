@@ -45,7 +45,7 @@ namespace XLantDataStore.Repository
             _db.SaveChanges();
         }
 
-        public async void InsertList(List<MLFSSale> sales)
+        public async Task<string> InsertList(List<MLFSSale> sales)
         {
             foreach (MLFSSale sale in sales)
             {
@@ -70,6 +70,7 @@ namespace XLantDataStore.Repository
                 _db.MLFSSales.Add(sale);
             }
             await _db.SaveChangesAsync();
+            return "Success";
         }
     }
 }

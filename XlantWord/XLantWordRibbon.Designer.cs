@@ -136,6 +136,7 @@
             this.CreateFaxBtn.Name = "CreateFaxBtn";
             this.CreateFaxBtn.OfficeImageId = "FileInternetFax";
             this.CreateFaxBtn.ShowImage = true;
+            this.CreateFaxBtn.Visible = false;
             this.CreateFaxBtn.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.CreateFaxBtn_Click);
             // 
             // CreateFNBtn
@@ -385,6 +386,7 @@
             this.MLFSPdfBtn.Name = "MLFSPdfBtn";
             this.MLFSPdfBtn.ScreenTip = "Create an MLFS PDF";
             this.MLFSPdfBtn.ShowImage = true;
+            this.MLFSPdfBtn.Visible = false;
             this.MLFSPdfBtn.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.MLFSPdfBtn_Click);
             // 
             // MLFSPdfAttachBtn
@@ -393,6 +395,7 @@
             this.MLFSPdfAttachBtn.Name = "MLFSPdfAttachBtn";
             this.MLFSPdfAttachBtn.ScreenTip = "Create an MLFS PDF and add attachments to it";
             this.MLFSPdfAttachBtn.ShowImage = true;
+            this.MLFSPdfAttachBtn.Visible = false;
             this.MLFSPdfAttachBtn.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.MLFSAttachBtn_Click);
             // 
             // MLFPPdfBtn
@@ -401,6 +404,7 @@
             this.MLFPPdfBtn.Name = "MLFPPdfBtn";
             this.MLFPPdfBtn.ScreenTip = "Create an MLFP PDF";
             this.MLFPPdfBtn.ShowImage = true;
+            this.MLFPPdfBtn.Visible = false;
             this.MLFPPdfBtn.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.MLFPPdfBtn_Click);
             // 
             // MLFPPdfAttachBtn
@@ -409,6 +413,7 @@
             this.MLFPPdfAttachBtn.Name = "MLFPPdfAttachBtn";
             this.MLFPPdfAttachBtn.ScreenTip = "Create an MLFP PDF and add attachments to it";
             this.MLFPPdfAttachBtn.ShowImage = true;
+            this.MLFPPdfAttachBtn.Visible = false;
             this.MLFPPdfAttachBtn.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.MLFPAttachBtn_Click);
             // 
             // PrintBtn

@@ -394,7 +394,9 @@ namespace XlantWord
                 else
                 {
                     XLMain.Staff send = new XLMain.Staff();
+                    send.crmID = "";
                     send.name = tempSend.name;
+                    send.initials = "";
                     DeploySignature(client, send, AddresseeTB.Text);
                     XLDocument.UpdateParameter("Sender", "");
 

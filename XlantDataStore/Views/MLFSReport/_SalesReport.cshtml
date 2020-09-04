@@ -8,7 +8,7 @@
             <thead>
                 <tr>
                     <th>
-                        @Html.DisplayNameFor(model => model.Advisor)
+                        @Html.DisplayNameFor(model => model.PivotEntity)
                     </th>
                     <th class="columnTotal">
                         @Html.DisplayNameFor(model => model.Budget)
@@ -18,6 +18,9 @@
                     </th>
                     <th class="columnTotal">
                         @Html.DisplayNameFor(model => model.Renewals)
+                    </th>
+                    <th class="columnTotal">
+                        @Html.DisplayNameFor(model => model.Unallocated)
                     </th>
                     <th class="columnTotal">
                         @Html.DisplayNameFor(model => model.Clawback)
@@ -42,42 +45,46 @@
             <tbody>
                 @foreach (var item in Model)
                 {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Advisor)
-                        </td>
-                        <td align="right">
-                            @Html.DisplayFor(modelItem => item.Budget)
-                        </td>
-                        <td align="right">
-                            @Html.DisplayFor(modelItem => item.New_Business)
-                        </td>
-                        <td align="right">
-                            @Html.DisplayFor(modelItem => item.Renewals)
-                        </td>
-                        <td align="right">
-                            @Html.DisplayFor(modelItem => item.Clawback)
-                        </td>
-                        <td align="right">
-                            @Html.DisplayFor(modelItem => item.NotTakenUp)
-                        </td>
-                        <td align="right">
-                            @Html.DisplayFor(modelItem => item.Adjustment)
-                        </td>
-                        <td align="right">
-                            @Html.DisplayFor(modelItem => item.Debtors_Variance)
-                        </td>
-                        <td align="right">
-                            @Html.DisplayFor(modelItem => item.Debtors_Adjustment)
-                        </td>
-                        <td align="right">
-                            @Html.DisplayFor(modelItem => item.Total)
-                        </td>
-                    </tr>
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PivotEntity)
+                    </td>
+                    <td align="right">
+                        @Html.DisplayFor(modelItem => item.Budget)
+                    </td>
+                    <td align="right">
+                        @Html.DisplayFor(modelItem => item.New_Business)
+                    </td>
+                    <td align="right">
+                        @Html.DisplayFor(modelItem => item.Renewals)
+                    </td>
+                    <td align="right">
+                        @Html.DisplayFor(modelItem => item.Unallocated)
+                    </td>
+                    <td align="right">
+                        @Html.DisplayFor(modelItem => item.Clawback)
+                    </td>
+                    <td align="right">
+                        @Html.DisplayFor(modelItem => item.NotTakenUp)
+                    </td>
+                    <td align="right">
+                        @Html.DisplayFor(modelItem => item.Adjustment)
+                    </td>
+                    <td align="right">
+                        @Html.DisplayFor(modelItem => item.Debtors_Variance)
+                    </td>
+                    <td align="right">
+                        @Html.DisplayFor(modelItem => item.Debtors_Adjustment)
+                    </td>
+                    <td align="right">
+                        @Html.DisplayFor(modelItem => item.Total)
+                    </td>
+                </tr>
                 }
             </tbody>
             <tfoot>
                 <tr>
+                    <td align="right"></td>
                     <td align="right"></td>
                     <td align="right"></td>
                     <td align="right"></td>

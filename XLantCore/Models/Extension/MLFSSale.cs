@@ -334,54 +334,54 @@ namespace XLantCore.Models
             {
                 if (!row["Advise Fee Type"].ToString().Contains("Ongoing"))
                 {
-                    MLFSSale sale = new MLFSSale(row, advisors);
-                    sale.ReportingPeriodId = period.Id;
-                    sale.ReportingPeriod = period;
+                    MLFSSale sale = new MLFSSale(row, advisors, period);
                     returnedSales.Add(sale);
                 }
             }
 
             foreach (DataRow row in commissions.Rows)
             {
-                MLFSSale sale = new MLFSSale(row, advisors, true);
-                sale.ReportingPeriodId = period.Id;
-                sale.ReportingPeriod = period;
+                MLFSSale sale = new MLFSSale(row, advisors, period, true);
                 returnedSales.Add(sale);
             }
 
             for (int i = 0; i < returnedSales.Count; i++)
             {
-                MLFSSale sale = returnedSales[i];
-                //where the plan data is not present
-                if (String.IsNullOrEmpty(sale.ProviderName))
-                {
-                    List<DataRow> planRows = plans.AsEnumerable().Where(x => x.Field<string>("Root Sequential Ref").Contains(sale.PlanReference)).ToList();
-                    planRows.AddRange(plans.AsEnumerable().Where(x => x.Field<string>("Sequential Ref").Contains(sale.PlanReference)).ToList());
-                    DataRow selectedPlan;
-                    if (planRows.Count == 1)
-                    {
-                        selectedPlan = planRows.FirstOrDefault();
-                    }
-                    else
-                    {
-                        //match against fee ref
-                        if (planRows.Where(x => x.Field<string>("Related Fee Reference").Contains(sale.IOReference)).Count() > 0)
-                        {
-                            selectedPlan = planRows.Where(x => x.Field<string>("Related Fee Reference").Contains(sale.IOReference)).FirstOrDefault();
-                        }
-                        else
-                        {
-                            selectedPlan = planRows.FirstOrDefault();
-                        }
-                    }
-                    if (selectedPlan != null)
-                    {
-                        sale.AddPlanData(selectedPlan);
-                    }
-                }
+                returnedSales[i].MatchPlan(plans);
             }
 
             return returnedSales;
+        }
+
+        public void MatchPlan(DataTable plans)
+        {
+            //where the plan data is not present
+            if (String.IsNullOrEmpty(ProviderName))
+            {
+                List<DataRow> planRows = plans.AsEnumerable().Where(x => x.Field<string>("Root Sequential Ref").Contains(PlanReference)).ToList();
+                planRows.AddRange(plans.AsEnumerable().Where(x => x.Field<string>("Sequential Ref").Contains(PlanReference)).ToList());
+                DataRow selectedPlan;
+                if (planRows.Count == 1)
+                {
+                    selectedPlan = planRows.FirstOrDefault();
+                }
+                else
+                {
+                    //match against fee ref
+                    if (planRows.Where(x => x.Field<string>("Related Fee Reference").Contains(IOReference)).Count() > 0)
+                    {
+                        selectedPlan = planRows.Where(x => x.Field<string>("Related Fee Reference").Contains(IOReference)).FirstOrDefault();
+                    }
+                    else
+                    {
+                        selectedPlan = planRows.FirstOrDefault();
+                    }
+                }
+                if (selectedPlan != null)
+                {
+                    this.AddPlanData(selectedPlan);
+                }
+            }
         }
 #endif
     }

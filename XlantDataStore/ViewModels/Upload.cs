@@ -7,14 +7,16 @@ using Microsoft.AspNetCore.Http;
 using System.IO;
 using System.Data;
 using XLantCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace XLantDataStore.ViewModels
 {
     public class Upload
     {
+        [Display(Name="Reporting Period")]
         public int? ReportingPeriodId { get; set; }
         public MLFSReportingPeriod ReportingPeriod { get; set; }
-        public List<IFormFile> Files { get; set; }
+        public IFormFileCollection Files { get; set; }
         public List<MLFSSale> Sales { get; set; }
         public List<MLFSIncome> Income { get; set; }
 
@@ -44,7 +46,7 @@ namespace XLantDataStore.ViewModels
                     {
                         planTable = Tools.ConvertCSVToDataTable(newFilePath);
                     }
-                    else if (file.FileName.Contains("AdvisorMonthlyFCI"))
+                    else if (file.FileName.Contains("AdviserMonthlyFCI"))
                     {
                         incomeTable = Tools.ConvertCSVToDataTable(newFilePath);
                     }

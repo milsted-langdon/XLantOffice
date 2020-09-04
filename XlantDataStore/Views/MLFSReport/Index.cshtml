@@ -13,23 +13,30 @@
 <div class="ibox-content">
         <!-- Nav tabs -->
         <nav class="nav nav-tabs" role="tablist">
-            <a class="nav-item nav-link active" id="directorsTab" href="#directors" aria-controls="directors" role="tab" data-toggle="tab">Director's Report</a></li>
-            <a class="nav-item nav-link" id="salesTab" href="#sales" aria-controls="sales" role="tab" data-toggle="tab">Sales Report</a></li>
-            <a class="nav-item nav-link" id="fciTab" href="#fci" aria-controls="fci" role="tab" data-toggle="tab">FCI Report</a></li>
+            <a class="nav-item nav-link active" id="directorsTab" href="#directors" aria-controls="directors" role="tab" data-toggle="tab" data-url="@Url.Action("DirectorsReport", "MLFSReport")" data-deploy="directors">Director's Report</a>
+            <div class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" id="salesTab" href="#sales" aria-controls="sales" data-toggle="dropdown">Sales Report</a>
+                <div class="dropdown-menu">
+                    <a href="#salesByAdvsior" class="dropdown-item" aria-controls="sales" data-toggle="tab" data-url="@Url.Action("SalesReport", "MLFSReport")" data-deploy="sales">By Advisor</a>
+                    <a href="#salesBySource" class="dropdown-item" aria-controls="sales" data-toggle="tab" data-url="@Url.Action("SalesReport", "MLFSReport", new { pivot = "Campaign" })" data-deploy="sales">By Source</a>
+                    <a href="#salesByEntity" class="dropdown-item" aria-controls="sales" data-toggle="tab" data-url="@Url.Action("SalesReport", "MLFSReport", new { pivot = "Organisation" })" data-deploy="sales">By Entity</a>
+                </div>
+            </div>
+            <a class="nav-item nav-link" id="fciTab" href="#fci" aria-controls="fci" role="tab" data-toggle="tab" data-url="@Url.Action("FCIReport", "MLFSReport")" data-deploy="fci">FCI Report</a>
         </nav>
 
         <!-- Tab panes -->
         <div class="tab-content">
             <div role="tabpanel" class="tab-pane container active" id="directors" style="width:100%">
-                <div id="directorsDiv" style="width:110%" data-url="@Url.Action("DirectorsReport", "MLFSReport")">
+                <div id="directorsDiv" style="width:110%">
                 </div>
             </div>
             <div role="tabpanel" class="tab-pane container fade" id="sales" style="width:100%">
-                <div id="salesDiv" style="width:100%" data-url="@Url.Action("SalesReport", "MLFSReport")">
+                <div id="salesDiv" style="width:100%">
                 </div>
             </div>
             <div role="tabpanel" class="tab-pane container fade" id="fci" style="width:100%">
-                <div id="fciDiv" style="width:100%" data-url="@Url.Action("FCIReport", "MLFSReport")">
+                <div id="fciDiv" style="width:100%">
                 </div>
             </div>
         </div>
@@ -41,7 +48,9 @@
             UpdateSections();
         })
         $('.nav-tabs').on('click', 'a', function () {
-            UpdateSections($(this).attr('id'));
+            if ($(this).data("toggle") == "tab") {
+                UpdateSections($(this).attr('id'));
+            }
         });
 
         $('#periodId').on('change', function () {
@@ -56,10 +65,10 @@
                 id = $('.nav-tabs').find('.active').attr('id');
             }
             $(id).addClass('active');
-            let name =  id.substring(0, id.indexOf('T'));
-            let contentDiv = $('#' +name  + 'Div');
+            let url = $('#' + id).data("url");
+            let name =  $('#' + id).data("deploy");
+            let contentDiv = $('#' + name  + 'Div');
             if ($.trim($(contentDiv).text()) == '' || force) {
-                let url = $(contentDiv).data("url");
                 $(contentDiv).html("<div id='modalLoader' class='sk-spinner sk-spinner-rotating-plane'></div>")
                 let periodId = $('#periodId').val();
                 $.get(url + "?periodId=" + periodId)

@@ -16,6 +16,6 @@ namespace XLantDataStore.Repository
         Task UpdateClientOnboardDate(MLFSReportingPeriod period);
         Task<List<MLFSIncome>> PotentialDebtorMatches(MLFSSale debtor);
         Task<List<MLFSIncome>> GetUnMatchedIncome();
-        void InsertList(List<MLFSIncome> income);
+        Task<string> InsertList(List<MLFSIncome> income);
     }
 }

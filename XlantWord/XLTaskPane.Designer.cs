@@ -149,23 +149,23 @@
             this.FAOBHOlbl.AutoSize = true;
             this.FAOBHOlbl.Location = new System.Drawing.Point(23, 590);
             this.FAOBHOlbl.Name = "FAOBHOlbl";
-            this.FAOBHOlbl.Size = new System.Drawing.Size(69, 13);
+            this.FAOBHOlbl.Size = new System.Drawing.Size(91, 13);
             this.FAOBHOlbl.TabIndex = 30;
-            this.FAOBHOlbl.Text = "FAOBHO ML";
+            this.FAOBHOlbl.Text = "Milsted Langdon: ";
             // 
             // PandClbl
             // 
             this.PandClbl.AutoSize = true;
             this.PandClbl.Location = new System.Drawing.Point(23, 552);
             this.PandClbl.Name = "PandClbl";
-            this.PandClbl.Size = new System.Drawing.Size(107, 13);
+            this.PandClbl.Size = new System.Drawing.Size(113, 13);
             this.PandClbl.TabIndex = 29;
-            this.PandClbl.Text = "Private && Confidential";
+            this.PandClbl.Text = "Private && Confidential: ";
             // 
             // FAOBCheck
             // 
             this.FAOBCheck.AutoSize = true;
-            this.FAOBCheck.Location = new System.Drawing.Point(148, 589);
+            this.FAOBCheck.Location = new System.Drawing.Point(159, 589);
             this.FAOBCheck.Name = "FAOBCheck";
             this.FAOBCheck.Size = new System.Drawing.Size(15, 14);
             this.FAOBCheck.TabIndex = 9;
@@ -175,7 +175,7 @@
             // PandCCheck
             // 
             this.PandCCheck.AutoSize = true;
-            this.PandCCheck.Location = new System.Drawing.Point(148, 551);
+            this.PandCCheck.Location = new System.Drawing.Point(159, 551);
             this.PandCCheck.Name = "PandCCheck";
             this.PandCCheck.Size = new System.Drawing.Size(15, 14);
             this.PandCCheck.TabIndex = 8;
@@ -288,7 +288,7 @@
             // WhenCallingCheck
             // 
             this.WhenCallingCheck.AutoSize = true;
-            this.WhenCallingCheck.Location = new System.Drawing.Point(148, 627);
+            this.WhenCallingCheck.Location = new System.Drawing.Point(159, 627);
             this.WhenCallingCheck.Name = "WhenCallingCheck";
             this.WhenCallingCheck.Size = new System.Drawing.Size(15, 14);
             this.WhenCallingCheck.TabIndex = 10;

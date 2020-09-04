@@ -18,6 +18,63 @@ namespace XlantWord
     {
         public class Header
         {
+            public Header()
+            {
+                HeaderLines = new List<Line>();
+                FooterLines = new List<Line>();
+                Images = new List<Image>();
+            }
+
+            public Header(XElement element)
+            {
+                HeaderLines = new List<Line>();
+                FooterLines = new List<Line>();
+                Images = new List<Image>();
+                Description = element.Attribute("Description").Value;
+                Firmname = element.Attribute("Firm").Value;
+                foreach (XElement xLines in element.Descendants("Lines"))
+                {
+                    if (xLines.Attribute("Type").Value == "Header")
+                    {
+                        foreach (XElement xLine in element.Descendants("HeaderLine"))
+                        {
+                            Line line = new Line();
+                            line.Text = xLine.Value;
+                            line.Size = xLine.AttributeIntNull("Size");
+                            line.Font = xLine.AttributeValueNull("Font");
+                            line.Bold = xLine.AttributeIntNull("Bold");
+                            HeaderLines.Add(line);
+                        }
+                    }
+                    //It is only either a header or a footer
+                    else
+                    {
+                        FooterRightIndent = xLines.AttributeIntNull("RightIndent");
+                        foreach (XElement xLine in element.Descendants("FooterLine"))
+                        {
+                            Line line = new Line();
+                            line.Text = xLine.Value;
+                            line.Size = xLine.AttributeIntNull("Size");
+                            line.Font = xLine.AttributeValueNull("Font");
+                            line.Bold = xLine.AttributeIntNull("Bold");
+                            FooterLines.Add(line);
+                        }
+                    }
+                }
+                //Then deal with any images/logos
+                foreach (XElement xImage in element.Descendants("Image"))
+                {
+                    Image logo = new Image()
+                    {
+                        SourceLocation = xImage.AttributeValueNull("ImageSource"),
+                        PointsFromLeftEdge = xImage.AttributeIntNull("LeftEdge"),
+                        PointsFromTop = xImage.AttributeIntNull("Top"),
+                        Width = xImage.AttributeIntNull("Width"),
+                        Height = xImage.AttributeIntNull("Height"),
+                    };
+                    Images.Add(logo);
+                }
+            }
             public string Description { get; set; }
             public string Firmname { get; set; }
             public int HeaderRightIndent { get; set; }
@@ -26,6 +83,7 @@ namespace XlantWord
             public int FooterLeftIndent { get; set; }
             public List<Line> HeaderLines { get; set; }
             public List<Line> FooterLines { get; set; }
+            public List<Image> Images { get; set; }
         }
 
         public class Line
@@ -34,6 +92,15 @@ namespace XlantWord
             public string Font { get; set; }
             public int Size { get; set; }
             public int Bold { get; set; }
+        }
+
+        public class Image
+        {
+            public string SourceLocation { get; set; }
+            public int PointsFromLeftEdge { get; set; }
+            public int PointsFromTop { get; set; }
+            public int Width { get; set; }
+            public int Height { get; set; }
         }
 
         public class ListItem
@@ -360,47 +427,12 @@ namespace XlantWord
             try
             {
                 List<Header> headings = new List<Header>();
-                List<Line> hLines = new List<Line>();
-                List<Line> fLines = new List<Line>();
 
                 IEnumerable<XElement> xHeadings = settingsDoc.Descendants("Headings");
 
                 foreach (XElement xHeading in xHeadings.Descendants("Heading"))
                 {
-                    Header header = new Header();
-                    header.Description = xHeading.Attribute("Description").Value;
-                    header.Firmname = xHeading.Attribute("Firm").Value;
-                    foreach (XElement xLines in xHeading.Descendants("Lines"))
-                    {
-                        if (xLines.Attribute("Type").Value == "Header")
-                        {
-                            foreach (XElement xLine in xHeading.Descendants("HeaderLine"))
-                            {
-                                Line line = new Line();
-                                line.Text = xLine.Value;
-                                line.Size = xLine.AttributeIntNull("Size");
-                                line.Font = xLine.AttributeValueNull("Font");
-                                line.Bold = xLine.AttributeIntNull("Bold");
-                                hLines.Add(line);
-                            }
-                        }
-                        //It is only either a header or a footer
-                        else
-                        {
-                            header.FooterRightIndent = 150;
-                            foreach (XElement xLine in xHeading.Descendants("FooterLine"))
-                            {
-                                Line line = new Line();
-                                line.Text = xLine.Value;
-                                line.Size = xLine.AttributeIntNull("Size");
-                                line.Font = xLine.AttributeValueNull("Font");
-                                line.Bold = xLine.AttributeIntNull("Bold");
-                                fLines.Add(line);
-                            }
-                        }
-                        header.HeaderLines = hLines;
-                        header.FooterLines = fLines;
-                    }
+                    Header header = new Header(xHeading);
                     headings.Add(header);
                 }
                 return headings;
@@ -418,8 +450,6 @@ namespace XlantWord
             try
             {
                 Header selectedHeader = new Header();
-                List<Line> hLines = new List<Line>();
-                List<Line> fLines = new List<Line>();
 
                 //query the setting files and try to find a match
                 XElement selectedMap = (from map in settingsDoc.Descendants("Map")
@@ -432,39 +462,7 @@ namespace XlantWord
                                             where (string)heading.Attribute("Description").Value == selectedMap.Attribute("Header").Value
                                             select heading).FirstOrDefault();
                     //then build the object
-                    selectedHeader.Description = foundHeader.Attribute("Description").Value;
-                    selectedHeader.Firmname = foundHeader.Attribute("Firm").Value;
-                    foreach (XElement xLines in foundHeader.Descendants("Lines"))
-                    {
-                        if (xLines.Attribute("Type").Value == "Header")
-                        {
-                            foreach (XElement xLine in foundHeader.Descendants("HeaderLine"))
-                            {
-                                Line line = new Line();
-                                line.Text = xLine.Value;
-                                line.Size = xLine.AttributeIntNull("Size");
-                                line.Font = xLine.AttributeValueNull("Font");
-                                line.Bold = xLine.AttributeIntNull("Bold");
-                                hLines.Add(line);
-                            }
-                        }
-                        //It is only either a header or a footer
-                        else
-                        {
-                            selectedHeader.FooterRightIndent = xLines.AttributeIntNull("RightIndent");
-                            foreach (XElement xLine in foundHeader.Descendants("FooterLine"))
-                            {
-                                Line line = new Line();
-                                line.Text = xLine.Value;
-                                line.Size = xLine.AttributeIntNull("Size");
-                                line.Font = xLine.AttributeValueNull("Font");
-                                line.Bold = xLine.AttributeIntNull("Bold");
-                                fLines.Add(line);
-                            }
-                        }
-                        selectedHeader.HeaderLines = hLines;
-                        selectedHeader.FooterLines = fLines;
-                    }
+                    selectedHeader = new Header(foundHeader);
                 }
                 else
                 {
@@ -485,8 +483,6 @@ namespace XlantWord
             try
             {
                 Header selectedHeader = new Header();
-                List<Line> hLines = new List<Line>();
-                List<Line> fLines = new List<Line>();
 
                 //query the setting files and try to find a match
                 XElement selectedMap = (from map in settingsDoc.Descendants("Map")
@@ -499,39 +495,7 @@ namespace XlantWord
                                             where (string)heading.Attribute("Description").Value == selectedMap.Attribute("Header").Value
                                             select heading).FirstOrDefault();
                     //then build the object
-                    selectedHeader.Description = foundHeader.Attribute("Description").Value;
-                    selectedHeader.Firmname = foundHeader.Attribute("Firm").Value;
-                    foreach (XElement xLines in foundHeader.Descendants("Lines"))
-                    {
-                        if (xLines.Attribute("Type").Value == "Header")
-                        {
-                            foreach (XElement xLine in foundHeader.Descendants("HeaderLine"))
-                            {
-                                Line line = new Line();
-                                line.Text = xLine.Value;
-                                line.Size = xLine.AttributeIntNull("Size");
-                                line.Font = xLine.AttributeValueNull("Font");
-                                line.Bold = xLine.AttributeIntNull("Bold");
-                                hLines.Add(line);
-                            }
-                        }
-                        //It is only either a header or a footer
-                        else
-                        {
-                            selectedHeader.FooterRightIndent = xLines.AttributeIntNull("RightIndent");
-                            foreach (XElement xLine in foundHeader.Descendants("FooterLine"))
-                            {
-                                Line line = new Line();
-                                line.Text = xLine.Value;
-                                line.Size = xLine.AttributeIntNull("Size");
-                                line.Font = xLine.AttributeValueNull("Font");
-                                line.Bold = xLine.AttributeIntNull("Bold");
-                                fLines.Add(line);
-                            }
-                        }
-                        selectedHeader.HeaderLines = hLines;
-                        selectedHeader.FooterLines = fLines;
-                    }
+                    selectedHeader = new Header(foundHeader);
                 }
                 else
                 {
@@ -596,6 +560,11 @@ namespace XlantWord
                     para.Range.Font.Bold = line.Bold;
                     para.Range.Font.Color = WdColor.wdColorGray50;
                     para.Range.Text = line.Text + Environment.NewLine;
+                }
+                foreach(Image logo in header.Images)
+                {
+                    Microsoft.Office.Interop.Word.Range anchorRng = currentDoc.Sections[1].Headers[WdHeaderFooterIndex.wdHeaderFooterFirstPage].Range;
+                    currentDoc.Shapes.AddPicture(logo.SourceLocation, false, true, logo.PointsFromLeftEdge, logo.PointsFromTop, logo.Width, logo.Height, anchorRng);
                 }
             }
             catch (Exception e)
@@ -700,7 +669,7 @@ namespace XlantWord
             try
             {
                 XLDocument.UpdateCurrentDoc();
-                string path = StandardLocation() + "Letter.dotx";
+                string path = StandardLocation() + "Letter.docx";
                 Document sTemplate = OpenDoc(path, true, false, false);
                 //object template = (object)path;
                 currentDoc.set_AttachedTemplate((object)sTemplate);
@@ -772,18 +741,18 @@ namespace XlantWord
                 {
                     watermarkFile = "Watermark.pdf";
                 }
-                //if it isn't in the Roaming folder fetch from sharepoint
-                if (!System.IO.File.Exists(folder + watermarkFile))
+                ////if it isn't in the Roaming folder fetch from sharepoint
+                //if (!System.IO.File.Exists(folder + watermarkFile))
+                //{
+                string webLocation = StandardLocation();
+                //download remote files
+                using (WebClient client = new WebClient())
                 {
-                    string webLocation = StandardLocation();
-                    //download remote files
-                    using (WebClient client = new WebClient())
-                    {
-                        string fileName = folder + watermarkFile;
-                        client.UseDefaultCredentials = true;
-                        client.DownloadFile(webLocation + watermarkFile, fileName);
-                    }
+                    string fileName = folder + watermarkFile;
+                    client.UseDefaultCredentials = true;
+                    client.DownloadFile(webLocation + watermarkFile, fileName);
                 }
+                //}
                 string watermarkLocation = folder + watermarkFile;
 
                 //create a filelocation for the new file
