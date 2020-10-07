@@ -723,7 +723,7 @@ namespace XlantWord
                         string str = sender.name;
                         if (data.sign != null && data.sign != "" && data.sign != sender.name)
                         {
-                            str += Environment.NewLine + "FOR " + data.sign;
+                            str += Environment.NewLine + "For " + data.sign;
                         }
                         XLDocument.UpdateBookmark("Sender", str);
                         XLDocument.UpdateBookmark("Sender2", sender.name);
