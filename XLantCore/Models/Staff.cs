@@ -53,6 +53,7 @@ namespace XLantCore.Models
         public string Username { get; set; }
         public String Department { get; set; }
         public String Office { get; set; }
+        public bool Active { get; set; }
 
     }
 }

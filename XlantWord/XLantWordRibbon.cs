@@ -807,10 +807,11 @@ namespace XlantWord
                 string fileID = XLDocument.GetFileID();
                 //save the document as a pdf and get location
                 string file = XLDocument.CreatePdf();
+                string fileName = XLDocument.currentDoc.Name.Substring(0, XLDocument.currentDoc.Name.LastIndexOf('.'));
                 //close the original, it isn't required any more
                 XLDocument.EndDocument();
                 //add the header and get the location of the new combined file
-                file = XLDocument.AddHeadertoPDF(file, watermark);
+                file = XLDocument.AddHeadertoPDF(file, watermark, fileName);
                 //merge the attachments, if any selected
                 if (selectedDocs.Count != 0)
                 {

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -9,7 +10,8 @@ namespace XLantDataStore.Repository
 {
     public interface IMLFSAdvisorRepository
     {
-        Task<MLFSAdvisor> GetAdvisor(string id);
+        Task<MLFSAdvisor> GetAdvisor(int id);
         Task<List<MLFSAdvisor>> GetAdvisors();
+        Task<SelectList> SelectList(int? advisorId = null);
     }
 }

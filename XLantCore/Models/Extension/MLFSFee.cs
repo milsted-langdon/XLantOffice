@@ -17,10 +17,17 @@ namespace XLantCore.Models
         public static List<MLFSFee> CreateList(JArray jarray)
         {
             List<MLFSFee> fees = new List<MLFSFee>();
+            if (jarray == null)
+            {
+                return fees;
+            }
             foreach (JObject p in jarray)
             {
-                MLFSFee fee = new MLFSFee(p);
-                fees.Add(fee);
+                if (p != null)
+                {
+                    MLFSFee fee = new MLFSFee(p);
+                    fees.Add(fee);
+                }
             }
             return fees;
         }

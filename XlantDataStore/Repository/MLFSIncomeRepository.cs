@@ -28,9 +28,16 @@ namespace XLantDataStore.Repository
             return income;
         }
 
-        public async Task<List<MLFSIncome>> GetIncome(MLFSReportingPeriod period)
+        public async Task<List<MLFSIncome>> GetIncome(MLFSReportingPeriod period, int? advisorId = null)
         {
-            return await _db.MLFSIncome.Where(x => x.ReportingPeriodId == period.Id).Include(z=> z.MLFSDebtorAdjustment).Include(y => y.Advisor).ToListAsync();
+            if (advisorId == null)
+            {
+                return await _db.MLFSIncome.Where(x => x.ReportingPeriodId == period.Id).Include(z => z.MLFSDebtorAdjustment).Include(y => y.Advisor).ToListAsync(); 
+            }
+            else
+            {
+                return await _db.MLFSIncome.Where(x => x.ReportingPeriodId == period.Id && x.AdvisorId == advisorId).Include(z => z.MLFSDebtorAdjustment).Include(y => y.Advisor).ToListAsync();
+            }
         }
 
         public async Task<List<MLFSIncome>> GetIncome(List<MLFSReportingPeriod> periods)

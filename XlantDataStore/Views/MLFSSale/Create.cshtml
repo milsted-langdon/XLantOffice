@@ -6,16 +6,16 @@
 
 <h1>Create</h1>
 
-<h4>MLFSSale</h4>
+<h4>New Business</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="IOId" class="control-label"></label>
-                <input asp-for="IOId" class="form-control" />
-                <span asp-validation-for="IOId" class="text-danger"></span>
+                <label asp-for="RelevantDate" class="control-label"></label>
+                <input asp-for="RelevantDate" class="form-control" />
+                <span asp-validation-for="RelevantDate" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="IOReference" class="control-label"></label>
@@ -24,36 +24,16 @@
             </div>
             <div class="form-group">
                 <label asp-for="ReportingPeriodId" class="control-label"></label>
-                <select asp-for="ReportingPeriodId" class ="form-control" asp-items="ViewBag.ReportingPeriodId"></select>
+                <select asp-for="ReportingPeriodId" class="form-control" asp-items="ViewBag.ReportingPeriodId"></select>
             </div>
             <div class="form-group">
-                <label asp-for="Organisation" class="control-label"></label>
-                <input asp-for="Organisation" class="form-control" />
-                <span asp-validation-for="Organisation" class="text-danger"></span>
+                <label asp-for="AdvisorId" class="control-label"></label>
+                <select asp-for="AdvisorId" class="form-control" asp-items="ViewBag.AdvisorId"></select>
             </div>
             <div class="form-group">
                 <label asp-for="ClientName" class="control-label"></label>
                 <input asp-for="ClientName" class="form-control" />
                 <span asp-validation-for="ClientName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ClientId" class="control-label"></label>
-                <input asp-for="ClientId" class="form-control" />
-                <span asp-validation-for="ClientId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="JointClientName" class="control-label"></label>
-                <input asp-for="JointClientName" class="form-control" />
-                <span asp-validation-for="JointClientName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="JointClientId" class="control-label"></label>
-                <input asp-for="JointClientId" class="form-control" />
-                <span asp-validation-for="JointClientId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="AdvisorId" class="control-label"></label>
-                <select asp-for="AdvisorId" class ="form-control" asp-items="ViewBag.AdvisorId"></select>
             </div>
             <div class="form-group">
                 <label asp-for="ProviderName" class="control-label"></label>
@@ -69,11 +49,6 @@
                 <label class="form-check-label">
                     <input class="form-check-input" asp-for="IsNew" /> @Html.DisplayNameFor(model => model.IsNew)
                 </label>
-            </div>
-            <div class="form-group">
-                <label asp-for="RelevantDate" class="control-label"></label>
-                <input asp-for="RelevantDate" class="form-control" />
-                <span asp-validation-for="RelevantDate" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="NetAmount" class="control-label"></label>
@@ -112,9 +87,6 @@
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

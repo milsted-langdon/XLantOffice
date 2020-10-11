@@ -9,7 +9,7 @@ namespace XLantDataStore.Repository
 {
     public interface IMLFSIncomeRepository
     {
-        Task<List<MLFSIncome>> GetIncome(MLFSReportingPeriod period);
+        Task<List<MLFSIncome>> GetIncome(MLFSReportingPeriod period, int? advisorId = null);
         Task<List<MLFSIncome>> GetIncome(List<MLFSReportingPeriod> periods);
         Task<List<MLFSIncome>> GetIncome();
         Task<MLFSIncome> GetIncomeById(int incomeId);

@@ -3,110 +3,168 @@
 @{
     ViewData["Title"] = "Index";
 }
+    <div class="ibox-content">
+        <div class="row">
+            <div class="col-md-2 pull-right">
+                <a class="btn btn-primary" target="_blank" asp-controller="MLFSIncome" asp-action="Index" asp-route-split="Unallocated">View Unallocated Income</a>
+            </div>
+            <div class="col-md-2 pull-right">
+                <input type="button" class="btn btn-primary" value="Search" onclick="LaunchModalString('Search', 'Enter Search Term', 'LaunchSearch()')" />
+            </div>
+        </div>
+    </div>
+        <div class="ibox-content">
+            <table class="table debtorTable">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.IOReference)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.RelevantDate)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Organisation)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ClientName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.AdvisorId)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ProviderName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.PlanType)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.PlanReference)
+                        </th>
+                        <th class="hidden-col">
+                            @Html.DisplayNameFor(model => model.VAT)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.GrossAmount)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Receipt)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Variance)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Adjustment)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Outstanding)
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr id="debtorRow-@item.Id">
+                            <td>
+                                <a asp-action="Details" asp-route-id="@item.Id">@item.IOReference</a>
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.RelevantDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Organisation)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ClientName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Advisor.Fullname)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ProviderName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.PlanType)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.PlanReference)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.VAT)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.GrossAmount)
+                            </td>
+                            <td align="right">
+                                @Html.DisplayFor(modelItem => item.Receipt)
+                            </td>
+                            <td align="right">
+                                @Html.DisplayFor(modelItem => item.Variance)
+                            </td>
+                            <td align="right">
+                                @Html.DisplayFor(modelItem => item.Adjustment)
+                            </td>
+                            <td align="right">
+                                @Html.DisplayFor(modelItem => item.Outstanding)
+                            </td>
+                            <td>
+                                <div class="dropdown">
+                                    <button class="btn btn-primary dropdown-toggle" aria-haspopup="true" data-toggle="dropdown" aria-expanded="false">Action</button>
+                                    <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                                        <li><a onclick="LaunchModal('', 'Select One', '@Url.Action("PotentialDebtorMatches", "MLFSIncome", new { debtorid = @item.Id })')">Potential Matches</a></li>
+                                        <li><a onclick="LaunchModal('', 'Select One', '@Url.Action("Unmatched", "MLFSIncome", new { debtorid = @item.Id })')">Search for Matches</a></li>
+                                        <li><a onclick="LaunchModal('', 'Select One', '@Url.Action("CreateAdjustment", "MLFSDebtorAdjustments", new { debtorid = @item.Id })')">Add Adjustment</a></li>
+                                        <li><a onclick="LaunchModal('', 'Select One', '@Url.Action("CreateVariance", "MLFSDebtorAdjustments", new { debtorid = @item.Id })')">Add Variance</a></li>
+                                        <li><a asp-action="NotTakenUp" asp-controller="MLFSDebtorAdjustments" asp-route-debtorid="@item.Id">Mark as NTU</a></li>
+                                        <li><a onclick="LaunchModal('', 'Transactions', '@Url.Action("Transactions", "MLFSDebtorAdjustments", new { debtorid = @item.Id })')">View Transactions</a></li>
+                                        <li><a onclick="clearVAT('@item.Id')">Clear VAT</a></li>
+                                        <li><a target="_blank" href="https://www.intelligent-office.net/nio/clientfees/@item.ClientId/Index">View in IO</a></li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+                <tfoot></tfoot>
+            </table>
+        </div>
 
-<table class="table xlantDataTable">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.IOReference)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.RelevantDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Organisation)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ClientName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.AdvisorId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ProviderName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PlanType)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PlanReference)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.GrossAmount)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Receipt)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Variance)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Adjustment)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Outstanding)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                <a asp-action="Details" asp-route-id="@item.Id">@item.IOReference</a>
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RelevantDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Organisation)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ClientName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Advisor.Fullname)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProviderName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PlanType)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PlanReference)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.GrossAmount)
-            </td>
-            <td align="right">
-                @Html.DisplayFor(modelItem => item.Receipt)
-            </td>
-            <td align="right">
-                @Html.DisplayFor(modelItem => item.Variance)
-            </td>
-            <td align="right">
-                @Html.DisplayFor(modelItem => item.Adjustment)
-            </td>
-            <td align="right">
-                @Html.DisplayFor(modelItem => item.Outstanding)
-            </td>
-            <td>
-                <div class="dropdown">
-                    <button class="btn btn-primary dropdown-toggle" aria-haspopup="true" data-toggle="dropdown" aria-expanded="false">Action</button>
-                    <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-                        <li><a onclick="LaunchModal('', 'Select One', '@Url.Action("PotentialDebtorMatches", "MLFSIncome", new { debtorid = @item.Id })')">Potential Matches</a></li>
-                        <li><a onclick="LaunchModal('', 'Select One', '@Url.Action("Unmatched", "MLFSIncome", new { debtorid = @item.Id })')">Search for Matches</a></li>
-                        <li><a onclick="LaunchModal('', 'Select One', '@Url.Action("CreateAdjustment", "MLFSDebtorAdjustments", new { debtorid = @item.Id })')">Add Adjustment</a></li>
-                        <li><a onclick="LaunchModal('', 'Select One', '@Url.Action("CreateVariance", "MLFSDebtorAdjustments", new { debtorid = @item.Id })')">Add Variance</a></li>
-                        <li><a asp-action="NotTakenUp" asp-controller="MLFSDebtorAdjustments" asp-route-debtorid="@item.Id">Mark as NTU</a></li>
-                        <li><a onclick="LaunchModal('', 'Transactions', '@Url.Action("Index", "MLFSDebtorAdjustments", new { debtorid = @item.Id })')">View Transactions</a></li>
-                        <li><a target="_blank" href="https://www.intelligent-office.net/nio/clientfees/@item.ClientId/Index">View in IO</a></li>
-                    </ul>
-                </div>
-            </td>
-        </tr>
+@section scripts{ 
+    <script type="text/javascript">
+        $(document).ready(function () {
+            FormatDataTables('.debtorTable');
+        });
+
+        function match(debtorId, incomeId) {
+            $.ajax({
+                type: "POST",
+                url: "/Debtor/Match?id=" + incomeId + "&debtorId=" + debtorId,
+                success: function () {
+                    $('#debtorRow-' + debtorId).remove();
+                },
+                fail: function () {
+                    alert('A problem occured with matching the records');
+                }
+            });
+        }
+
+        function LaunchSearch() {
+            let string = $('#textField').val();
+            window.location.href = "./Search?searchTerm=" + string;
+        }
+
+        function clearVAT(debtorId) {
+            $.ajax({
+                type: "POST",
+                url: "/MLFSSale/clearVAT?debtorid=" + debtorId,
+                success: function () {
+                    $('#debtorRow-' + debtorId).remove();
+                },
+                fail: function () {
+                    alert('A problem occured with clearing the VAT');
+                }
+            });
+        }
+    </script>
 }
-    </tbody>
-    <tfoot></tfoot>
-</table>

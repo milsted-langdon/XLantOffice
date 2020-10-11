@@ -191,6 +191,7 @@
     <Compile Include="XLVirtualCabinet.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include=".env" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -4,46 +4,56 @@
 }
 
 <h1>Reports</h1>
-<div class="row">
-    <div class="col-md-3">
-        <select id="periodId" class="form-control" asp-items="ViewBag.ReportingPeriodId"></select>
+<div class="ibox-content">
+    <div class="row">
+        <div class="col-md-3">
+            <select id="periodId" class="form-control" asp-items="ViewBag.ReportingPeriodId"></select>
+        </div>
+        <div class="col-md-3">
+            <input type="radio" value="advisor" name="entity" checked>
+            Advisor
+            <input type="radio" name="entity" id="organisation" value="organisation" />
+            Organisation
+        </div>
+    </div>
+</div>
+<div class="ibox-content">
+    <!-- Nav tabs -->
+    <nav class="nav nav-tabs" role="tablist">
+        <a class="nav-item nav-link active" id="directorsTab" href="#directors" aria-controls="directors" role="tab" data-toggle="tab" data-url="@Url.Action("DirectorsReport", "MLFSReport")" data-deploy="directors">Directors' Report</a>
+        <a class="nav-item nav-link" id="salesTab" href="#sales" aria-controls="sales" role="tab" data-toggle="tab" data-url="@Url.Action("SalesReport", "MLFSReport")" data-deploy="sales">Sales Report</a>
+        <a class="nav-item nav-link" id="fciTab" href="#fci" aria-controls="fci" role="tab" data-toggle="tab" data-url="@Url.Action("FCIReport", "MLFSReport")" data-deploy="fci">FCI Report</a>
+        <a class="nav-item nav-link" id="turnoverTab" href="#turnover" aria-controls="turnover" role="tab" data-toggle="tab" data-url="@Url.Action("Turnover", "MLFSReport")" data-deploy="turnover">Turnover</a>
+        <a class="nav-item nav-link" id="ytdTab" href="#ytd" aria-controls="ytd" role="tab" data-toggle="tab" data-url="@Url.Action("SalesSummary", "MLFSReport")" data-deploy="ytd">Year To Date</a>
+    </nav>
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane container active" id="directors" style="width:100%">
+            <div id="directorsDiv" style="width:110%">
+            </div>
+        </div>
+        <div role="tabpanel" class="tab-pane container fade" id="sales" style="width:100%">
+            <div id="salesDiv" style="width:100%">
+            </div>
+        </div>
+        <div role="tabpanel" class="tab-pane container fade" id="fci" style="width:100%">
+            <div id="fciDiv" style="width:100%">
+            </div>
+        </div>
+        <div role="tabpanel" class="tab-pane container fade" id="turnover" style="width:100%">
+            <div id="turnoverDiv" style="width:100%">
+            </div>
+        </div>
+        <div role="tabpanel" class="tab-pane container fade" id="ytd" style="width:100%">
+            <div id="ytdDiv" style="width:100%">
+            </div>
+        </div>
     </div>
 </div>
 
-<div class="ibox-content">
-        <!-- Nav tabs -->
-        <nav class="nav nav-tabs" role="tablist">
-            <a class="nav-item nav-link active" id="directorsTab" href="#directors" aria-controls="directors" role="tab" data-toggle="tab" data-url="@Url.Action("DirectorsReport", "MLFSReport")" data-deploy="directors">Director's Report</a>
-            <div class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" id="salesTab" href="#sales" aria-controls="sales" data-toggle="dropdown">Sales Report</a>
-                <div class="dropdown-menu">
-                    <a href="#salesByAdvsior" class="dropdown-item" aria-controls="sales" data-toggle="tab" data-url="@Url.Action("SalesReport", "MLFSReport")" data-deploy="sales">By Advisor</a>
-                    <a href="#salesBySource" class="dropdown-item" aria-controls="sales" data-toggle="tab" data-url="@Url.Action("SalesReport", "MLFSReport", new { pivot = "Campaign" })" data-deploy="sales">By Source</a>
-                    <a href="#salesByEntity" class="dropdown-item" aria-controls="sales" data-toggle="tab" data-url="@Url.Action("SalesReport", "MLFSReport", new { pivot = "Organisation" })" data-deploy="sales">By Entity</a>
-                </div>
-            </div>
-            <a class="nav-item nav-link" id="fciTab" href="#fci" aria-controls="fci" role="tab" data-toggle="tab" data-url="@Url.Action("FCIReport", "MLFSReport")" data-deploy="fci">FCI Report</a>
-        </nav>
-
-        <!-- Tab panes -->
-        <div class="tab-content">
-            <div role="tabpanel" class="tab-pane container active" id="directors" style="width:100%">
-                <div id="directorsDiv" style="width:110%">
-                </div>
-            </div>
-            <div role="tabpanel" class="tab-pane container fade" id="sales" style="width:100%">
-                <div id="salesDiv" style="width:100%">
-                </div>
-            </div>
-            <div role="tabpanel" class="tab-pane container fade" id="fci" style="width:100%">
-                <div id="fciDiv" style="width:100%">
-                </div>
-            </div>
-        </div>
-</div>
-
-@section Scripts {
-    <script>
+    @section Scripts {
+        <script>
         $(document).ready(function () {
             UpdateSections();
         })
@@ -54,11 +64,39 @@
         });
 
         $('#periodId').on('change', function () {
+            clearSections();
+            UpdateSections();
+        });
+
+        $('#entity').on('change', function () {
+            clearSections();
+            UpdateSections();
+        });
+
+        function clearSections() {
             $('#directorsDiv').empty();
             $('#salesDiv').empty();
             $('#fciDiv').empty();
-            UpdateSections();
-        })
+            $('#turnoverDiv').empty();
+            $('#ytdDiv').empty();
+        }
+
+        function updateFromIO() {
+            $('#directorsDiv').empty();
+            $('#directorsDiv').html("<div id='modalLoader' class='sk-spinner sk-spinner-rotating-plane'></div>");
+            let periodId = $('#periodId').val();
+            $.ajax({
+                type: "POST",
+                url: "/MLFSSale/UpdateData?periodId=" + periodId,
+                success: function () {
+                    alert('Data fetch complete');
+                    UpdateSections("directorsTab", true);
+                },
+                fail: function () {
+                    alert('A problem occured with collecting the data from IO');
+                }
+            });
+        };
 
         function UpdateSections(id, force) {
             if (id === undefined) {
@@ -69,9 +107,10 @@
             let name =  $('#' + id).data("deploy");
             let contentDiv = $('#' + name  + 'Div');
             if ($.trim($(contentDiv).text()) == '' || force) {
-                $(contentDiv).html("<div id='modalLoader' class='sk-spinner sk-spinner-rotating-plane'></div>")
+                $(contentDiv).html("<div id='modalLoader' class='sk-spinner sk-spinner-rotating-plane'></div>");
                 let periodId = $('#periodId').val();
-                $.get(url + "?periodId=" + periodId)
+                let entity = $('input[name="entity"]:checked').val();
+                $.get(url + "?periodId=" + periodId + "&entity=" + entity)
                 .done(function (response) {
                     $(contentDiv).html(response);
                     FormatDataTables('.' + name + 'Table', true);
@@ -82,5 +121,5 @@
             }
 
         }
-    </script>
-}
+        </script>
+    }

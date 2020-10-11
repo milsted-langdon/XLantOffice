@@ -26,9 +26,18 @@ namespace XLantDataStore.Controllers.MVC
         }
 
         // GET: Debtor
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? periodId)
         {
-            return View(await _debtorData.GetDebtors());
+            MLFSReportingPeriod period;
+            if (periodId == null)
+            {
+                period = await _periodData.GetCurrent();
+            }
+            else
+            {
+                period = await _periodData.GetPeriodById((int)periodId);
+            }
+            return View(await _debtorData.GetDebtors(period));
         }
 
         // GET: Debtor/Details/5
@@ -66,17 +75,29 @@ namespace XLantDataStore.Controllers.MVC
                 adjs.Add(debtor.ClearToVariance(receipt.ReportingPeriod));
             }
             _adjustmentData.InsertList(adjs);
-            return RedirectToAction("Index");
+            return Ok();
         }
 
         public async Task<IActionResult> CheckForMatches()
         {
-            List<MLFSSale> debtors = await _debtorData.GetDebtors();
+            MLFSReportingPeriod period = await _periodData.GetCurrent();
+            List<MLFSSale> debtors = await _debtorData.GetDebtors(period);
             List<MLFSIncome> income = await _incomeData.GetIncome();
             income = income.Where(x => x.MLFSDebtorAdjustment == null && x.IncomeType.Contains("Initial")).ToList();
             List<MLFSDebtorAdjustment> adjs = MLFSSale.CheckForReceipts(debtors, income);
             _adjustmentData.InsertList(adjs);
             return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Search(string searchTerm)
+        {
+            if (string.IsNullOrEmpty(searchTerm))
+            {
+                return NotFound();
+            }
+            List<MLFSSale> sales = await _debtorData.Search(searchTerm);
+            return View("Index", sales);
         }
     }
 }

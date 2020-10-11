@@ -72,12 +72,8 @@ namespace XLantDataStore.Repository
 
         public async Task<MLFSReportingPeriod> GetCurrent()
         {
-            MLFSReportingPeriod period = await _db.MLFSReportingPeriods.Where(x => x.Year == DateTime.Now.Year && x.Month == DateTime.Now.Month).FirstOrDefaultAsync();
-            if (period == null)
-            {
-                DateTime lastMonth = DateTime.Now.AddMonths(-1);
-                period = await _db.MLFSReportingPeriods.Where(x => x.Year == lastMonth.Year && x.Month == lastMonth.Month).FirstOrDefaultAsync();
-            }
+            DateTime lastMonth = DateTime.Now.AddMonths(-1);
+            MLFSReportingPeriod period = await _db.MLFSReportingPeriods.Where(x => x.Year == lastMonth.Year && x.Month == lastMonth.Month).FirstOrDefaultAsync();
             if (period == null)
             {
                 period = await _db.MLFSReportingPeriods.OrderByDescending(x => x.Year).ThenByDescending(y => y.ReportOrder).FirstOrDefaultAsync();

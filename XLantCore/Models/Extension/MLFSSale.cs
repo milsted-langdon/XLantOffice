@@ -95,6 +95,24 @@ namespace XLantCore.Models
         }
 
         /// <summary>
+        /// Read Only - After all adjustments how much is left to be collected
+        /// </summary>
+        public decimal NetOutstanding
+        {
+            get
+            {
+                if (Adjustments != null && Adjustments.Count > 0)
+                {
+                    return NetAmount + Adjustments.DefaultIfEmpty().Sum(z => z.Amount);
+                }
+                else
+                {
+                    return NetAmount;
+                }
+            }
+        }
+
+        /// <summary>
         /// Read Only - How much has been received
         /// </summary>
         public decimal Receipt
@@ -237,7 +255,7 @@ namespace XLantCore.Models
             if (client.Plans != null && client.Plans.Count > 0)
             {
                 this.EstimatedOtherIncome = 0;
-                foreach (MLFSPlan p in client.Plans.Where(x => plan == null || x.PrimaryID != plan.PrimaryID))
+                foreach (MLFSPlan p in client.Plans.Where(x => plan == null || x.PrimaryID != plan.PrimaryID).Distinct())
                 {
                     MLFSFee fee = client.Fees.Where(x => x.Plan != null && x.Plan.PrimaryID.Contains(p.PrimaryID) && x.IsRecurring).FirstOrDefault();
                     if (fee != null)
@@ -287,7 +305,7 @@ namespace XLantCore.Models
         /// <returns>A list of the adjustments (receipts) to be added</returns>
         public static List<MLFSDebtorAdjustment> CheckForReceipts(List<MLFSSale> debtors, List<MLFSIncome> receipts)
         {
-            receipts = receipts.Where(x => x.IsNewBusiness).ToList();
+            receipts = receipts.Where(x => x.IsNewBusiness && x.Amount != 0).ToList();
             List<MLFSDebtorAdjustment> adjs = new List<MLFSDebtorAdjustment>();
             for (int i = 0; i < debtors.Count; i++)
             {
@@ -356,7 +374,7 @@ namespace XLantCore.Models
         public void MatchPlan(DataTable plans)
         {
             //where the plan data is not present
-            if (String.IsNullOrEmpty(ProviderName))
+            if (String.IsNullOrEmpty(ProviderName) && !String.IsNullOrEmpty(PlanReference))
             {
                 List<DataRow> planRows = plans.AsEnumerable().Where(x => x.Field<string>("Root Sequential Ref").Contains(PlanReference)).ToList();
                 planRows.AddRange(plans.AsEnumerable().Where(x => x.Field<string>("Sequential Ref").Contains(PlanReference)).ToList());

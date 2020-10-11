@@ -70,7 +70,7 @@
                         <div class="dropdown">
                             <button class="btn btn-primary dropdown-toggle" aria-haspopup="true" data-toggle="dropdown" aria-expanded="false">Action</button>
                             <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-                                <li><a asp-action="Match" asp-controller="Debtor" asp-route-id="@item.Id" asp-route-debtorId="@ViewBag.Debtor.Id">Match</a></li>
+                                <li><a href="#" onclick="match(@ViewBag.Debtor.Id, @item.Id)">Match</a></li>
                             </ul>
                         </div>
                     </td>

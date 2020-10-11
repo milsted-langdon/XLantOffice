@@ -24,18 +24,47 @@ namespace XLantDataStore.Controllers.MVC
         }
 
         // GET: MLFSSales
-        public async Task<IActionResult> Index(int? periodId)
+        public async Task<IActionResult> Index(int? periodId, string split="", int? advisorId = null)
         {
+            MLFSReportingPeriod period;
             if (periodId == null)
             {
-                return NotFound();
+                period = await _periodData.GetCurrent();
             }
-            MLFSReportingPeriod period = await _periodData.GetPeriodById((int)periodId);
+            else
+            {
+                period = await _periodData.GetPeriodById((int)periodId); 
+            }
             if (period == null)
             {
                 return NotFound();
             }
-            List<MLFSIncome> income = await _incomeData.GetIncome(period);
+            List<MLFSIncome> income = await _incomeData.GetIncome(period, advisorId);
+            if (split.ToLower() == "unallocated")
+            {
+                income = income.Where(x => x.MLFSDebtorAdjustment == null && x.IsNewBusiness).ToList();
+            }
+            else if (split.ToLower() == "allocated")
+            {
+                income = income.Where(x => x.MLFSDebtorAdjustment != null && x.IsNewBusiness).ToList();
+            }
+            else if (split.ToLower() == "initial")
+            {
+                income = income.Where(x => x.IsNewBusiness).ToList();
+            }
+            else if (split.ToLower() == "recurring")
+            {
+                income = income.Where(x => !x.IsNewBusiness).ToList();
+            }
+            else if (split.ToLower() == "adjustment")
+            {
+                income = income.Where(x => x.IsAdjustment).ToList();
+            }
+            else if (split.ToLower() == "clawback")
+            {
+                income = income.Where(x => x.IsClawBack).ToList();
+            }
+
             return View(income);
         }
 
@@ -56,7 +85,7 @@ namespace XLantDataStore.Controllers.MVC
                 return NotFound();
             }
             List<MLFSIncome> matches = await _incomeData.PotentialDebtorMatches(debtor);
-            ViewBag.DebtorId = debtorId;
+            ViewBag.Debtor = debtor;
             return PartialView("_SelectIndex", matches);
         }
 

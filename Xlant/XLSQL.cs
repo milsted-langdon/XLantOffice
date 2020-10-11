@@ -13,7 +13,7 @@ namespace XLant
     {
         private static string BuildConnectionString()
         {
-            DotNetEnv.Env.Load("../.env");
+            DotNetEnv.Env.Load(".env");
             string conn = "";
             XDocument settingsDoc = XLtools.settingsDoc;
             //query the setting files and try to find a match

@@ -8,19 +8,16 @@
             <thead>
                 <tr>
                     <th>
-                        @Html.DisplayNameFor(model => model.PivotEntity)
-                    </th>
-                    <th class="columnTotal">
-                        @Html.DisplayNameFor(model => model.Budget)
+                        
                     </th>
                     <th class="columnTotal">
                         @Html.DisplayNameFor(model => model.New_Business)
                     </th>
                     <th class="columnTotal">
-                        @Html.DisplayNameFor(model => model.Renewals)
+                        @Html.DisplayNameFor(model => model.Unallocated)
                     </th>
                     <th class="columnTotal">
-                        @Html.DisplayNameFor(model => model.Unallocated)
+                        @Html.DisplayNameFor(model => model.Renewals)
                     </th>
                     <th class="columnTotal">
                         @Html.DisplayNameFor(model => model.Clawback)
@@ -40,6 +37,9 @@
                     <th class="columnTotal">
                         @Html.DisplayNameFor(model => model.Total)
                     </th>
+                    <th class="columnTotal">
+                        @Html.DisplayNameFor(model => model.Budget)
+                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -47,37 +47,37 @@
                 {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.PivotEntity)
+                        @Html.DisplayFor(modelItem => item.Advisor)
                     </td>
                     <td align="right">
-                        @Html.DisplayFor(modelItem => item.Budget)
+                        <a target="_blank" asp-controller="MLFSSale" asp-action="Index" asp-route-periodId="@item.PeriodId" asp-route-advisorId="@item.AdvisorId">@Html.DisplayFor(modelItem => item.New_Business)</a>
                     </td>
                     <td align="right">
-                        @Html.DisplayFor(modelItem => item.New_Business)
+                        <a target="_blank" asp-controller="MLFSIncome" asp-action="Index" asp-route-periodId="@item.PeriodId" asp-route-split="Unallocated" asp-route-advisorId="@item.AdvisorId">@Html.DisplayFor(modelItem => item.Unallocated)</a>
                     </td>
                     <td align="right">
-                        @Html.DisplayFor(modelItem => item.Renewals)
+                        <a target="_blank" asp-controller="MLFSIncome" asp-action="Index" asp-route-periodId="@item.PeriodId" asp-route-split="Recurring" asp-route-advisorId="@item.AdvisorId">@Html.DisplayFor(modelItem => item.Renewals)</a>
                     </td>
                     <td align="right">
-                        @Html.DisplayFor(modelItem => item.Unallocated)
+                        <a target="_blank" asp-controller="MLFSIncome" asp-action="Index" asp-route-periodId="@item.PeriodId" asp-route-split="clawback" asp-route-advisorId="@item.AdvisorId">@Html.DisplayFor(modelItem => item.Clawback)</a>
                     </td>
                     <td align="right">
-                        @Html.DisplayFor(modelItem => item.Clawback)
+                        <a target="_blank" asp-controller="MLFSDebtorAdjustments" asp-action="Index" asp-route-periodId="@item.PeriodId" asp-route-split="ntu" asp-route-advisorId="@item.AdvisorId">@Html.DisplayFor(modelItem => item.NotTakenUp)</a>
                     </td>
                     <td align="right">
-                        @Html.DisplayFor(modelItem => item.NotTakenUp)
+                        <a target="_blank" asp-controller="MLFSIncome" asp-action="Index" asp-route-periodId="@item.PeriodId" asp-route-split="adjustment" asp-route-advisorId="@item.AdvisorId">@Html.DisplayFor(modelItem => item.Adjustment)</a>
                     </td>
                     <td align="right">
-                        @Html.DisplayFor(modelItem => item.Adjustment)
+                        <a target="_blank" asp-controller="MLFSDebtorAdjustments" asp-action="Index" asp-route-periodId="@item.PeriodId" asp-route-split="variance" asp-route-advisorId="@item.AdvisorId">@Html.DisplayFor(modelItem => item.Debtors_Variance)</a>
                     </td>
                     <td align="right">
-                        @Html.DisplayFor(modelItem => item.Debtors_Variance)
-                    </td>
-                    <td align="right">
-                        @Html.DisplayFor(modelItem => item.Debtors_Adjustment)
+                        <a target="_blank" asp-controller="MLFSDebtorAdjustments" asp-action="Index" asp-route-periodId="@item.PeriodId" asp-route-split="adjustment" asp-route-advisorId="@item.AdvisorId">@Html.DisplayFor(modelItem => item.Debtors_Adjustment)</a>
                     </td>
                     <td align="right">
                         @Html.DisplayFor(modelItem => item.Total)
+                    </td>
+                    <td align="right">
+                        @Html.DisplayFor(modelItem => item.Budget)
                     </td>
                 </tr>
                 }

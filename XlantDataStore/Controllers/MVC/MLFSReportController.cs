@@ -31,10 +31,14 @@ namespace XLantDataStore.Controllers.MVC
         }
 
         // GET: Index
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? periodId)
         {
-            MLFSReportingPeriod current = await _periodData.GetCurrent();
-            ViewBag.ReportingPeriodId = await _periodData.SelectList(current.Id);
+            if (periodId == null)
+            {
+                MLFSReportingPeriod current = await _periodData.GetCurrent();
+                periodId = current.Id;
+            }
+            ViewBag.ReportingPeriodId = await _periodData.SelectList(periodId);
             return View();
         }
 
@@ -49,10 +53,10 @@ namespace XLantDataStore.Controllers.MVC
 
             List<DirectorsReport> report = ViewModels.DirectorsReport.Create(sales.OrderBy(x => x.ClientName).ToList());
 
-            return PartialView("_DirectorsReport", report);
+            return PartialView("_DirectorsReport", report.OrderBy(x => x.ClientId));
         }
 
-        public async Task<IActionResult> SalesReport(int? periodId, string pivot = "Advisor")
+        public async Task<IActionResult> SalesReport(int? periodId, string entity = "advisor")
         {
             MLFSReportingPeriod period;
             List<SalesReport> report = new List<SalesReport>();
@@ -70,34 +74,48 @@ namespace XLantDataStore.Controllers.MVC
             //get advsiors
             List<MLFSAdvisor> advisors = await _advisorData.GetAdvisors();
             List<MLFSIncome> income = await _incomeData.GetIncome(period);
+            List<MLFSSale> sales = await _salesData.GetSales(period);
             List<MLFSDebtorAdjustment> adjs = await _adjustmentData.GetAdjustments(period);
             List<MLFSBudget> budgets = await _budgetData.GetBudgets(period);
 
-            if (pivot.ToLower() == "advisor")
+            if (entity.ToLower() == "advisor")
             {
                 foreach (MLFSAdvisor adv in advisors)
                 {
-                    SalesReport line = new SalesReport(income, adjs, budgets, adv, period);
+                    SalesReport line = new SalesReport(income, sales, adjs, budgets, adv, period);
                     report.Add(line);
                 } 
             }
-            else if (pivot.ToLower() == "organisation")
+            if (entity.ToLower() == "organisation")
             {
-                report = ViewModels.SalesReport.CreateByOrganisation(income, adjs, period);
+                report = report.GroupBy(x => x.Organisation).Select(y => new ViewModels.SalesReport()
+                {
+                    Period = y.FirstOrDefault().Period,
+                    PeriodId = y.FirstOrDefault().PeriodId,
+                    Advisor = y.Key,
+                    AdvisorId = 0,
+                    Organisation = y.Key,
+                    Budget = y.Sum(z => z.Budget),
+                    New_Business = y.Sum(z => z.New_Business),
+                    Renewals = y.Sum(z => z.Renewals),
+                    Unallocated = y.Sum(z => z.Unallocated),
+                    Clawback = y.Sum(z => z.Clawback),
+                    NotTakenUp = y.Sum(z => z.NotTakenUp),
+                    Adjustment = y.Sum(z => z.Adjustment),
+                    Debtors_Variance = y.Sum(z => z.Debtors_Variance),
+                    Debtors_Adjustment = y.Sum(z => z.Debtors_Adjustment),
+                    Total = y.Sum(z => z.Total)
+                }).ToList();
             }
-            else if (pivot.ToLower() == "campaign")
+            else if (entity.ToLower() == "campaign")
             {
                 report = ViewModels.SalesReport.CreateByCampaign(income, period);
             }
-            else
-            {
-                return NotFound();
-            }
 
-            return PartialView("_SalesReport", report.OrderBy(x => x.PivotEntity));
+            return PartialView("_SalesReport", report.OrderBy(x => x.Advisor));
         }
 
-        public async Task<IActionResult> FCIReport(int? periodId)
+        public async Task<IActionResult> FCIReport(int? periodId, string entity = "advisor")
         {
             MLFSReportingPeriod period;
             List<ViewModels.FCIReport> report = new List<ViewModels.FCIReport>();
@@ -113,7 +131,130 @@ namespace XLantDataStore.Controllers.MVC
             }
             List<MLFSIncome> income = await _incomeData.GetIncome(period);
             report = ViewModels.FCIReport.CreateFromList(income);
+            if (entity == "organisation")
+            {
+                report = report.GroupBy(x => x.Organisation).Select(y => new ViewModels.FCIReport()
+                {
+                    Advisor = y.Key,
+                    Adhoc = y.Sum(z => z.Adhoc),
+                    FundBased = y.Sum(z => z.FundBased),
+                    Initial = y.Sum(z => z.Initial),
+                    Ongoing = y.Sum(z => z.Ongoing),
+                    Renewal = y.Sum(z => z.Renewal),
+                    Other = y.Sum(z => z.Other),
+                    Total = y.Sum(z => z.Total)
+                }).ToList();
+            }
             return PartialView("_FCIReport", report.OrderBy(x => x.Advisor));
+        }
+
+        public async Task<IActionResult> Turnover(int? periodId, string entity = "advisor")
+        {
+            MLFSReportingPeriod current;
+            MLFSReportingPeriod prior;
+            if (periodId == null)
+            {
+                current = await _periodData.GetCurrent();
+                periodId = current.Id;
+            }
+            else
+            {
+                current = await _periodData.GetPeriodById((int)periodId);
+            }
+            List<MLFSReportingPeriod> periods = await _periodData.GetLast12Months(current);
+            if (current.ReportOrder == 1)
+            {
+                prior = periods.Where(x => x.ReportOrder == 12).FirstOrDefault();
+            }
+            else
+            {
+                prior = periods.Where(x => x.ReportOrder == current.ReportOrder - 1).FirstOrDefault();
+            }
+            List<MLFSSale> closingDebtors = await _salesData.GetDebtors(current);
+            List<MLFSSale> openingDebtors = await _salesData.GetDebtors(prior);
+            List<MLFSIncome> receipts = await _incomeData.GetIncome(current);
+            List<MLFSSale> newBusiness = await _salesData.GetSales(current);
+            List<MLFSDebtorAdjustment> adjs = await _adjustmentData.GetAdjustments(current);
+            List<Turnover> turnover = ViewModels.Turnover.CreateList(openingDebtors, closingDebtors, receipts, newBusiness, adjs);
+
+            if (entity == "organisation")
+            {
+                turnover = turnover.GroupBy(x => x.Organisation).Select(y => new ViewModels.Turnover()
+                {
+                    Advisor = y.Key,
+                    Period = y.FirstOrDefault().Period,
+                    PeriodId = y.FirstOrDefault().PeriodId,
+                    CashReceipts = y.Sum(z => z.CashReceipts),
+                    NewBusiness = y.Sum(z => z.NewBusiness),
+                    OpeningDebtor = y.Sum(z => z.OpeningDebtor),
+                    ClosingDebtor = y.Sum(z => z.ClosingDebtor),
+                    Adjustments = y.Sum(z => z.Adjustments),
+                    Variance = y.Sum(z => z.Variance),
+                    NotTakenUp = y.Sum(z => z.NotTakenUp),
+                    DebtorBalancing = y.Sum(z => z.DebtorBalancing),
+                    ChangeInDebtors = y.Sum(z => z.ChangeInDebtors),
+                    RecurringIncome = y.Sum(z => z.RecurringIncome),
+                    TurnoverTotal = y.Sum(z => z.TurnoverTotal)
+                }).ToList();
+            }
+            return PartialView("_Turnover", turnover.OrderBy(x => x.Advisor));
+        }
+
+        public async Task<IActionResult> SalesSummary(int? periodId, string entity = "advisor")
+        {
+            MLFSReportingPeriod finalPeriod;
+            List<SalesReport> report = new List<SalesReport>();
+            //get period
+            if (periodId == null)
+            {
+                return NotFound();
+            }
+            finalPeriod = await _periodData.GetPeriodById((int)periodId);
+            if (finalPeriod == null)
+            {
+                return NotFound();
+            }
+            List<MLFSReportingPeriod> periods = await _periodData.GetFinancialYear(finalPeriod);
+            periods = periods.Where(x => x.ReportOrder <= finalPeriod.ReportOrder).ToList();
+            List<MLFSAdvisor> advisors = await _advisorData.GetAdvisors();
+            foreach (MLFSReportingPeriod period in periods)
+            {   
+                List<MLFSIncome> income = await _incomeData.GetIncome(period);
+                List<MLFSSale> sales = await _salesData.GetSales(period);
+                List<MLFSDebtorAdjustment> adjs = await _adjustmentData.GetAdjustments(period);
+                List<MLFSBudget> budgets = await _budgetData.GetBudgets(period);
+
+                foreach (MLFSAdvisor adv in advisors)
+                {
+                    SalesReport line = new SalesReport(income, sales, adjs, budgets, adv, period);
+                    report.Add(line);
+                }
+            }
+            if (entity.ToLower() == "organisation")
+            {
+                report = report.GroupBy(x => x.Organisation).Select(y => new ViewModels.SalesReport()
+                {
+                    Period = y.FirstOrDefault().Period,
+                    PeriodId = y.FirstOrDefault().PeriodId,
+                    Advisor = y.Key,
+                    AdvisorId = 0,
+                    Organisation = y.Key,
+                    Budget = y.Sum(z => z.Budget),
+                    New_Business = y.Sum(z => z.New_Business),
+                    Renewals = y.Sum(z => z.Renewals),
+                    Unallocated = y.Sum(z => z.Unallocated),
+                    Clawback = y.Sum(z => z.Clawback),
+                    NotTakenUp = y.Sum(z => z.NotTakenUp),
+                    Adjustment = y.Sum(z => z.Adjustment),
+                    Debtors_Variance = y.Sum(z => z.Debtors_Variance),
+                    Debtors_Adjustment = y.Sum(z => z.Debtors_Adjustment),
+                    Total = y.Sum(z => z.Total)
+                }).ToList();
+            }
+
+            List<SalesSummary> yearToDate = ViewModels.SalesSummary.CreateFromSalesReport(report, advisors);
+
+            return PartialView("_SalesSummary", yearToDate.OrderBy(x => x.Advisor));
         }
     }
 }

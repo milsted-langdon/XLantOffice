@@ -9,6 +9,10 @@ namespace XLantDataStore.ViewModels
 {
     public class DirectorsReport
     {
+        public DirectorsReport()
+        {
+
+        }
         public DirectorsReport(MLFSSale sale)
         {
             if (sale.Advisor != null)
@@ -21,6 +25,7 @@ namespace XLantDataStore.ViewModels
             }
             ClientName = sale.ClientName;
             ClientId = sale.ClientId;
+            JointClientId = sale.JointClientId;
             PlanId = sale.PlanReference;
             ReportingPeriodId = (int)sale.ReportingPeriodId;
             Provider = sale.ProviderName;
@@ -35,22 +40,6 @@ namespace XLantDataStore.ViewModels
             InitialFee = sale.NetAmount;
             Investment = sale.Investment;
             OngoingPercentage = sale.OnGoingPercentage;
-            if (sale.InitialFeePass)
-            {
-                InitialPassed = "Passed"; 
-            }
-            else
-            {
-                InitialPassed = "Failed";
-            }
-            if (sale.OngoingFeePass)
-            {
-                OngoingPassed = "Passed";
-            }
-            else
-            {
-                OngoingPassed = "Failed";
-            }
             if (Investment != 0 && sale.OnGoingPercentage != 0)
             {
                 TwelveMonthsTrail = Investment * sale.OnGoingPercentage / 100; 
@@ -67,6 +56,7 @@ namespace XLantDataStore.ViewModels
         [Display(Name="Client Name")]
         public string ClientName { get; set; }
         public string ClientId { get; set; }
+        public string JointClientId { get; set; }
         public string PlanId { get; set; }
         public string Provider { get; set; }
         [Display(Name="New/Existing")]
@@ -81,10 +71,6 @@ namespace XLantDataStore.ViewModels
         [Display(Name = "12 Month Trail")]
         [DataType(DataType.Currency)]
         public decimal TwelveMonthsTrail { get; set; }
-        [Display(Name = "Initial Passed")]
-        public string InitialPassed { get; set; }
-        [Display(Name = "Ongoing Passed")]
-        public string OngoingPassed { get; set; }
         [Display(Name = "Other Income")]
         [DataType(DataType.Currency)]
         public decimal OtherIncome { get; set; }
@@ -102,8 +88,76 @@ namespace XLantDataStore.ViewModels
                 DirectorsReport line = new DirectorsReport(sale);
                 report.Add(line);
             }
-            
+
+            //group where they are the same client
+            report = report.GroupBy(x => x.ClientId).Select(y => new DirectorsReport()
+            {
+                ReportingPeriodId = y.FirstOrDefault().ReportingPeriodId,
+                Advisor = y.FirstOrDefault().Advisor,
+                ClientName = y.FirstOrDefault().ClientName,
+                ClientId = y.Key,
+                NewExisting = y.FirstOrDefault().NewExisting,
+                InitialFee = y.Sum(z => z.InitialFee),
+                Investment = y.Sum(z => z.Investment),
+                TwelveMonthsTrail = y.Sum(z => z.TwelveMonthsTrail),
+                OngoingPercentage = y.Sum(z => z.TwelveMonthsTrail) == 0 ? 0 : y.Sum(z => z.TwelveMonthsTrail) / y.Sum(z => z.Investment) * 100,
+                OtherIncome = y.FirstOrDefault().OtherIncome
+            }).ToList();
+
             return report;
         }
+
+        [Display(Name = "Initial Passed")]
+        public bool InitialPassed
+        {
+            get
+            {
+                bool pass = false;
+
+                if (InitialFee >= 450)
+                {
+                    pass = true;
+                }
+                else
+                {
+                    if (Investment != 0)
+                    {
+                        if (InitialFee / Investment >= (decimal)0.03)
+                        {
+                            pass = true;
+                        }
+                    }
+                }
+                return pass;
+
+            }
+        }
+
+        /// <summary>
+        /// Read Only - Tests whether the ongoing fee criteria is met is it greater that £500 for 12 months if not is it >= 1%
+        /// </summary>
+        [Display(Name = "Ongoing Passed")]
+        public bool OngoingPassed
+        {
+            get
+            {
+                bool pass = false;
+                decimal twelveMonthsIncome = Investment * OngoingPercentage / 100;
+                twelveMonthsIncome = twelveMonthsIncome + OtherIncome;
+                if (twelveMonthsIncome >= 500)
+                {
+                    pass = true;
+                }
+                else
+                {
+                    if (OngoingPercentage >= (decimal)0.01)
+                    {
+                        pass = true;
+                    }
+                }
+                return pass;
+            }
+        }
+
     }
 }

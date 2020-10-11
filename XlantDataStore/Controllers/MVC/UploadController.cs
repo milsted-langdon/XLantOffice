@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using XLantDataStore.ViewModels;
 using XLantCore.Models;
 using Microsoft.AspNetCore.Http;
+using System.Data;
+using XLantCore;
+using System.IO;
 
 namespace XLantDataStore.Controllers.MVC
 {
@@ -57,6 +60,56 @@ namespace XLantDataStore.Controllers.MVC
                 return NotFound();
             }
             await _salesData.InsertList(upload.Sales);
+            await _incomeData.InsertList(upload.Income);
+            List<MLFSDebtorAdjustment> adjs = MLFSSale.CheckForReceipts(upload.Sales, upload.Income);
+            _adjustmentData.InsertList(adjs);
+            ViewBag.Result = "Uploaded Successfully";
+            return RedirectToAction("Index");
+        }
+
+        public async Task<IActionResult> IncomeOnly()
+        {
+            ViewBag.ReportingPeriodId = await _periodData.SelectList();
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> IncomeOnly(Upload upload)
+        {
+            if (upload.ReportingPeriodId == null)
+            {
+                return NotFound();
+            }
+            MLFSReportingPeriod period = await _periodData.GetPeriodById((int)upload.ReportingPeriodId);
+            if (period == null)
+            {
+                return NotFound();
+            }
+            upload.ReportingPeriod = period;
+            upload.ReportingPeriodId = period.Id;
+            if (upload.Files == null || upload.Files.Count != 4)
+            {
+                return NotFound();
+            }
+            List<MLFSAdvisor> advisors = await _advisorData.GetAdvisors();
+
+            DataTable incomeTable = new DataTable();
+            foreach (IFormFile file in upload.Files)
+            {
+                if (file.Length > 0)
+                {
+                    string newFilePath = Path.GetTempFileName();
+                    using (var fileStream = new FileStream(newFilePath, FileMode.Create))
+                    {
+                        await file.CopyToAsync(fileStream);
+                    }
+                    if (file.FileName.Contains("AdviserMonthlyFCI"))
+                    {
+                        incomeTable = Tools.ConvertCSVToDataTable(newFilePath);
+                    }
+                }
+            }
+            upload.Income = MLFSIncome.CreateFromDataTable(incomeTable, advisors, period);
             await _incomeData.InsertList(upload.Income);
             List<MLFSDebtorAdjustment> adjs = MLFSSale.CheckForReceipts(upload.Sales, upload.Income);
             _adjustmentData.InsertList(adjs);

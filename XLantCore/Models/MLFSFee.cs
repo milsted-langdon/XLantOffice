@@ -19,7 +19,10 @@ namespace XLantCore.Models
             dynamic f = fee;
             PrimaryID = f.id;
             SentToClient = f.sentToClientOn;
-            FeeType = f.feeChargingType.name;
+            if (f.feeChargingType != null)
+            {
+                FeeType = f.feeChargingType.name; 
+            }
             if (f.sellingAdvisor != null)
             {
                 string advisorID = f.sellingAdvisor.id;

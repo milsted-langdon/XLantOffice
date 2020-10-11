@@ -75,7 +75,7 @@
     });
 };
 
-function LaunchModalString(label, s) {
+function LaunchModalStatement(label, s) {
     $('#modalLabel').text(label);
     $('#modal').modal('show');
     $('#modalLoader').hide();
@@ -97,6 +97,15 @@ function LaunchModalNumber(label, s, onClickAction) {
     $('#modal').modal('show');
     $('#modalLoader').hide();
     s = s + "<br/><br/><input type='text' id='numberField' class='form-control'/><br/><br/><input class='btn btn-primary' value='Confirm' type='button' onclick='" + onClickAction + "'/>";
+    $('#modalPlaceholder').html(s);
+    $('#modalPlaceholder').fadeIn('fast');
+}
+
+function LaunchModalString(label, s, onClickAction) {
+    $('#modalLabel').text(label);
+    $('#modal').modal('show');
+    $('#modalLoader').hide();
+    s = s + "<br/><br/><input type='text' id='textField' class='form-control'/><br/><br/><input class='btn btn-primary' value='Confirm' type='button' onclick='" + onClickAction + "'/>";
     $('#modalPlaceholder').html(s);
     $('#modalPlaceholder').fadeIn('fast');
 }

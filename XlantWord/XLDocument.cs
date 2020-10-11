@@ -695,16 +695,23 @@ namespace XlantWord
                 fileID = ReadParameter("FileID");
 
                 fileID = currentDoc.Name;
-                int len = fileID.IndexOf("-"); //get the index of the version identifier
-                fileID = fileID.Substring(0, len);//ignore everything after and including the -
-                if (String.IsNullOrEmpty(fileID))
+                if(fileID.IndexOf("-") > -1)
                 {
-                    throw new ArgumentException("Document doesn't appear to be in VC");
+                    int len = fileID.IndexOf("-"); //get the index of the version identifier
+                    fileID = fileID.Substring(0, len);//ignore everything after and including the -
+                    if (String.IsNullOrEmpty(fileID) || !int.TryParse(fileID, out int i))
+                    {
+                        throw new ArgumentException("Document doesn't appear to be in VC");
+                    }
+                    UpdateParameter("FileID", fileID); //add the parameter for next time.
+
+                    return fileID;
+                }
+                else
+                {
+                    return null;
                 }
                 
-                UpdateParameter("FileID", fileID); //add the parameter for next time.
-
-                return fileID;
             }
             catch (Exception e)
             {
@@ -731,7 +738,7 @@ namespace XlantWord
             }
         }
 
-        public static string AddHeadertoPDF(string filestring, string watermarkFile = "")
+        public static string AddHeadertoPDF(string filestring, string watermarkFile = "", string fileNamePref = "")
         {
             try
             {
@@ -758,14 +765,30 @@ namespace XlantWord
                 //create a filelocation for the new file
                 string filelocation = folder;
                 Random rnd = new Random();
-                string filename = DateTime.Now.ToString("yyyy-MM-dd");
+                string filename;
+
+                if (fileNamePref == "")
+                {
+                    filename = DateTime.Now.ToString("yyyy-MM-dd"); 
+                }
+                else
+                {
+                    filename = fileNamePref;
+                }
                 int id = rnd.Next(1000, 9999); //provides a four digit id
                 filename += "-" + id.ToString();
                 filename += ".pdf";
                 //If that file already exists try again until it doesn't
                 while (File.Exists(folder + filename))
                 {
-                    filename = DateTime.Now.ToString("yyyy-MM-dd");
+                    if (fileNamePref == "")
+                    {
+                        filename = DateTime.Now.ToString("yyyy-MM-dd");
+                    }
+                    else
+                    {
+                        filename = fileNamePref;
+                    }
                     id = rnd.Next(1000, 9999); //provides a four digit id
                     filename += "-" + id.ToString();
                     filename += ".pdf";

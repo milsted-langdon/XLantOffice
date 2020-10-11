@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq;
 using RestSharp;
 using System;
@@ -23,7 +24,7 @@ namespace XLantDataStore.Repository
             
         }
 
-        public async Task<MLFSAdvisor> GetAdvisor(string id)
+        public async Task<MLFSAdvisor> GetAdvisor(int id)
         {
             MLFSAdvisor adv = await _db.MLFSAdvisors.FindAsync(id);
             return adv;
@@ -33,6 +34,13 @@ namespace XLantDataStore.Repository
         {
             List<MLFSAdvisor> advisors = await _db.MLFSAdvisors.ToListAsync();
             return advisors;
+        }
+
+        public async Task<SelectList> SelectList(int? advisorId = null)
+        {
+            List<MLFSAdvisor> advisors = await GetAdvisors();
+            SelectList sList = new SelectList(advisors.OrderBy(x => x.LastName).ThenByDescending(y => y.FirstName), "Id", "Fullname", advisorId);
+            return sList;
         }
     }
 }

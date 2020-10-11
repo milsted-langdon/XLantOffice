@@ -129,8 +129,8 @@ function setDataTableDefaults() {
             }
         ],
         "processing": true,
-        "stateSave": true,
-        "stateDuration": 0,
+        stateSave: true,
+        stateDuration: -1,
         initComplete: function () {
             var api = this.api();
             var state = api.state.loaded();
@@ -161,6 +161,40 @@ function FormatDataTables(tableClass, excludeFilterTotal) {
     if (tableClass == null) {
         tableClass = '.xlantDataTable';
     }
+
+    //credit for handling negatives in brackets and currency Tom Buckle - http://sprymedia.co.uk/
+    var validChars = "$£€c" + "0123456789" + ".-,()'";
+    // Init the regex just once for speed - it is "closure locked"
+    var str = jQuery.fn.dataTableExt.oApi._fnEscapeRegex(validChars), re = new RegExp('[^' + str + ']');
+    $.fn.dataTableExt.aTypes.unshift(
+        function (data) {
+            if (typeof data !== 'string' || re.test(data)) {
+                return null;
+            }
+            return 'currency';
+        }
+    );
+    $.fn.dataTable.ext.type.order['currency-pre'] = function (data) {
+        if (data === '') {
+            return 0;
+        }
+
+        //Check if its in the proper format
+        if (data.match(/[\()]/g)) {
+            if (data.match(/[\-]/g) !== true) {
+                //It matched - strip out parentheses & any characters we dont want and append - at front
+                data = '-' + data.replace(/[\$£€c\(\),]/g, '');
+            } else {
+                //Already has a '-' so just strip out non-numeric charactors exluding '-'
+                data = data.replace(/[^\d\-\.]/g, '');
+            }
+        } else {
+            data = data.replace(/[\$£€\,]/g, '');
+        }
+        return parseFloat(data);
+    };
+    //End of Tom's input
+
     //init table
     var table;
     if ($.fn.dataTable.isDataTable(tableClass)) {
@@ -191,8 +225,8 @@ function addFunctionalRows(tableClass) {
         let newFooter = '<tr>';
         //foreach td in the row above
         $(tableClass).find('thead tr:last').find('th').each(function () {
-            newHeader = newHeader + '<th rowspan="1" colspan="1" align="right"><i class="fa fa-filter" onClick="addTableFilterLauncher(this)"></i></th>';
-            newFooter = newFooter + '<td rowspan="1" colspan="1" align="right"><i class="fa fa-calculator" onClick="columnTotalLauncher(this)"></i></td>';
+            newHeader = newHeader + '<th rowspan="1" colspan="1" align="right"><i class="fa fa-filter" onClick="addTableFilterLauncher(this, \'' + tableClass + '\')"></i></th>';
+            newFooter = newFooter + '<td rowspan="1" colspan="1" align="right"><i class="fa fa-calculator" onClick="columnTotalLauncher(this, \'' + tableClass + '\')"></i></td>';
         });
         //lastly
         newHeader = newHeader + '</tr>';
@@ -212,7 +246,7 @@ function columnTotal(table, columnIndex) {
         pageTotal = column.data().reduce(function (a, b) {
             //ignore HTML after text
             if (b.indexOf('<') !== -1) {
-                b = b.toString().substring(0, b.indexOf('<'));
+                b = b.toString().substring(b.indexOf('>') + 1, b.lastIndexOf('<'));
             }
             return intVal(a) + intVal(b);
         }, 0);
@@ -236,8 +270,8 @@ function columnTotal(table, columnIndex) {
     }
 }
 
-function columnTotalLauncher(obj) {
-    let table = $('.xlantDataTable').DataTable();
+function columnTotalLauncher(obj, tableClass) {
+    let table = $(tableClass).DataTable();
     let column = $(obj).closest('td');
     let visIdx = column.index();
     let columnIndex = table.column.index('fromVisible', visIdx);
@@ -286,8 +320,8 @@ function addTableFilter(table, columnIndex) {
     }
 }
 
-function addTableFilterLauncher(obj) {
-    let table = $('.xlantDataTable').DataTable();
+function addTableFilterLauncher(obj, tableClass) {
+    let table = $(tableClass).DataTable();
     let column = $(obj).closest('th');
     let visIdx = column.index();
     let columnIndex = table.column.index('fromVisible', visIdx);
@@ -318,15 +352,15 @@ function HideColumns() {
 }
 
 function intVal(i) {
-        let multiplier = 1;
-        if (typeof i === "string" && i.indexOf('(') === 0) {
-            //is negative so alter the multiplier
-            multiplier = -1;
-        }
-        return typeof i === 'string' ?
-            i.replace(/[\£,()]/g, '') * multiplier :
-            typeof i === 'number' ?
-                i : 0;
+    let multiplier = 1;
+    if (typeof i === "string" && i.indexOf('(') === 0) {
+        //is negative so alter the multiplier
+        multiplier = -1;
+    }
+    return typeof i === 'string' ?
+        i.replace(/[\£,()]/g, '') * multiplier :
+        typeof i === 'number' ?
+            i : 0;
 }
 
 ////deal with select tables

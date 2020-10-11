@@ -1,10 +1,10 @@
 ﻿@model IEnumerable<XLantCore.Models.MLFSIncome>
 
 @{
-    ViewData["Title"] = "Select Entry";
+    ViewData["Title"] = "Income";
 }
 
-<table class="table">
+<table class="table xlantDataTable">
     <thead>
         <tr>
             <th>
@@ -32,12 +32,9 @@
                 @Html.DisplayNameFor(model => model.IncomeType)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.FeeStatus)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.Amount)
             </th>
-            <th></th>
+            @*<th></th>*@
         </tr>
     </thead>
     <tbody>
@@ -50,7 +47,7 @@
                 @Html.DisplayFor(modelItem => item.ClientName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Advisor)
+                @Html.DisplayFor(modelItem => item.Advisor.Fullname)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ProviderName)
@@ -67,20 +64,17 @@
             <td>
                 @Html.DisplayFor(modelItem => item.IncomeType)
             </td>
-<td>
-                @Html.DisplayFor(modelItem => item.FeeStatus)
-            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Amount)
             </td>
-            <td>
+            @*<td>
                 <div class="dropdown">
                     <button class="btn btn-primary dropdown-toggle" aria-haspopup="true" data-toggle="dropdown" aria-expanded="false">Action</button>
                     <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
                         <li><a asp-action="Match" asp-controller="Debtor" asp-route-id="@item.Id" asp-route-debtorId="@ViewBag.DebtorId">Match</a></li>
                     </ul>
                 </div>
-            </td>
+            </td>*@
         </tr>
 }
     </tbody>

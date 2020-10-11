@@ -50,7 +50,7 @@
                 }
             </td>
             <td>
-                @if (!item.NotTakenUp)
+                @if (item.NotTakenUp)
                 {
                     @Html.DisplayFor(modelItem => item.Amount)
                 }

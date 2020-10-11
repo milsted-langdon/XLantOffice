@@ -1,0 +1,108 @@
+﻿@model IEnumerable<XLantDataStore.ViewModels.Turnover>
+
+@{
+    ViewData["Title"] = "Turnover Report";
+}
+
+        <table class="table xlantDataTable" style="width:100%">
+            <thead>
+                <tr>
+                    <th>
+                        
+                    </th>
+                    <th class="columnTotal">
+                        @Html.DisplayNameFor(model => model.OpeningDebtor)
+                    </th>
+                    <th class="columnTotal">
+                        @Html.DisplayNameFor(model => model.NewBusiness)
+                    </th>
+                    <th class="columnTotal">
+                        @Html.DisplayNameFor(model => model.CashReceipts)
+                    </th>
+                    <th class="columnTotal">
+                        @Html.DisplayNameFor(model => model.Adjustments)
+                    </th>
+                    <th class="columnTotal">
+                        @Html.DisplayNameFor(model => model.Variance)
+                    </th>
+                    <th class="columnTotal">
+                        @Html.DisplayNameFor(model => model.NotTakenUp)
+                    </th>
+                    <th class="columnTotal">
+                        @Html.DisplayNameFor(model => model.DebtorBalancing)
+                    </th>
+                    <th class="columnTotal">
+                        @Html.DisplayNameFor(model => model.ClosingDebtor)
+                    </th>
+                    <th class="columnTotal">
+                        @Html.DisplayNameFor(model => model.ChangeInDebtors)
+                    </th>
+                    <th class="columnTotal">
+                        @Html.DisplayNameFor(model => model.RecurringIncome)
+                    </th>
+                    <th class="columnTotal">
+                        @Html.DisplayNameFor(model => model.TurnoverTotal)
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Advisor)
+                    </td>
+                    <td align="right">
+                        @Html.DisplayFor(modelItem => item.OpeningDebtor)
+                    </td>
+                    <td align="right">
+                        @Html.DisplayFor(modelItem => item.NewBusiness)
+                    </td>
+                    <td align="right">
+                        @Html.DisplayFor(modelItem => item.CashReceipts)
+                    </td>
+                    <td align="right">
+                        @Html.DisplayFor(modelItem => item.Adjustments)
+                    </td>
+                    <td align="right">
+                        @Html.DisplayFor(modelItem => item.Variance)
+                    </td>
+                    <td align="right">
+                        @Html.DisplayFor(modelItem => item.NotTakenUp)
+                    </td>
+                    <td align="right">
+                        @Html.DisplayFor(modelItem => item.DebtorBalancing)
+                    </td>
+                    <td align="right">
+                        @Html.DisplayFor(modelItem => item.ClosingDebtor)
+                    </td>
+                    <td align="right">
+                        @Html.DisplayFor(modelItem => item.ChangeInDebtors)
+                    </td>
+                    <td align="right">
+                        @Html.DisplayFor(modelItem => item.RecurringIncome)
+                    </td>
+                    <td align="right">
+                        @Html.DisplayFor(modelItem => item.TurnoverTotal)
+                    </td>
+                </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td align="right"></td>
+                    <td align="right"></td>
+                    <td align="right"></td>
+                    <td align="right"></td>
+                    <td align="right"></td>
+                    <td align="right"></td>
+                    <td align="right"></td>
+                    <td align="right"></td>
+                    <td align="right"></td>
+                    <td align="right"></td>
+                    <td align="right"></td>
+                    <td align="right"></td>
+                </tr>
+            </tfoot>
+        </table>
+    

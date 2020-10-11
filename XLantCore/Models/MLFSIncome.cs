@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data;
 using System.Text;
@@ -16,7 +17,7 @@ namespace XLantCore.Models
         public MLFSIncome(DataRow row, List<MLFSAdvisor> advisors)
         {
             IOReference = row["IORef"].ToString();
-            RelevantDate = Tools.HandleStringToDate(row["Submitted"].ToString());
+            RelevantDate = Tools.HandleStringToDate(row["CashReceiptDate"].ToString());
             Organisation = row["GroupOne"].ToString();
             MLFSAdvisor adv = MLFSAdvisor.Assign(row["CRMContactId"].ToString(), advisors);
             AdvisorId = adv.Id;
@@ -47,6 +48,7 @@ namespace XLantCore.Models
         public int? Id { get; set; }
         public string IOReference { get; set; }
         public int? ReportingPeriodId { get; set; }
+        [DataType(DataType.Date)]
         public DateTime? RelevantDate { get; set; }
         public string Organisation { get; set; }
         public int AdvisorId { get; set; }

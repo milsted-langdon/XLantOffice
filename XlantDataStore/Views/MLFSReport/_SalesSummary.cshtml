@@ -1,0 +1,139 @@
+﻿@model IEnumerable<XLantDataStore.ViewModels.SalesSummary>
+
+@{
+    ViewData["Title"] = "Sales Summary";
+}
+
+        <table class="table ytdTable" style="width:100%">
+            <thead>
+                <tr>
+                    <th>
+
+                    </th>
+                    <th class="columnTotal">
+                        @Html.DisplayNameFor(model => model.Q1Budget)
+                    </th>
+                    <th class="columnTotal">
+                        @Html.DisplayNameFor(model => model.Q1Actual)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Q1Variance)
+                    </th>
+                    <th class="columnTotal">
+                        @Html.DisplayNameFor(model => model.Q2Budget)
+                    </th>
+                    <th class="columnTotal">
+                        @Html.DisplayNameFor(model => model.Q2Actual)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Q2Variance)
+                    </th>
+                    <th class="columnTotal">
+                        @Html.DisplayNameFor(model => model.Q3Budget)
+                    </th>
+                    <th class="columnTotal">
+                        @Html.DisplayNameFor(model => model.Q3Actual)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Q3Variance)
+                    </th>
+                    <th class="columnTotal">
+                        @Html.DisplayNameFor(model => model.Q4Budget)
+                    </th>
+                    <th class="columnTotal">
+                        @Html.DisplayNameFor(model => model.Q4Actual)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Q4Variance)
+                    </th>
+                    <th class="columnTotal">
+                        @Html.DisplayNameFor(model => model.YearToDateBudget)
+                    </th>
+                    <th class="columnTotal">
+                        @Html.DisplayNameFor(model => model.YearToDateActual)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.YearToDateVariance)
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Advisor)
+                    </td>
+                    <td align="right">
+                        @Html.DisplayFor(modelItem => item.Q1Budget)
+                    </td>
+                    <td align="right">
+                        @Html.DisplayFor(modelItem => item.Q1Actual)
+                    </td>
+                    <td align="right">
+                        @Html.DisplayFor(modelItem => item.Q1Variance)
+                    </td>
+
+                    <td align="right">
+                        @Html.DisplayFor(modelItem => item.Q2Budget)
+                    </td>
+                    <td align="right">
+                        @Html.DisplayFor(modelItem => item.Q2Actual)
+                    </td>
+                    <td align="right">
+                        @Html.DisplayFor(modelItem => item.Q2Variance)
+                    </td>
+
+                    <td align="right">
+                        @Html.DisplayFor(modelItem => item.Q3Budget)
+                    </td>
+                    <td align="right">
+                        @Html.DisplayFor(modelItem => item.Q3Actual)
+                    </td>
+                    <td align="right">
+                        @Html.DisplayFor(modelItem => item.Q3Variance)
+                    </td>
+                    <td align="right">
+                        @Html.DisplayFor(modelItem => item.Q4Budget)
+                    </td>
+                    <td align="right">
+                        @Html.DisplayFor(modelItem => item.Q4Actual)
+                    </td>
+                    <td align="right">
+                        @Html.DisplayFor(modelItem => item.Q4Variance)
+                    </td>
+
+                    <td align="right">
+                        @Html.DisplayFor(modelItem => item.YearToDateBudget)
+                    </td>
+                    <td align="right">
+                        @Html.DisplayFor(modelItem => item.YearToDateActual)
+                    </td>
+                    <td align="right">
+                        @Html.DisplayFor(modelItem => item.YearToDateVariance)
+                    </td>
+                </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td></td>
+                    <td align="right"></td>
+                    <td align="right"></td>
+                    <td align="right"></td>
+                    <td align="right"></td>
+                    <td align="right"></td>
+                    <td align="right"></td>
+                    <td align="right"></td>
+                    <td align="right"></td>
+                    <td align="right"></td>
+                    <td align="right"></td>
+                    <td align="right"></td>
+                    <td align="right"></td>
+                    <td align="right"></td>
+                    <td align="right"></td>
+                    <td align="right"></td>
+                </tr>
+            </tfoot>
+        </table>
+    

@@ -15,7 +15,7 @@ namespace XLantCore.Models
         {
             get
             {
-                if (IncomeType == "Ongoing Fee" || IncomeType == "Renewal Commission" || IncomeType == "Fund Based Commission")
+                if (IncomeType == "Ongoing Fee" || IncomeType == "Renewal Commission" || IncomeType == "Fund Based Commission" || IncomeType == "Adjustment")
                 {
                     return false;
                 }

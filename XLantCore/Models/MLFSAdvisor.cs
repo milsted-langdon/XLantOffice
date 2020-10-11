@@ -5,14 +5,16 @@ using System.Text;
 
 namespace XLantCore.Models
 {
-    public partial class MLFSAdvisor :Staff
+    public partial class MLFSAdvisor : Staff
     {
         public MLFSAdvisor()
         {
 
         }
+        public int ReplacementAdvisorId { get; set; }
 
         public List<MLFSBudget> Budget { get; set; }
         public List<MLFSCommissionRate> CommissionRates { get; set; }
+        
     }
 }

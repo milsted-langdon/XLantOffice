@@ -25,9 +25,13 @@ namespace XLantDataStore.Repository
             //Build the client
             MLFSClient client = await GetBasicClientData(id);
             //then get the plans
-            client.Plans = await GetClientPlans(client.PrimaryID);
+            List<MLFSPlan> plans = await GetClientPlans(id);
+            if (plans != null)
+            {
+                client.Plans.AddRange(plans);
+            }
             //for each plan get the other owners but only basic data
-            foreach(MLFSPlan plan in client.Plans)
+            foreach (MLFSPlan plan in client.Plans)
             {
                 if (plan.ContributionsToDate == 0)
                 {
@@ -44,9 +48,45 @@ namespace XLantDataStore.Repository
             //get addresses
             GetAdditionalData(client, "addresses");
             GetAdditionalData(client, "contactdetails");
-            GetAdditionalData(client, "relationships");
-            client.Fees.AddRange(await GetClientFees(client.PrimaryID));
+            List<MLFSFee> fees = await GetClientFees(client.PrimaryID);
+            if (fees != null)
+            {
+                client.Fees.AddRange(fees);
+            }
+            JArray relatedClients = await GetRelated(client);
+
+            foreach (JObject obj in relatedClients)
+            {
+                dynamic c = obj;
+                string relId = c.id;
+                fees = await GetClientFees(relId);
+                if (fees != null)
+                {
+                    client.Fees.AddRange(fees);
+                }
+                plans = await GetClientPlans(relId);
+                if (plans != null)
+                {
+                    client.Plans.AddRange(plans); 
+                }
+            }
             return client;
+        }
+
+        private static async Task<JArray> GetRelated(MLFSClient client)
+        {
+
+            string url = String.Format("clients/{0}/{1}", client.PrimaryID, "relationships");
+            IRestResponse response = await IOConnection.GetResponse(url);
+            if (response.Content.Length != 0)
+            {
+                JArray _array = Tools.ExtractItemsArrayFromJsonString(response.Content);
+                return _array;
+            }
+            else
+            {
+                return null;
+            }
         }
 
         private async Task<decimal> GetContributionTotal(MLFSPlan plan)
@@ -148,7 +188,7 @@ namespace XLantDataStore.Repository
 
         public async Task<List<MLFSFee>> GetClientFees(string clientId, string url = "")
         {
-            List<MLFSFee> fees = new List<MLFSFee>();
+            
             if (String.IsNullOrEmpty(url))
             {
                 url = String.Format("clients/{0}/fees", clientId);
@@ -157,7 +197,7 @@ namespace XLantDataStore.Repository
             if (response.Content.Length != 0 && response.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 JArray jarray = Tools.ExtractItemsArrayFromJsonString(response.Content);
-                fees = MLFSFee.CreateList(jarray);
+                List<MLFSFee> fees = MLFSFee.CreateList(jarray);
                 return fees; 
             }
             else

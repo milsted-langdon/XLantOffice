@@ -24,10 +24,45 @@ namespace XLantDataStore.Controllers.MVC
         }
 
         // GET: MLFSDebtorAdjustments
-        public async Task<IActionResult> Index(int debtorId)
+        public async Task<IActionResult> Transactions(int debtorId)
         {
             List<MLFSDebtorAdjustment> adjs = await _adjustmentData.GetAdjustments(debtorId);
-            return PartialView(adjs);
+            return PartialView("Index", adjs);
+        }
+
+        public async Task<IActionResult> Index(int? periodId, int? advisorId, string type = "")
+        {
+            MLFSReportingPeriod period;
+            if (periodId == null)
+            {
+                period = await _periodData.GetCurrent();
+            }
+            else
+            {
+                period = await _periodData.GetPeriodById((int)periodId);
+            }
+            if (period == null)
+            {
+                return NotFound();
+            }
+            List<MLFSDebtorAdjustment> adjs = await _adjustmentData.GetAdjustments(period);
+            if (advisorId != null)
+            {
+                adjs = adjs.Where(x => x.Debtor.AdvisorId == advisorId).ToList();
+            }
+            if (type.ToLower() == "ntu")
+            {
+                adjs = adjs.Where(x => x.NotTakenUp).ToList();
+            }
+            else if (type.ToLower() == "variance")
+            {
+                adjs = adjs.Where(x => x.IsVariance).ToList();
+            }
+            else if (type.ToLower() == "variance")
+            {
+                adjs = adjs.Where(x => !x.IsVariance && !x.NotTakenUp && x.ReceiptId == null).ToList();
+            }
+            return View(adjs);
         }
 
         // GET: MLFSDebtorAdjustments/Create

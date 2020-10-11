@@ -37,7 +37,14 @@ namespace XLantCore.Models
                 PlanType = row["Plan Type"].ToString();
                 ProviderName = row["Provider.Name"].ToString();
                 RelevantDate = DateTime.Parse(row["Submitted Date"].ToString());
-                NetAmount = Tools.HandleNull(row["Expected Commission - Total Initial"].ToString());
+                if (string.IsNullOrEmpty(row["Expected Commission - Non-Indemnity"].ToString()))
+                {
+                    NetAmount = Tools.HandleNull(row["Expected Commission - Total Initial"].ToString());
+                }
+                else
+                {
+                    NetAmount = Tools.HandleNull(row["Expected Commission - Non-Indemnity"].ToString());
+                }
                 VAT = 0;
                 DateTime creationDate = DateTime.Parse(row["Owner 1.Creation Date"].ToString());
                 if (creationDate > ReportingPeriod.StartDate.AddMonths(-9))
@@ -67,7 +74,7 @@ namespace XLantCore.Models
             }
         }
         
-        public int? Id { get; set; }
+        public int Id { get; set; }
         public string IOId { get; set; }
         [Display(Name="IO Reference")]
         public string IOReference { get; set; }
@@ -79,6 +86,7 @@ namespace XLantCore.Models
         public string ClientId { get; set; }
         public string JointClientName { get; set; }
         public string JointClientId { get; set; }
+        [Display(Name="Advisor")]
         public int AdvisorId { get; set; }
         [Display(Name = "Provider")]
         public string ProviderName { get; set; }

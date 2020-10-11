@@ -17,6 +17,8 @@ namespace XLantDataStore.ViewModels
 
         [Display(Name = "Advisor")]
         public string Advisor { get; set; }
+        [Display(Name = "Organisation")]
+        public string Organisation { get; set; }
         [Display(Name = "Ad-hoc Fee")]
         public decimal Adhoc { get; set; }
         [Display(Name = "Fund based Fee")]
@@ -44,6 +46,7 @@ namespace XLantDataStore.ViewModels
             report = income.GroupBy(x => new { x.Advisor }).Select(y => new FCIReport()
             {
                 Advisor = y.Key.Advisor.Fullname,
+                Organisation = y.Key.Advisor.Department,
                 Adhoc = y.Where(a => a.IncomeType == "Ad-hoc Fee").Sum(z => z.Amount),
                 FundBased = y.Where(a => a.IncomeType == "Fund Based Commission").Sum(z => z.Amount),
                 Initial = y.Where(a => a.IncomeType == "Initial Fee" || a.IncomeType == "Initial Commission").Sum(z => z.Amount),

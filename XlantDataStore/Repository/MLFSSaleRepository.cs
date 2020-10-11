@@ -12,22 +12,63 @@ namespace XLantDataStore.Repository
     {
         private readonly XLantDbContext _db;
         private readonly IMLFSClientRepository _clientData;
-        private readonly IMLFSAdvisorRepository _advisorData;
 
         public MLFSSaleRepository(XLantDbContext db)
         {
             _db = db;
             _clientData = new MLFSClientRepository();
-            _advisorData = new MLFSAdvisorRepository(db);
         }
 
-        public async Task<List<MLFSSale>> GetDebtors()
+        public async Task<List<MLFSSale>> GetDebtors(MLFSReportingPeriod period)
         {
-            List<MLFSSale> debtors = await _db.MLFSSales.Include(x => x.Adjustments).ToListAsync();
-            debtors = debtors.Where(x => x.Outstanding > 0).ToList();
+            List<MLFSSale> debtors = await _db.MLFSSales.Where(x => (x.ReportingPeriod.Year == period.Year && x.ReportingPeriod.Month <= period.Month) || x.ReportingPeriod.Year < period.Year)
+                .Include(y => y.Advisor)
+                .Include(x => x.Adjustments)
+                .ThenInclude(x => x.ReportingPeriod)
+                .Select(d => new MLFSSale()
+                {
+                    Id = d.Id,
+                    IOId = d.IOId,
+                    IOReference = d.IOReference,
+                    ReportingPeriodId = d.ReportingPeriodId,
+                    ReportingPeriod = d.ReportingPeriod,
+                    Organisation = d.Organisation,
+                    ClientName = d.ClientName,
+                    ClientId = d.ClientId,
+                    JointClientId = d.JointClientId,
+                    JointClientName = d.JointClientName,
+                    AdvisorId = d.AdvisorId,
+                    Advisor = d.Advisor,
+                    ProviderName = d.ProviderName,
+                    PlanType = d.PlanType,
+                    IsNew = d.IsNew,
+                    RelevantDate = d.RelevantDate,
+                    NetAmount = d.NetAmount,
+                    VAT = d.VAT,
+                    Investment = d.Investment,
+                    OnGoingPercentage = d.OnGoingPercentage,
+                    PlanReference = d.PlanReference,
+                    EstimatedOtherIncome = d.EstimatedOtherIncome,
+                    Adjustments = d.Adjustments.Where(y => (y.ReportingPeriod.Year == period.Year && y.ReportingPeriod.Month <= period.Month) || y.ReportingPeriod.Year < period.Year).ToList()
+                })
+                .ToListAsync();
+                
+            //foreach (MLFSSale debtor in debtors)
+            //{
+            //    List<MLFSDebtorAdjustment> adjs = debtor.Adjustments.ToList();
+            //    for(int i = 0; i < adjs.Count; i++)
+            //    {
+            //        MLFSDebtorAdjustment adj = adjs[i];
+            //        if ((adj.ReportingPeriod.Year == period.Year && adj.ReportingPeriod.Month > period.Month) || adj.ReportingPeriod.Year > period.Year)
+            //        {
+            //            debtor.Adjustments.Remove(adj);
+            //        }
+            //    }
+            //}
+            debtors = debtors.Where(x => x.Outstanding != 0).ToList();
             return debtors;
         }
-
+        
         public async Task<MLFSSale> GetSaleById(int saleId)
         {
             MLFSSale sale = await _db.MLFSSales.Include(x => x.ReportingPeriod).Include(y => y.Adjustments).Where(y => y.Id == saleId).FirstOrDefaultAsync();
@@ -71,6 +112,19 @@ namespace XLantDataStore.Repository
             }
             await _db.SaveChangesAsync();
             return "Success";
+        }
+
+        public async Task<int> Add(MLFSSale sale)
+        {
+            _db.MLFSSales.Add(sale);
+            await _db.SaveChangesAsync();
+            return sale.Id;
+        }
+
+        public async Task<List<MLFSSale>> Search(string searchTerm)
+        {
+            List<MLFSSale> debtors = await _db.MLFSSales.Where(x => x.ClientName.Contains(searchTerm) || x.IOReference.Contains(searchTerm) || x.PlanReference.Contains(searchTerm)).Include(y => y.Advisor).Include(x => x.Adjustments).ThenInclude(x => x.ReportingPeriod).ToListAsync();
+            return debtors;
         }
     }
 }
