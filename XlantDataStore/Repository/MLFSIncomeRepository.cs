@@ -101,15 +101,7 @@ namespace XLantDataStore.Repository
 
         public async Task<List<MLFSIncome>> PotentialDebtorMatches(MLFSSale debtor)
         {
-            List<MLFSIncome> matches = new List<MLFSIncome>();
-
-            matches.AddRange(await _db.MLFSIncome.Include(x => x.MLFSDebtorAdjustment).Where(x => x.ClientId == debtor.ClientId && x.IncomeType.Contains("Initial")).ToListAsync());
-            matches.AddRange(await _db.MLFSIncome.Include(x => x.MLFSDebtorAdjustment).Where(x => x.ClientName == debtor.ClientName && x.IncomeType.Contains("Initial")).ToListAsync());
-            matches.AddRange(await _db.MLFSIncome.Include(x => x.MLFSDebtorAdjustment).Where(x => x.Amount == debtor.GrossAmount && x.IncomeType.Contains("Initial")).ToListAsync());
-            matches.AddRange(await _db.MLFSIncome.Include(x => x.MLFSDebtorAdjustment).Where(x => x.JointClientId == debtor.ClientId && x.IncomeType.Contains("Initial")).ToListAsync());
-            //matches.AddRange(await _db.MLFSIncome.Include(x => x.MLFSDebtorAdjustment).Where(x => x.ProviderName == debtor.ProviderName && x.Amount == debtor.GrossAmount).ToListAsync());
-            matches = matches.GroupBy(x => x.Id).Select(y => y.First()).ToList();
-            matches = matches.Where(x => x.MLFSDebtorAdjustment == null).ToList();
+            List<MLFSIncome> matches = await _db.MLFSIncome.Include(x => x.MLFSDebtorAdjustment).Where(x => (x.ClientId == debtor.ClientId || x.ClientName == debtor.ClientName) && x.IncomeType.Contains("Initial") && x.MLFSDebtorAdjustment == null).ToListAsync();
             return matches;
         }
 
