@@ -13,6 +13,7 @@ namespace XLantCore.Models
         public MLFSSale()
         {
             Adjustments = new HashSet<MLFSDebtorAdjustment>();
+            RelatedClients = new string[]{};
         }
 
         public MLFSSale(DataRow row, List<MLFSAdvisor> advisors, MLFSReportingPeriod period, bool isCommission = false)
@@ -47,7 +48,7 @@ namespace XLantCore.Models
                 }
                 VAT = 0;
                 DateTime creationDate = DateTime.Parse(row["Owner 1.Creation Date"].ToString());
-                if (creationDate > ReportingPeriod.StartDate.AddMonths(-9))
+                if (creationDate > ReportingPeriod.StartDate.AddMonths(-6))
                 {
                     IsNew = true;
                 }
@@ -70,8 +71,32 @@ namespace XLantCore.Models
                 PlanReference = row["Related Plan Reference"].ToString();
                 Investment = 0;
                 OnGoingPercentage = 0;
-                
             }
+            RelatedClients = new string[]{};
+        }
+
+        public MLFSSale(MLFSIncome income)
+        {
+            IOId = income.IOReference;
+            ReportingPeriodId = income.ReportingPeriodId;
+            Organisation = income.Organisation;
+            ClientName = income.ClientName;
+            ClientId = income.ClientId;
+            JointClientId = income.JointClientId;
+            JointClientName = income.JointClientName;
+            AdvisorId = income.AdvisorId;
+            Advisor = income.Advisor;
+            ProviderName = income.ProviderName;
+            PlanType = income.PlanType;
+            IsNew = false;
+            RelevantDate = (DateTime)income.RelevantDate;
+            NetAmount = income.Amount;
+            VAT = 0;
+            Investment = 0;
+            OnGoingPercentage = 0;
+            PlanReference = income.PlanNumber;
+            EstimatedOtherIncome = 0;
+            RelatedClients = new string[] { };
         }
         
         public int Id { get; set; }
@@ -109,6 +134,7 @@ namespace XLantCore.Models
         [Display(Name = "Reference")]
         public string PlanReference { get; set; }
         public decimal EstimatedOtherIncome { get; set; }
+        public string[] RelatedClients { get; set; }
 
         [NotMapped]
         public virtual MLFSClient Client { get; set; }

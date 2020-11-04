@@ -26,56 +26,87 @@
                 @Html.DisplayNameFor(model => model.PlanNumber)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.RelevantDate)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.IncomeType)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Amount)
             </th>
-            @*<th></th>*@
+            <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.IOReference)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ClientName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Advisor.Fullname)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProviderName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PlanType)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PlanNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RelevantDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IncomeType)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Amount)
-            </td>
-            @*<td>
-                <div class="dropdown">
-                    <button class="btn btn-primary dropdown-toggle" aria-haspopup="true" data-toggle="dropdown" aria-expanded="false">Action</button>
-                    <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-                        <li><a asp-action="Match" asp-controller="Debtor" asp-route-id="@item.Id" asp-route-debtorId="@ViewBag.DebtorId">Match</a></li>
-                    </ul>
-                </div>
-            </td>*@
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr id="incomeRow-@item.Id">
+                <td>
+                    @Html.DisplayFor(modelItem => item.IOReference)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ClientName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Advisor.Fullname)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProviderName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PlanType)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PlanNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IncomeType)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Amount)
+                </td>
+                <td>
+                    <div class="dropdown">
+                        <button class="btn btn-primary dropdown-toggle" aria-haspopup="true" data-toggle="dropdown" aria-expanded="false">Action</button>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                            <li><a onclick="createIncomeEntry(@item.Id, this)">Create Income</a></li>
+                            <li><a onclick="convert(@item.Id, this)">Convert To Recurring</a></li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+        }
     </tbody>
+    <tfoot>
+
+    </tfoot>
 </table>
+
+@section Scripts {
+    <script>
+
+        function createIncomeEntry(id, elem) {
+            $.ajax({
+                type: "POST",
+                url: "/MLFSSale/CreateFromIncome?incomeId=" + id,
+                success: function () {
+                    $(elem).closest('tr').remove();
+                },
+                fail: function () {
+                    alert('A problem occured creating the entry');
+                }
+            });
+        };
+
+        function convert(id, elem) {
+            $.ajax({
+                type: "POST",
+                url: "/MLFSIncome/ConvertToRecurring?incomeId=" + id,
+                success: function () {
+                    $(elem).closest('tr').remove();
+                },
+                fail: function () {
+                    alert('A problem occured converting the entry');
+                }
+            });
+        };
+
+    </script>
+}

@@ -58,16 +58,22 @@ namespace XLantDataStore.Repository
             foreach (JObject obj in relatedClients)
             {
                 dynamic c = obj;
-                string relId = c.id;
-                fees = await GetClientFees(relId);
-                if (fees != null)
+                string relId;
+                if (c.relation != null)
                 {
-                    client.Fees.AddRange(fees);
-                }
-                plans = await GetClientPlans(relId);
-                if (plans != null)
-                {
-                    client.Plans.AddRange(plans); 
+                    relId = c.relation.id;
+
+                    fees = await GetClientFees(relId);
+                    if (fees != null)
+                    {
+                        client.Fees.AddRange(fees);
+                    }
+                    plans = await GetClientPlans(relId);
+                    if (plans != null)
+                    {
+                        client.Plans.AddRange(plans);
+                    }
+                    client.RelatedClients.Add(relId);
                 }
             }
             return client;
@@ -75,7 +81,6 @@ namespace XLantDataStore.Repository
 
         private static async Task<JArray> GetRelated(MLFSClient client)
         {
-
             string url = String.Format("clients/{0}/{1}", client.PrimaryID, "relationships");
             IRestResponse response = await IOConnection.GetResponse(url);
             if (response.Content.Length != 0)

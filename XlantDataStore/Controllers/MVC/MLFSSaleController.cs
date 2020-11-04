@@ -17,6 +17,7 @@ namespace XLantDataStore.Controllers.MVC
         private readonly Repository.IMLFSClientRepository _clientData;
         private readonly Repository.IMLFSAdvisorRepository _advisorData;
         private readonly Repository.IMLFSDebtorAdjustmentRepository _adjData;
+        private readonly Repository.IMLFSIncomeRepository _incomeData;
 
         public MLFSSaleController(XLantDbContext context)
         {
@@ -25,6 +26,7 @@ namespace XLantDataStore.Controllers.MVC
             _clientData = new Repository.MLFSClientRepository();
             _advisorData = new Repository.MLFSAdvisorRepository(context);
             _adjData = new Repository.MLFSDebtorAdjustmentRepository(context);
+            _incomeData = new Repository.MLFSIncomeRepository(context);
         }
 
         // GET: MLFSSales
@@ -47,6 +49,22 @@ namespace XLantDataStore.Controllers.MVC
             return View(sales);
         }
 
+        // GET: MLFSSales/VAT
+        public async Task<IActionResult> VAT(int? periodId)
+        {
+            if (periodId == null)
+            {
+                return NotFound();
+            }
+            MLFSReportingPeriod period = await _periodData.GetPeriodById((int)periodId);
+            if (period == null)
+            {
+                return NotFound();
+            }
+            List<MLFSSale> sales = await _salesData.GetSales(period);
+            return View("Index", sales.Where(x => x.VAT != 0));
+        }
+
         [HttpPost]
         public async Task<IActionResult> UpdateData(int? periodId)
         {
@@ -64,12 +82,9 @@ namespace XLantDataStore.Controllers.MVC
             for (int i = 0; i < sales.Count; i++)
             {
                 MLFSSale sale = sales[i];
-                if (!sale.InitialFeePass || !sale.OngoingFeePass)
-                {
-                    MLFSClient client = await _clientData.GetClient(sale.ClientId);
-                    sale.AddClientData(client);
-                    _salesData.Update(sale);
-                }
+                MLFSClient client = await _clientData.GetClient(sale.ClientId);
+                sale.AddClientData(client);
+                _salesData.Update(sale);
             }
 
             return Ok();
@@ -114,6 +129,21 @@ namespace XLantDataStore.Controllers.MVC
             };
             _adjData.Insert(adj);
             return RedirectToAction("Index", "MLFSReport");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateFromIncome(int incomeId)
+        {
+            MLFSIncome income = await _incomeData.GetIncomeById(incomeId);
+            if (income.MLFSDebtorAdjustment != null)
+            {
+                return NotFound();
+            }
+            MLFSSale sale = new MLFSSale(income);
+            MLFSDebtorAdjustment adj = new MLFSDebtorAdjustment(sale, income);
+            await _salesData.Add(sale);
+            _adjData.Insert(adj);
+            return Ok();
         }
 
         [HttpPost]

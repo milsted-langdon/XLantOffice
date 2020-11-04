@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace XLantCore.Models
@@ -34,7 +35,9 @@ namespace XLantCore.Models
         public int DebtorId { get; set; }
         public int? ReceiptId { get; set; }
         public decimal Amount { get; set; }
+        [Display(Name = "Variance")]
         public bool IsVariance { get; set; }
+        [Display(Name = "NTU")]
         public bool NotTakenUp { get; set; }
 
         public virtual MLFSReportingPeriod ReportingPeriod { get; set; }

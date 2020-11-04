@@ -33,7 +33,7 @@ namespace XLantDataStore.ViewModels
             {
                 Budget = 0;
             }
-            New_Business = sales.Where(x => x.AdvisorId == advisor.Id).Sum(y => y.NetAmount);//relevantIncome.Where(x => x.IsNewBusiness && !x.IsClawBack && x.MLFSDebtorAdjustment != null).Sum(y => y.Amount);
+            New_Business = sales.Where(x => x.AdvisorId == advisor.Id).Sum(y => y.NetAmount);
             Renewals = relevantIncome.Where(x => !x.IsNewBusiness && !x.IsClawBack).Sum(y => y.Amount);
             Unallocated = relevantIncome.Where(x => x.IsNewBusiness && !x.IsClawBack && x.MLFSDebtorAdjustment == null).Sum(y => y.Amount);
             Clawback = relevantIncome.Where(x => x.IsClawBack).Sum(y => y.Amount);

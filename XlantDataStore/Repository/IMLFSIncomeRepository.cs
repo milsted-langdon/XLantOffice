@@ -17,5 +17,7 @@ namespace XLantDataStore.Repository
         Task<List<MLFSIncome>> PotentialDebtorMatches(MLFSSale debtor);
         Task<List<MLFSIncome>> GetUnMatchedIncome();
         Task<string> InsertList(List<MLFSIncome> income);
+        void Insert(MLFSIncome income);
+        void Update(MLFSIncome income);
     }
 }

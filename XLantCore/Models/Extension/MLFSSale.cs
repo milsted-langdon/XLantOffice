@@ -228,6 +228,7 @@ namespace XLantCore.Models
         /// <param name="client">the client to which the sale relates</param>
         public void AddClientData(MLFSClient client)
         {
+            RelatedClients = client.RelatedClients.ToArray();
             MLFSPlan plan = client.Plans.Where(x => x.Reference == this.PlanReference).FirstOrDefault();
             if (plan != null)
             {

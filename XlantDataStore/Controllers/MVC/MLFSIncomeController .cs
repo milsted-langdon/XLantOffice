@@ -15,12 +15,14 @@ namespace XLantDataStore.Controllers.MVC
         private readonly Repository.IMLFSIncomeRepository _incomeData;
         private readonly Repository.IMLFSSaleRepository _salesData;
         private readonly Repository.IMLFSReportingPeriodRepository _periodData;
+        private readonly Repository.IMLFSAdvisorRepository _advisorData;
 
         public MLFSIncomeController(XLantDbContext context)
         {
             _incomeData = new Repository.MLFSIncomeRepository(context);
             _salesData = new Repository.MLFSSaleRepository(context);
             _periodData = new Repository.MLFSReportingPeriodRepository(context);
+            _advisorData = new Repository.MLFSAdvisorRepository(context);
         }
 
         // GET: MLFSSales
@@ -107,6 +109,46 @@ namespace XLantDataStore.Controllers.MVC
                 income = income.Where(x => x.ReportingPeriodId == periodId).ToList();
             }
             return PartialView("_SelectIndex", income);
+        }
+
+        // GET: MLFSIncome/CreateClawback
+        public async Task<IActionResult> CreateClawback()
+        {
+            ViewBag.AdvisorId = await _advisorData.SelectList();
+            ViewBag.ReportingPeriodId = await _periodData.SelectList();
+            return PartialView("_CreateClawback");
+        }
+
+        // GET: MLFSIncome/CreateClawback
+        [HttpPost]
+        public async Task<IActionResult> CreateClawback([Bind("ReportingPeriodId,AdvisorId,ClientName,RelevantDate,Amount,IgnoreFromCommission")] MLFSIncome income)
+        {
+            if (ModelState.IsValid)
+            {
+                MLFSAdvisor adv = await _advisorData.GetAdvisor(income.AdvisorId);
+                income.IsClawBack = true;
+                income.Organisation = adv.Department;
+                _incomeData.Insert(income);
+            }
+            else
+            {
+                return NotFound();
+            }
+            return RedirectToAction("Index", "MLFSReport");
+        }
+
+        // GET: MLFSIncome/ConvertToRecurring
+        [HttpPost]
+        public async Task<IActionResult> ConvertToRecurring(int incomeId)
+        {
+            MLFSIncome income = await _incomeData.GetIncomeById(incomeId);
+            if (income == null)
+            {
+                NotFound();
+            }
+            income.IncomeType = "Converted";
+            _incomeData.Update(income);
+            return Ok();
         }
     }
 }

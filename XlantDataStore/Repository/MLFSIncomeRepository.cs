@@ -50,6 +50,14 @@ namespace XLantDataStore.Repository
         {
             foreach (MLFSIncome i in income)
             {
+                if (i.IsNewBusiness && i.Amount < 25)
+                {
+                    i.IncomeType = "Converted";
+                }
+                if (i.Amount < -250)
+                {
+                    i.IsClawBack = true;
+                }
                 _db.MLFSIncome.Add(i);
             }
             await _db.SaveChangesAsync();
@@ -109,6 +117,18 @@ namespace XLantDataStore.Repository
         {
             List<MLFSIncome> income = await _db.MLFSIncome.Where(x => (x.IncomeType.Contains("Initial") || x.IncomeType.Contains("Ad-hoc")) && x.ClientName != "BLANK SPH").Include(y => y.MLFSDebtorAdjustment).Include(y => y.ReportingPeriod).Include(y => y.Advisor).ToListAsync();
             return income.Where(x => x.MLFSDebtorAdjustment == null).ToList();
+        }
+
+        public void Insert(MLFSIncome income)
+        {
+            _db.MLFSIncome.Add(income);
+            _db.SaveChanges();
+        }
+
+        public void Update(MLFSIncome income)
+        {
+            _db.Entry(income).State = EntityState.Modified;
+            _db.SaveChanges();
         }
     }
 }

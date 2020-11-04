@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using XLantDataStore;
 
 namespace XLantDataStore.Migrations
 {
     [DbContext(typeof(XLantDbContext))]
-    partial class XLantDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201029124105_commissionignore")]
+    partial class commissionignore
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

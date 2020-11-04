@@ -49,6 +49,7 @@ namespace XLantDataStore.ViewModels
                 TwelveMonthsTrail = 0;
             }
             OtherIncome = sale.EstimatedOtherIncome;
+            RelatedClients = sale.RelatedClients;
         }
 
         public int ReportingPeriodId { get; set; }
@@ -74,6 +75,7 @@ namespace XLantDataStore.ViewModels
         [Display(Name = "Other Income")]
         [DataType(DataType.Currency)]
         public decimal OtherIncome { get; set; }
+        public string[] RelatedClients { get; set; }
 
         /// <summary>
         /// Creates a list for a report based on the sales provided
@@ -96,14 +98,39 @@ namespace XLantDataStore.ViewModels
                 Advisor = y.FirstOrDefault().Advisor,
                 ClientName = y.FirstOrDefault().ClientName,
                 ClientId = y.Key,
+                JointClientId = y.Where(z => z.JointClientId != null).FirstOrDefault().JointClientId,
                 NewExisting = y.FirstOrDefault().NewExisting,
                 InitialFee = y.Sum(z => z.InitialFee),
                 Investment = y.Sum(z => z.Investment),
                 TwelveMonthsTrail = y.Sum(z => z.TwelveMonthsTrail),
                 OngoingPercentage = y.Sum(z => z.TwelveMonthsTrail) == 0 ? 0 : y.Sum(z => z.TwelveMonthsTrail) / y.Sum(z => z.Investment) * 100,
-                OtherIncome = y.FirstOrDefault().OtherIncome
+                OtherIncome = y.FirstOrDefault().OtherIncome,
+                RelatedClients = y.FirstOrDefault().RelatedClients
             }).ToList();
 
+            //group where they are related
+            List<string> checkedIds = new List<string>();
+            for (int i = 0; i < report.Count; i++)
+            {
+                DirectorsReport rep = report[i];
+                if (!checkedIds.Contains(rep.ClientId))
+                {
+                    for(int j = 0; j < report.Count; j++)
+                    {
+                        DirectorsReport r = report[j];
+                        if (rep.JointClientId == r.ClientId || (rep.RelatedClients != null && rep.RelatedClients.Contains(r.ClientId)))
+                        {
+                            //Add the initial fees together
+                            rep.InitialFee += r.InitialFee;
+                            //log the id
+                            checkedIds.Add(r.ClientId);
+                            //update the name
+                            rep.ClientName += " & " + r.ClientName;
+                            report.Remove(r);
+                        }
+                    }
+                }
+            }
             return report;
         }
 

@@ -15,7 +15,7 @@ namespace XLantCore.Models
         /// <returns>an Advisor or if no match is found the unknown advisor will also adapt to replacements if required</returns>
         public static MLFSAdvisor Assign(string externalId, List<MLFSAdvisor> advisors)
         {
-            MLFSAdvisor adv = advisors.Where(x => x.PrimaryID == externalId).FirstOrDefault();
+            MLFSAdvisor adv = advisors.Where(x => x.PrimaryID.Trim(' ') == externalId.Trim(' ')).FirstOrDefault();
             if (adv == null)
             {
                 adv = advisors.Where(x => x.Username.ToLower() == "unknown").FirstOrDefault();

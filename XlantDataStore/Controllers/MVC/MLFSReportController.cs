@@ -148,58 +148,7 @@ namespace XLantDataStore.Controllers.MVC
             return PartialView("_FCIReport", report.OrderBy(x => x.Advisor));
         }
 
-        public async Task<IActionResult> Turnover(int? periodId, string entity = "advisor")
-        {
-            MLFSReportingPeriod current;
-            MLFSReportingPeriod prior;
-            if (periodId == null)
-            {
-                current = await _periodData.GetCurrent();
-                periodId = current.Id;
-            }
-            else
-            {
-                current = await _periodData.GetPeriodById((int)periodId);
-            }
-            List<MLFSReportingPeriod> periods = await _periodData.GetLast12Months(current);
-            if (current.ReportOrder == 1)
-            {
-                prior = periods.Where(x => x.ReportOrder == 12).FirstOrDefault();
-            }
-            else
-            {
-                prior = periods.Where(x => x.ReportOrder == current.ReportOrder - 1).FirstOrDefault();
-            }
-            List<MLFSSale> closingDebtors = await _salesData.GetDebtors(current);
-            List<MLFSSale> openingDebtors = await _salesData.GetDebtors(prior);
-            List<MLFSIncome> receipts = await _incomeData.GetIncome(current);
-            List<MLFSSale> newBusiness = await _salesData.GetSales(current);
-            List<MLFSDebtorAdjustment> adjs = await _adjustmentData.GetAdjustments(current);
-            List<Turnover> turnover = ViewModels.Turnover.CreateList(openingDebtors, closingDebtors, receipts, newBusiness, adjs);
-
-            if (entity == "organisation")
-            {
-                turnover = turnover.GroupBy(x => x.Organisation).Select(y => new ViewModels.Turnover()
-                {
-                    Advisor = y.Key,
-                    Period = y.FirstOrDefault().Period,
-                    PeriodId = y.FirstOrDefault().PeriodId,
-                    CashReceipts = y.Sum(z => z.CashReceipts),
-                    NewBusiness = y.Sum(z => z.NewBusiness),
-                    OpeningDebtor = y.Sum(z => z.OpeningDebtor),
-                    ClosingDebtor = y.Sum(z => z.ClosingDebtor),
-                    Adjustments = y.Sum(z => z.Adjustments),
-                    Variance = y.Sum(z => z.Variance),
-                    NotTakenUp = y.Sum(z => z.NotTakenUp),
-                    DebtorBalancing = y.Sum(z => z.DebtorBalancing),
-                    ChangeInDebtors = y.Sum(z => z.ChangeInDebtors),
-                    RecurringIncome = y.Sum(z => z.RecurringIncome),
-                    TurnoverTotal = y.Sum(z => z.TurnoverTotal)
-                }).ToList();
-            }
-            return PartialView("_Turnover", turnover.OrderBy(x => x.Advisor));
-        }
-
+        
         public async Task<IActionResult> SalesSummary(int? periodId, string entity = "advisor")
         {
             MLFSReportingPeriod finalPeriod;
@@ -255,6 +204,38 @@ namespace XLantDataStore.Controllers.MVC
             List<SalesSummary> yearToDate = ViewModels.SalesSummary.CreateFromSalesReport(report, advisors);
 
             return PartialView("_SalesSummary", yearToDate.OrderBy(x => x.Advisor));
+        }
+
+        public async Task<IActionResult> NewBusinessSummary(int? periodId, string entity = "advisor")
+        {
+            MLFSReportingPeriod period;
+            //get period
+            if (periodId == null)
+            {
+                return NotFound();
+            }
+            period = await _periodData.GetPeriodById((int)periodId);
+            if (period == null)
+            {
+                return NotFound();
+            }
+            List<MLFSSale> sales = await _salesData.GetSales(period);
+            List<NewBusiness> report = NewBusiness.CreateList(sales, period);
+            if (entity.ToLower() == "organisation")
+            {
+                report = report.GroupBy(x => x.Organisation).Select(y => new ViewModels.NewBusiness()
+                {
+                    Period = y.FirstOrDefault().Period,
+                    PeriodId = y.FirstOrDefault().PeriodId,
+                    Advisor = y.Key,
+                    AdvisorId = 0,
+                    Organisation = y.Key,
+                    NewClients = y.Sum(z => z.NewClients),
+                    ExistingClients = y.Sum(z => z.ExistingClients),
+                    Total = y.Sum(z => z.Total)
+                }).ToList();
+            }
+            return PartialView("_NewBusiness", report);
         }
     }
 }

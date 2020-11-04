@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using XLantDataStore;
 
 namespace XLantDataStore.Migrations
 {
     [DbContext(typeof(XLantDbContext))]
-    partial class XLantDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201028122100_rels")]
+    partial class rels
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -283,9 +285,6 @@ namespace XLantDataStore.Migrations
 
                     b.Property<string>("IOReference")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IgnoreFromCommission")
-                        .HasColumnType("bit");
 
                     b.Property<string>("IncomeType")
                         .HasColumnType("nvarchar(max)");

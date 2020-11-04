@@ -12,6 +12,7 @@ namespace XLantCore.Models
         {
             Plans = new List<MLFSPlan>();
             Fees = new List<MLFSFee>();
+            RelatedClients = new List<string>();
         }
 
         public MLFSClient(string id)
@@ -19,13 +20,14 @@ namespace XLantCore.Models
             Plans = new List<MLFSPlan>();
             Fees = new List<MLFSFee>();
             PrimaryID = id;
+            RelatedClients = new List<string>();
         }
 
         public MLFSClient(JToken jsonResponse)
         {
             Plans = new List<MLFSPlan>();
             Fees = new List<MLFSFee>();
-            
+            RelatedClients = new List<string>();
             dynamic obj = jsonResponse;
             if (obj != null)
             {
@@ -86,6 +88,7 @@ namespace XLantCore.Models
         public Staff Advisor { get; set; }
         public string Category { get; set; }
         public string Type { get; set; }
+        public List<string> RelatedClients { get; set; }
         public DateTime? CreatedOn { get; set; } 
 
         public List<MLFSPlan> Plans { get; set; }

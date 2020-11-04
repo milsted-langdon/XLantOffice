@@ -15,12 +15,14 @@ namespace XLantDataStore.Controllers.MVC
         private readonly Repository.IMLFSDebtorAdjustmentRepository _adjustmentData;
         private readonly Repository.IMLFSReportingPeriodRepository _periodData;
         private readonly Repository.IMLFSSaleRepository _salesData;
+        
 
         public MLFSDebtorAdjustmentsController(XLantDbContext context)
         {
             _adjustmentData = new Repository.MLFSDebtorAdjustmentRepository(context);
             _periodData = new Repository.MLFSReportingPeriodRepository(context);
             _salesData = new Repository.MLFSSaleRepository(context);
+
         }
 
         // GET: MLFSDebtorAdjustments
@@ -90,6 +92,7 @@ namespace XLantDataStore.Controllers.MVC
             ViewBag.ReportingPeriodId = await _periodData.SelectList();
             return PartialView("Create", adj);
         }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]

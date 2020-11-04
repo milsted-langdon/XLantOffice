@@ -42,6 +42,7 @@ namespace XLantCore.Models
                 IsTopUp = true;
             }
             IncomeType = row["IncomeType"].ToString();
+            IgnoreFromCommission = false;
         }
 
 
@@ -68,6 +69,9 @@ namespace XLantCore.Models
         public DateTime? ClientOnBoardDate { get; set; }
         public bool IsClawBack { get; set; }
         public bool IsAdjustment { get; set; }
+        [Display(Name = "Ignore for Commission Calculation")]
+        public bool IgnoreFromCommission { get; set; }
+
 
         public virtual MLFSAdvisor Advisor { get; set; }
         [NotMapped]

@@ -22,5 +22,15 @@ namespace XLantDataStore
         {
 
         }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<MLFSSale>()
+                .Property(x => x.RelatedClients)
+                .HasConversion(
+                    y => string.Join(';', y),
+                    y => y.Split(';', StringSplitOptions.RemoveEmptyEntries)
+                );
+        }
     }
 }

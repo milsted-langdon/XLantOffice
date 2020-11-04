@@ -1,20 +1,12 @@
 ﻿@model IEnumerable<XLantCore.Models.MLFSSale>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "New Business";
 }
 
-<h1>Index</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
+<table class="table xlantDataTable">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.IOId)
-            </th>
             <th>
                 @Html.DisplayNameFor(model => model.IOReference)
             </th>
@@ -22,16 +14,13 @@
                 @Html.DisplayNameFor(model => model.Organisation)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.Advisor)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.ClientName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ClientId)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.JointClientName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.JointClientId)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.ProviderName)
@@ -40,7 +29,7 @@
                 @Html.DisplayNameFor(model => model.PlanType)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.IsNew)
+                @Html.DisplayNameFor(model => model.PlanReference)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.RelevantDate)
@@ -52,22 +41,7 @@
                 @Html.DisplayNameFor(model => model.VAT)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Investment)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.OnGoingPercentage)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PlanReference)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EstimatedOtherIncome)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Advisor)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ReportingPeriod)
+                @Html.DisplayNameFor(model => model.GrossAmount)
             </th>
             <th></th>
         </tr>
@@ -76,25 +50,19 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.IOId)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.IOReference)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Organisation)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.Advisor.Fullname)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.ClientName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ClientId)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.JointClientName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.JointClientId)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ProviderName)
@@ -103,7 +71,7 @@
                 @Html.DisplayFor(modelItem => item.PlanType)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.IsNew)
+                @Html.DisplayFor(modelItem => item.PlanReference)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.RelevantDate)
@@ -115,27 +83,19 @@
                 @Html.DisplayFor(modelItem => item.VAT)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Investment)
+                @Html.DisplayFor(modelItem => item.GrossAmount)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.OnGoingPercentage)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PlanReference)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EstimatedOtherIncome)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Advisor.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ReportingPeriod.Id)
-            </td>
-            <td>
-
+                <div class="dropdown">
+                    <button class="btn btn-primary dropdown-toggle" aria-haspopup="true" data-toggle="dropdown" aria-expanded="false">Action</button>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                        <li><a onclick="clearVAT('@item.Id')">Clear VAT</a></li>
+                        <li><a target="_blank" href="https://www.intelligent-office.net/nio/clientfees/@item.ClientId/Index">View in IO</a></li>
+                    </ul>
+                </div>
             </td>
         </tr>
 }
     </tbody>
+    <tfoot></tfoot>
 </table>

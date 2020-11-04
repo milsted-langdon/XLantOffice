@@ -1,0 +1,52 @@
+﻿@model IEnumerable<XLantDataStore.ViewModels.NewBusiness>
+
+@{
+    ViewData["Title"] = "New Business Review";
+}
+
+        <table class="table newBusTable" style="width:100%">
+            <thead>
+                <tr>
+                    <th>
+                        
+                    </th>
+                    <th class="columnTotal">
+                        @Html.DisplayNameFor(model => model.NewClients)
+                    </th>
+                    <th class="columnTotal">
+                        @Html.DisplayNameFor(model => model.ExistingClients)
+                    </th>
+                    <th class="columnTotal">
+                        @Html.DisplayNameFor(model => model.Total)
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Advisor)
+                    </td>
+                    <td align="right">
+                        @Html.DisplayFor(modelItem => item.NewClients)
+                    </td>
+                    <td align="right">
+                        @Html.DisplayFor(modelItem => item.ExistingClients)
+                    </td>
+                    <td align="right">
+                        <a target="_blank" asp-controller="MLFSSale" asp-action="Index" asp-route-periodId="@item.PeriodId" asp-route-advisorId="@item.AdvisorId">@Html.DisplayFor(modelItem => item.Total)</a>
+                    </td>
+                </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td align="right"></td>
+                    <td align="right"></td>
+                    <td align="right"></td>
+                    <td align="right"></td>
+                </tr>
+            </tfoot>
+        </table>
+    
