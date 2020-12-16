@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using XLantDataStore;
 
 namespace XLantDataStore.Migrations
 {
     [DbContext(typeof(XLantDbContext))]
-    partial class XLantDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201113173105_VATchanges")]
+    partial class VATchanges
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -475,21 +477,6 @@ namespace XLantDataStore.Migrations
                     b.HasIndex("MLFSAdvisorId");
 
                     b.ToTable("Number");
-                });
-
-            modelBuilder.Entity("XLantCore.Models.VATIssueFee", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("IOReference")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("VATIssueFees");
                 });
 
             modelBuilder.Entity("XLantCore.Models.Address", b =>

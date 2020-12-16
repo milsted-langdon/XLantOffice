@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Data;
 using XLantCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace XLantCore.Models
 {
@@ -15,8 +16,11 @@ namespace XLantCore.Models
         }
 
         public int Id { get; set; }
+        [Display(Name = "Advsior")]
         public int AdvisorId { get; set; }
+        [Display(Name = "Lower Bound")]
         public decimal StartingValue { get; set; }
+        [Display(Name = "Upper Bound")]
         public decimal EndingValue { get; set; }
         public decimal Percentage { get; set; }
 

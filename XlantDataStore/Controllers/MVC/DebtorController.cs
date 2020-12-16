@@ -70,7 +70,7 @@ namespace XLantDataStore.Controllers.MVC
             }
             List<MLFSDebtorAdjustment> adjs = new List<MLFSDebtorAdjustment>();
             adjs.Add(new MLFSDebtorAdjustment(debtor, receipt));
-            if (debtor.Outstanding != 0  && (debtor.Outstanding < 0 || debtor.Outstanding/debtor.GrossAmount < (decimal)0.005))
+            if (debtor.Outstanding != 0  && ((debtor.Outstanding < 0 && (debtor.Outstanding * -1) / debtor.GrossAmount < (decimal)0.020) || debtor.Outstanding/debtor.GrossAmount < (decimal)0.005))
             {
                 adjs.Add(debtor.ClearToVariance(receipt.ReportingPeriod));
             }

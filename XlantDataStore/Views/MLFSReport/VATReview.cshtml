@@ -1,0 +1,117 @@
+﻿@model IEnumerable<XLantDataStore.ViewModels.VATReview>
+
+@{
+    ViewData["Title"] = "VAT Review";
+}
+
+<table class="table newBusTable" style="width:100%">
+    <thead>
+        <tr>
+            <th>
+                Income Type
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ClientName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IOReference)
+            </th>
+            <th class="columnTotal">
+                @Html.DisplayNameFor(model => model.NetAmount)
+            </th>
+            <th class="columnTotal">
+                @Html.DisplayNameFor(model => model.VAT)
+            </th>
+            <th class="columnTotal">
+                @Html.DisplayNameFor(model => model.GrossAmount)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @if (item.NewBusiness)
+                    {
+                        @Html.Raw("New Business")
+                    }
+                    else
+                    {
+                        @Html.Raw("Recurring")
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ClientName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IOReference)
+                </td>
+                <td align="right">
+                    @Html.DisplayFor(modelItem => item.NetAmount)
+                </td>
+                <td align="right">
+                    @Html.DisplayFor(modelItem => item.VAT)
+                </td>
+                <td align="right">
+                    @Html.DisplayFor(modelItem => item.GrossAmount)
+                </td>
+                <td align="right">
+                    <div class="dropdown">
+                        <button class="btn btn-primary dropdown-toggle" aria-haspopup="true" data-toggle="dropdown" aria-expanded="false">Action</button>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                            @if (!item.NewBusiness)
+                            {
+                                <li><a onclick="convertToGross(@item.Id, this)">Convert To Gross</a></li>
+                            }
+                            else
+                            {
+                                <li><a onclick="clearVAT(@item.Id, this)">Convert To Gross</a></li>
+                            }
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td align="right"></td>
+            <td align="right"></td>
+            <td align="right"></td>
+            <td align="right"></td>
+        </tr>
+    </tfoot>
+</table>
+
+
+@section Scripts{ 
+<script type="text/javascript">
+        function convertToGross(id, elem) {
+            $.ajax({
+                type: "POST",
+                url: "/MLFSIncome/ConvertToGross?incomeId=" + id,
+                success: function () {
+                    $(elem).closest('tr').remove();
+                },
+                fail: function () {
+                    alert('A problem occured converting the entry');
+                }
+            });
+        };
+
+        function clearVAT(debtorId, elem) {
+        $.ajax({
+            type: "POST",
+            url: "/MLFSSale/clearVAT?debtorid=" + debtorId,
+            success: function () {
+                $(elem).closest('tr').remove();
+            },
+            fail: function () {
+                alert('A problem occured with clearing the VAT');
+            }
+        });
+    }
+</script>
+}

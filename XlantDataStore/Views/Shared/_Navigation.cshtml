@@ -12,20 +12,28 @@
                     </ul>
                 </div>
                 <div class="logo-element">
-                    IN+
+                    XL
                 </div>
             </li>
             <li class="@Html.IsSelected(controller: "Debtor", action: "Index")">
                 <a href="@Url.Action("Index", "Debtor")"><i class="fa fa-dollar"></i> <span class="nav-label">Debtors</span></a>
             </li>
-            <li class="@Html.IsSelected(controller: "MLFSReports", action: "Index")">
+            <li class="@Html.IsSelected(controller: "MLFSReport", action: "Index")">
                 <a href="@Url.Action("Index", "MLFSReport")"><i class="fa fa-file-o"></i> <span class="nav-label">Reports</span></a>
             </li>
-            <li class="@Html.IsSelected(controller: "MLFSReportingPeriod", action: "Index")">
-                <a href="@Url.Action("Index", "MLFSReportingPeriods")"><i class="fa fa-calendar"></i> <span class="nav-label">Reporting Periods</span></a>
-            </li>
-            <li class="@Html.IsSelected(controller: "DataMaps", action: "Index")">
-                <a href="@Url.Action("Index", "DataMaps")"><i class="fa fa-server"></i> <span class="nav-label">Data Maps</span></a>
+            <li id="adminMenu">
+                <a><i class="fa fa-cogs"></i><span class="nav-label">Admin</span></a>
+                <ul class="nav nav-second-level collapse @Html.IsSelected(cssClass: "in")">
+                    <li class="@Html.IsSelected(controller: "MLFSReportingPeriod", action: "Index")">
+                        <a href="@Url.Action("Index", "MLFSReportingPeriods")"><i class="fa fa-calendar"></i> <span class="nav-label">Reporting Periods</span></a>
+                    </li>
+                    <li class="@Html.IsSelected(controller: "MLFSAdvisors")">
+                        <a href="@Url.Action("Index", "MLFSAdvisors")"><i class="fa fa-user"></i> <span class="nav-label">Advisors</span></a>
+                    </li>
+                    <li class="@Html.IsSelected(controller: "DataMaps", action: "Index")">
+                        <a href="@Url.Action("Index", "DataMaps")"><i class="fa fa-server"></i> <span class="nav-label">Data Maps</span></a>
+                    </li>
+                </ul>
             </li>
         </ul>
     </div>

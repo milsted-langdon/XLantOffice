@@ -1,0 +1,76 @@
+﻿@model IEnumerable<XLantCore.Models.MLFSAdvisor>
+
+@{
+    ViewData["Title"] = "Advisors";
+}
+<div class="ibox-content">
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-3"></div>
+        <div class="col-md-3">
+            <div class="dropdown">
+                <button class="btn btn-primary dropdown-toggle" aria-haspopup="true" data-toggle="dropdown" aria-expanded="false">Action</button>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                    <li><a onclick="LaunchModal('', 'Create', '@Url.Action("Create", "MLFSAdvisors")')">Add</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="ibox-content">
+    <div class="row" width="90%">
+
+        <table class="table xlantDataTable">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Username)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Fullname)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Department)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Active)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Username)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Fullname)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Department)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Active)
+                        </td>
+                        <td>
+                            <div class="dropdown">
+                                <button class="btn btn-primary dropdown-toggle" aria-haspopup="true" data-toggle="dropdown" aria-expanded="false">Action</button>
+                                <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                                    <li><a asp-action="Edit" asp-route-id="@item.Id">Edit</a></li>
+                                    <li><a asp-action="Index" asp-controller="MLFSBudget" asp-route-id="@item.Id">Budget</a></li>
+                                    <li><a asp-action="Index" asp-controller="MLFSCommissionRate" asp-route-adviserid="@item.Id">Commission Rates</a></li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+
+            </tfoot>
+        </table>
+    </div>
+</div>

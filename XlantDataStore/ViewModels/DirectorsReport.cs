@@ -170,14 +170,14 @@ namespace XLantDataStore.ViewModels
             {
                 bool pass = false;
                 decimal twelveMonthsIncome = Investment * OngoingPercentage / 100;
-                twelveMonthsIncome = twelveMonthsIncome + OtherIncome;
+                twelveMonthsIncome += OtherIncome;
                 if (twelveMonthsIncome >= 500)
                 {
                     pass = true;
                 }
                 else
                 {
-                    if (OngoingPercentage >= (decimal)0.01)
+                    if (OngoingPercentage >= (decimal)1.00)
                     {
                         pass = true;
                     }

@@ -33,14 +33,14 @@ namespace XLantDataStore.ViewModels
             {
                 Budget = 0;
             }
-            New_Business = sales.Where(x => x.AdvisorId == advisor.Id).Sum(y => y.NetAmount);
-            Renewals = relevantIncome.Where(x => !x.IsNewBusiness && !x.IsClawBack).Sum(y => y.Amount);
-            Unallocated = relevantIncome.Where(x => x.IsNewBusiness && !x.IsClawBack && x.MLFSDebtorAdjustment == null).Sum(y => y.Amount);
-            Clawback = relevantIncome.Where(x => x.IsClawBack).Sum(y => y.Amount);
-            NotTakenUp = relevantAdjustments.Where(x => x.NotTakenUp).Sum(y => y.Amount);
-            Adjustment = relevantIncome.Where(x => x.IsAdjustment).Sum(y => y.Amount);
-            Debtors_Adjustment = relevantAdjustments.Where(x => x.ReceiptId == null && !x.NotTakenUp && !x.IsVariance).Sum(y => y.Amount);
-            Debtors_Variance = relevantAdjustments.Where(x => x.IsVariance).Sum(y => y.Amount);
+            New_Business = sales.Where(x => x.AdvisorId == advisor.Id).Distinct().Sum(y => y.NetAmount);
+            Renewals = relevantIncome.Where(x => !x.IsNewBusiness && !x.IsClawBack).Distinct().Sum(y => y.Amount);
+            Unallocated = relevantIncome.Where(x => x.IsNewBusiness && !x.IsClawBack && x.MLFSDebtorAdjustment == null).Distinct().Sum(y => y.Amount);
+            Clawback = relevantIncome.Where(x => x.IsClawBack).Distinct().Sum(y => y.Amount);
+            NotTakenUp = relevantAdjustments.Where(x => x.NotTakenUp).Distinct().Sum(y => y.Amount);
+            Adjustment = relevantIncome.Where(x => x.IsAdjustment).Distinct().Sum(y => y.Amount);
+            Debtors_Adjustment = relevantAdjustments.Where(x => x.ReceiptId == null && !x.NotTakenUp && !x.IsVariance).Distinct().Sum(y => y.Amount);
+            Debtors_Variance = relevantAdjustments.Where(x => x.IsVariance).Distinct().Sum(y => y.Amount);
             Total = New_Business + Adjustment + Renewals + Unallocated + Clawback + NotTakenUp + Debtors_Adjustment + Debtors_Variance;
         }
 

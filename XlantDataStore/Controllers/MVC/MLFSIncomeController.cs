@@ -16,6 +16,7 @@ namespace XLantDataStore.Controllers.MVC
         private readonly Repository.IMLFSSaleRepository _salesData;
         private readonly Repository.IMLFSReportingPeriodRepository _periodData;
         private readonly Repository.IMLFSAdvisorRepository _advisorData;
+        private readonly Repository.IVATIssueFeeRepository _issueData;
 
         public MLFSIncomeController(XLantDbContext context)
         {
@@ -23,6 +24,7 @@ namespace XLantDataStore.Controllers.MVC
             _salesData = new Repository.MLFSSaleRepository(context);
             _periodData = new Repository.MLFSReportingPeriodRepository(context);
             _advisorData = new Repository.MLFSAdvisorRepository(context);
+            _issueData = new Repository.VATIssueFeeRepository(context);
         }
 
         // GET: MLFSSales
@@ -42,25 +44,26 @@ namespace XLantDataStore.Controllers.MVC
                 return NotFound();
             }
             List<MLFSIncome> income = await _incomeData.GetIncome(period, advisorId);
+            income = income.Distinct().ToList();
             if (split.ToLower() == "unallocated")
             {
-                income = income.Where(x => x.MLFSDebtorAdjustment == null && x.IsNewBusiness).ToList();
+                income = income.Where(x => x.MLFSDebtorAdjustment == null && x.IsNewBusiness && !x.IsClawBack).ToList();
             }
             else if (split.ToLower() == "allocated")
             {
-                income = income.Where(x => x.MLFSDebtorAdjustment != null && x.IsNewBusiness).ToList();
+                income = income.Where(x => x.MLFSDebtorAdjustment != null && x.IsNewBusiness && !x.IsClawBack).ToList();
             }
             else if (split.ToLower() == "initial")
             {
-                income = income.Where(x => x.IsNewBusiness).ToList();
+                income = income.Where(x => x.IsNewBusiness && !x.IsClawBack).ToList();
             }
             else if (split.ToLower() == "recurring")
             {
-                income = income.Where(x => !x.IsNewBusiness).ToList();
+                income = income.Where(x => !x.IsNewBusiness && !x.IsClawBack).ToList();
             }
             else if (split.ToLower() == "adjustment")
             {
-                income = income.Where(x => x.IsAdjustment).ToList();
+                income = income.Where(x => x.IsAdjustment && !x.IsClawBack).ToList();
             }
             else if (split.ToLower() == "clawback")
             {
@@ -126,6 +129,11 @@ namespace XLantDataStore.Controllers.MVC
             if (ModelState.IsValid)
             {
                 MLFSAdvisor adv = await _advisorData.GetAdvisor(income.AdvisorId);
+                //make sure it is a negative value
+                if (income.Amount > 0)
+                {
+                    income.Amount *= -1;
+                }
                 income.IsClawBack = true;
                 income.Organisation = adv.Department;
                 _incomeData.Insert(income);
@@ -144,11 +152,76 @@ namespace XLantDataStore.Controllers.MVC
             MLFSIncome income = await _incomeData.GetIncomeById(incomeId);
             if (income == null)
             {
-                NotFound();
+                return NotFound();
             }
             income.IncomeType = "Converted";
             _incomeData.Update(income);
             return Ok();
+        }
+
+        // GET: MLFSIncome/ConvertToRecurring
+        [HttpPost]
+        public async Task<IActionResult> ConvertToGross(int incomeId)
+        {
+            MLFSIncome income = await _incomeData.GetIncomeById(incomeId);
+            if (income == null)
+            {
+                return NotFound();
+            }
+            income.Amount += income.VAT;
+            income.VAT = 0;
+            _incomeData.Update(income);
+            //add to register for next month
+            _issueData.Add(income.IOReference);
+            return Ok();
+        }
+
+        public async Task<IActionResult> AlterAdvisor(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            MLFSIncome income = await _incomeData.GetIncomeById((int)id);
+            ViewBag.AdvisorId = await _advisorData.SelectList(income.AdvisorId);
+            return PartialView("_AlterAdvisor", income);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AlterAdvisor(int? id, int? advisorId)
+        {
+            if (id == null || advisorId == null)
+            {
+                return NotFound();
+            }
+            MLFSIncome income = await _incomeData.GetIncomeById((int)id);
+            income.AdvisorId = (int)advisorId;
+            _incomeData.Update(income);
+
+            return Ok();
+        }
+
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            TempData["sendingURL"] = HttpContext.Request.Headers["Referer"].ToString();
+            MLFSIncome income = await _incomeData.GetIncomeById((int)id);
+            ViewBag.AdvisorId = await _advisorData.SelectList(income.AdvisorId);
+            return PartialView("_Edit", income);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(MLFSIncome income)
+        {
+            if (ModelState.IsValid)
+            {
+                _incomeData.Update(income);
+                return Redirect(TempData["sendingURL"].ToString());
+            }
+            return RedirectToAction("Edit", income.Id);
         }
     }
 }

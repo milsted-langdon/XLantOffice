@@ -237,5 +237,24 @@ namespace XLantDataStore.Controllers.MVC
             }
             return PartialView("_NewBusiness", report);
         }
+
+        public async Task<IActionResult> VATReview(int? periodId)
+        {
+            MLFSReportingPeriod period;
+            //get period
+            if (periodId == null)
+            {
+                return NotFound();
+            }
+            period = await _periodData.GetPeriodById((int)periodId);
+            if (period == null)
+            {
+                return NotFound();
+            }
+            List<MLFSSale> sales = await _salesData.GetSales(period);
+            List<MLFSIncome> income = await _incomeData.GetIncome(period);
+            List<VATReview> review = ViewModels.VATReview.CreateList(sales, income, period);
+            return View(review);
+        }
     }
 }

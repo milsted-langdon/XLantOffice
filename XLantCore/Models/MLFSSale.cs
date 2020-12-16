@@ -89,7 +89,14 @@ namespace XLantCore.Models
             ProviderName = income.ProviderName;
             PlanType = income.PlanType;
             IsNew = false;
-            RelevantDate = (DateTime)income.RelevantDate;
+            if (income.RelevantDate != null)
+            {
+                RelevantDate = (DateTime)income.RelevantDate;
+            }
+            else
+            {
+                RelevantDate = DateTime.Parse("01/" + income.ReportingPeriod.Month + "/" + income.ReportingPeriod.Year);
+            }
             NetAmount = income.Amount;
             VAT = 0;
             Investment = 0;
@@ -109,6 +116,7 @@ namespace XLantCore.Models
         [Display(Name = "Client")]
         public string ClientName { get; set; }
         public string ClientId { get; set; }
+        [Display(Name = "Joint Client")]
         public string JointClientName { get; set; }
         public string JointClientId { get; set; }
         [Display(Name="Advisor")]

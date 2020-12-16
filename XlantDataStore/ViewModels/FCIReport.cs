@@ -47,12 +47,12 @@ namespace XLantDataStore.ViewModels
             {
                 Advisor = y.Key.Advisor.Fullname,
                 Organisation = y.Key.Advisor.Department,
-                Adhoc = y.Where(a => a.IncomeType == "Ad-hoc Fee").Sum(z => z.Amount),
-                FundBased = y.Where(a => a.IncomeType == "Fund Based Commission").Sum(z => z.Amount),
-                Initial = y.Where(a => a.IncomeType == "Initial Fee" || a.IncomeType == "Initial Commission").Sum(z => z.Amount),
-                Ongoing = y.Where(a => a.IncomeType == "Ongoing Fee").Sum(z => z.Amount),
-                Renewal = y.Where(a => a.IncomeType == "Renewal Commission").Sum(z => z.Amount),
-                Other = y.Where(a => a.IncomeType != "Ad-hoc Fee" && a.IncomeType != "Fund Based Commission" && a.IncomeType != "Initial Fee" && a.IncomeType != "Initial Commission" && a.IncomeType != "Ongoing Fee" && a.IncomeType != "Renewal Commission").Sum(z => z.Amount),
+                Adhoc = y.Where(a => a.IncomeType == "Ad-hoc Fee").Distinct().Sum(z => z.Amount),
+                FundBased = y.Where(a => a.IncomeType == "Fund Based Commission").Distinct().Sum(z => z.Amount),
+                Initial = y.Where(a => a.IncomeType == "Initial Fee" || a.IncomeType == "Initial Commission").Distinct().Sum(z => z.Amount),
+                Ongoing = y.Where(a => a.IncomeType == "Ongoing Fee").Distinct().Sum(z => z.Amount),
+                Renewal = y.Where(a => a.IncomeType == "Renewal Commission").Distinct().Sum(z => z.Amount),
+                Other = y.Where(a => a.IncomeType != "Ad-hoc Fee" && a.IncomeType != "Fund Based Commission" && a.IncomeType != "Initial Fee" && a.IncomeType != "Initial Commission" && a.IncomeType != "Ongoing Fee" && a.IncomeType != "Renewal Commission" && !a.IgnoreFromCommission).Distinct().Sum(z => z.Amount),
                 Total = y.Sum(z => z.Amount)
             }).ToList();
             return report;

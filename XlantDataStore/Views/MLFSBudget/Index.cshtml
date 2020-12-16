@@ -1,0 +1,84 @@
+﻿@model XLantDataStore.ViewModels.BudgetReview
+@{
+    ViewData["Title"] = "Budget";
+}
+
+<div class="ibox-content">
+    <div class="row">
+        <div class="col-md-3">
+            <select asp-for="AdvisorId" asp-items="ViewBag.AdvisorId" class="form-control"></select>
+        </div>
+        <div class="col-md-3">
+            <select asp-for="Year" asp-items="ViewBag.Year" class="form-control"></select>
+        </div>
+        <div class="col-md-3">
+            <input type="button" onclick="goToView()" class="btn btn-primary" value="Submit" />
+        </div>
+    </div>
+</div>
+
+<div class="ibox-content">
+    <div class="row">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        Year
+                    </th>
+                    <th>
+                        Budget
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (MLFSBudget b in Model.Budgets.OrderBy(x => x.ReportingPeriod.ReportOrder))
+                {
+                    <tr>
+                        <td>
+                            @b.ReportingPeriod.Month 
+                        </td>
+                        <td>
+                            <input class="budgetEntry form-control" id="@b.ReportingPeriodId" value="@b.Budget" />
+                        </td>
+                    </tr>
+                }
+            </tbody>
+            
+        </table>
+    </div>
+</div>
+
+@section Scripts{ 
+    <script type="text/javascript">
+        function goToView() {
+            let aId = $('#AdvisorId').val();
+            let year = $('#Year').val();
+            window.location.href = "@Url.Action("Index", "MLFSBudget")" + "?advisorId=" + aId + "&financialYear=" + year;
+        }
+
+        $('.budgetEntry').on('change', function () {
+            let box = $(this);
+            box.addClass("bg-warning");
+            let periodId = box.attr("id");
+            let val = box.val();
+            let advisorId = $('#AdvisorId').val();
+            $.ajax({
+                type: "POST",
+                url: "/MLFSBudget/Update?reportingPeriodId=" + periodId + "&value=" + val + "&advisorId=" + advisorId,
+                success: function () {
+                    box.removeClass("bg-warning");
+                    box.addClass('bg-primary');
+                    setTimeout(function(){
+                        box.removeClass('bg-primary');
+                    }, 2000);
+                },
+                fail: function () {
+                    alert('A problem occured with updating the record');
+                    box.removeClass("bg-warning");
+                    box.addClass('bg-danger');
+                }
+            });
+        })
+    </script>
+
+}

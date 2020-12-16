@@ -29,6 +29,9 @@
                 @Html.DisplayNameFor(model => model.IncomeType)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.VAT)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Amount)
             </th>
             <th></th>
@@ -37,41 +40,49 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr id="incomeRow-@item.Id">
-                <td>
-                    @Html.DisplayFor(modelItem => item.IOReference)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ClientName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Advisor.Fullname)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ProviderName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.PlanType)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.PlanNumber)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.IncomeType)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Amount)
-                </td>
-                <td>
-                    <div class="dropdown">
-                        <button class="btn btn-primary dropdown-toggle" aria-haspopup="true" data-toggle="dropdown" aria-expanded="false">Action</button>
-                        <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-                            <li><a onclick="createIncomeEntry(@item.Id, this)">Create Income</a></li>
-                            <li><a onclick="convert(@item.Id, this)">Convert To Recurring</a></li>
-                        </ul>
-                    </div>
-                </td>
-            </tr>
+        <tr id="incomeRow-@item.Id">
+            <td>
+                @Html.DisplayFor(modelItem => item.IOReference)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ClientName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Advisor.Fullname)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProviderName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PlanType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PlanNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IncomeType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.VAT)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Amount)
+            </td>
+            <td>
+                <div class="dropdown">
+                    <button class="btn btn-primary dropdown-toggle" aria-haspopup="true" data-toggle="dropdown" aria-expanded="false">Action</button>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                        <li><a onclick="createIncomeEntry(@item.Id, this)">Create Income</a></li>
+                        <li><a onclick="convert(@item.Id, this)">Convert To Recurring</a></li>
+                        <li><a onclick="LaunchModal('@item.Id', 'Edit', '@Url.Action("Edit", "MLFSIncome")')">Edit</a></li>
+                        @if (item.AdvisorId == 19)
+                        {
+                            <li><a onclick="LaunchModal('@item.Id', 'Choose Advisor', '@Url.Action("AlterAdvisor")')">Change Advisor</a></li>
+                        }
+                    </ul>
+                </div>
+            </td>
+        </tr>
         }
     </tbody>
     <tfoot>
@@ -107,6 +118,27 @@
                 }
             });
         };
+
+        //$(document).ajaxComplete(function () {
+        //    //Override the normal post and handle with js
+        //    $("#alterForm").submit(function (e) {
+        //        e.preventDefault(); // avoid to execute the actual submit of the form.
+
+        //        var form = $(this);
+        //        var url = form.attr('action');
+        //        var incomeId = $('#Id').val();
+        //        $.ajax({
+        //            type: "POST",
+        //            url: url,
+        //            success: function () {
+        //                $('#incomeRow-' + incomeId).remove();
+        //            },
+        //            fail: function () {
+        //                alert('A problem occured changing the entry');
+        //            }
+        //        });
+        //    });
+        //});
 
     </script>
 }

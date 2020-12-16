@@ -31,8 +31,11 @@ namespace XLantCore.Models
         }
 
         public int Id { get; set; }
+        [Display(Name = "Reporting Period")]
         public int ReportingPeriodId { get; set; }
+        [Display(Name = "Debtor")]
         public int DebtorId { get; set; }
+        [Display(Name = "Income")]
         public int? ReceiptId { get; set; }
         public decimal Amount { get; set; }
         [Display(Name = "Variance")]

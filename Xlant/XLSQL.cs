@@ -21,7 +21,7 @@ namespace XLant
                                 select map).FirstOrDefault();
             if (setting != null)
             {
-                conn = String.Format("user id={0};password={1};server=", DotNetEnv.Env.GetString("XLANTLOGIN"), DotNetEnv.Env.GetString("XLANTPASSWORD"));
+                conn = String.Format("user id={0};password={1};server=", "XlantLogin", "mswlBtCk11OF");
                 conn += setting.Attribute("Server").Value;
                 conn += ";database=";
                 conn += setting.Attribute("db").Value;

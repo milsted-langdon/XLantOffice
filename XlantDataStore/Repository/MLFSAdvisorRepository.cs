@@ -42,5 +42,27 @@ namespace XLantDataStore.Repository
             SelectList sList = new SelectList(advisors.OrderBy(x => x.LastName).ThenByDescending(y => y.FirstName), "Id", "Fullname", advisorId);
             return sList;
         }
+
+        public void Add(MLFSAdvisor adv)
+        {
+            adv.Active = true;
+            if (adv.Name == null)
+            {
+                adv.Name = adv.FirstName + " " + adv.LastName;
+            }
+            _db.MLFSAdvisors.Add(adv);
+            _db.SaveChanges();
+        }
+
+        public void Update(MLFSAdvisor adv)
+        {
+            if (adv.Name == null)
+            {
+                adv.Name = adv.FirstName + " " + adv.LastName;
+            }
+            _db.Entry(adv).State = EntityState.Modified;
+            _db.SaveChanges();
+
+        }
     }
 }

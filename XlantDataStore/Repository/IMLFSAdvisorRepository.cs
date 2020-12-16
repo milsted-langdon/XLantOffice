@@ -13,5 +13,7 @@ namespace XLantDataStore.Repository
         Task<MLFSAdvisor> GetAdvisor(int id);
         Task<List<MLFSAdvisor>> GetAdvisors();
         Task<SelectList> SelectList(int? advisorId = null);
+        void Add(MLFSAdvisor adv);
+        void Update(MLFSAdvisor adv);
     }
 }

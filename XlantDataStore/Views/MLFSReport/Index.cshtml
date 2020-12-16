@@ -112,7 +112,7 @@
 
             function viewVAT() {
                 let periodId = $('#periodId').val();
-                window.location.href = "@Url.Action("VAT", "MLFSSale")?periodId=" + periodId;
+                window.location.href = "@Url.Action("VATReview", "MLFSReport")?periodId=" + periodId;
             }
 
             function UpdateSections(id, force) {
@@ -137,5 +137,7 @@
                     });
                 }
             }
+
+
         </script>
     }

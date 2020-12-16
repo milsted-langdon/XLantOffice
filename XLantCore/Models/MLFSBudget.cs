@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Data;
-using XLantCore;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace XLantCore.Models
 {
@@ -14,8 +10,10 @@ namespace XLantCore.Models
         }
 
         public int Id { get; set; }
+        [Display(Name = "Reporting Period")]
         public int ReportingPeriodId { get; set; }
         public decimal Budget { get; set; }
+        [Display(Name = "Advisor")]
         public int AdvisorId { get; set; }
 
         public virtual MLFSAdvisor Advisor { get; set; }
