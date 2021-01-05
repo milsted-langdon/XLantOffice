@@ -10,7 +10,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
-using XLantCore;
+using XLant;
 using XLForms;
 using Office = Microsoft.Office.Core;
 using Outlook = Microsoft.Office.Interop.Outlook;
@@ -27,7 +27,7 @@ namespace XLantOutlook
         private static List<string> emailsToIndex = new List<string>();
         //private static System.Threading.Timer timer;
 
-        public static XLantCore.XLVirtualCabinet.BondResult IndexEmail(Outlook.MailItem email, string folder)
+        public static XLant.XLVirtualCabinet.BondResult IndexEmail(Outlook.MailItem email, string folder)
         {
             try
             {
@@ -122,7 +122,7 @@ namespace XLantOutlook
                 s = s.ToLower();
                 if (!incML)
                 {
-                    if (!s.Contains("milsted-langdon"))
+                    if (!s.Contains("milstedlangdon"))
                     {
                         emails += ";" + pa.GetProperty(PR_SMTP_ADDRESS).ToString();
                     }
@@ -149,7 +149,7 @@ namespace XLantOutlook
                 s = s.ToLower();
                 if (!incML)
                 {
-                    if (!s.Contains("milsted-langdon"))
+                    if (!s.Contains("milstedlangdon"))
                     {
                         emails += ";" + pa.GetProperty(PR_SMTP_ADDRESS).ToString();
                     }
@@ -478,7 +478,7 @@ namespace XLantOutlook
         {
             try
             {
-                XLantCore.XLVirtualCabinet.BondResult outcome = IndexEmail(email, folder);
+                XLant.XLVirtualCabinet.BondResult outcome = IndexEmail(email, folder);
 
                 if (outcome.ExitCode != 0)
                 {
@@ -506,7 +506,7 @@ namespace XLantOutlook
         {
             try
             {
-                XLantCore.XLVirtualCabinet.BondResult outcome = IndexEmail(email, folder);
+                XLant.XLVirtualCabinet.BondResult outcome = IndexEmail(email, folder);
                 // As the filing has been successfull, get the FileId returned from Bond via the Standard Output
                 if (outcome.ExitCode == 0)
                 {
@@ -568,7 +568,7 @@ namespace XLantOutlook
             try
             {
 
-                XLantCore.XLVirtualCabinet.BondResult outcome = IndexEmail(email, "Draft");
+                XLant.XLVirtualCabinet.BondResult outcome = IndexEmail(email, "Draft");
 
                 if (outcome.ExitCode != 0)
                 {
