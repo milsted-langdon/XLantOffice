@@ -863,10 +863,13 @@ namespace XlantWord
 
         private void BioBtn_Click(object sender, RibbonControlEventArgs e)
         {
-            XLForms.StaffForm selectForm = new StaffForm();
+            XLForms.ClientForm selectForm = new ClientForm();
             selectForm.ShowDialog();
-            XLMain.Staff staff = selectForm.selectedContact;
-            XLDocument.AddBio(staff);
+            XLMain.Client client = selectForm.selectedClient;
+            MergeClient bioClient = new MergeClient(client);
+            XLDocument.UpdateCurrentDoc();
+            Range range = XLDocument.currentDoc.Range();
+            XLDocument.UpdateFieldsFromRange(range, bioClient);
         }
     }
 }

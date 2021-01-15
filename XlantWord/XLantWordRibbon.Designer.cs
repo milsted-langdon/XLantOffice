@@ -36,6 +36,11 @@
         {
             this.XLantDataTab = this.Factory.CreateRibbonTab();
             this.group1 = this.Factory.CreateRibbonGroup();
+            this.group2 = this.Factory.CreateRibbonGroup();
+            this.group4 = this.Factory.CreateRibbonGroup();
+            this.Signature = this.Factory.CreateRibbonGroup();
+            this.group3 = this.Factory.CreateRibbonGroup();
+            this.FPI = this.Factory.CreateRibbonGroup();
             this.CreateBtns = this.Factory.CreateRibbonSplitButton();
             this.CreateLetterBtn = this.Factory.CreateRibbonButton();
             this.CreateFaxBtn = this.Factory.CreateRibbonButton();
@@ -45,23 +50,19 @@
             this.ContactAddressBtn = this.Factory.CreateRibbonButton();
             this.StaffAddressBtn = this.Factory.CreateRibbonButton();
             this.InsolAddressBtn = this.Factory.CreateRibbonButton();
-            this.group2 = this.Factory.CreateRibbonGroup();
             this.IndexBtn = this.Factory.CreateRibbonButton();
             this.ForwardBtn = this.Factory.CreateRibbonButton();
             this.ApproveBtn = this.Factory.CreateRibbonButton();
-            this.group4 = this.Factory.CreateRibbonGroup();
             this.UpdateDatebtn = this.Factory.CreateRibbonButton();
             this.UpdateRefBtn = this.Factory.CreateRibbonButton();
             this.docRefButton = this.Factory.CreateRibbonButton();
             this.button1 = this.Factory.CreateRibbonButton();
-            this.Signature = this.Factory.CreateRibbonGroup();
             this.button2 = this.Factory.CreateRibbonButton();
             this.ScannedImage = this.Factory.CreateRibbonSplitButton();
             this.MySigBtn = this.Factory.CreateRibbonButton();
             this.MLsignature = this.Factory.CreateRibbonButton();
             this.StaffSig = this.Factory.CreateRibbonButton();
             this.SigViewBtn = this.Factory.CreateRibbonButton();
-            this.group3 = this.Factory.CreateRibbonGroup();
             this.BioBtn = this.Factory.CreateRibbonButton();
             this.TempSaveBtn = this.Factory.CreateRibbonButton();
             this.PdfBtn = this.Factory.CreateRibbonSplitButton();
@@ -74,7 +75,6 @@
             this.HeaderFooterBtn = this.Factory.CreateRibbonButton();
             this.StyleBtn = this.Factory.CreateRibbonButton();
             this.ShowHiddenBtn = this.Factory.CreateRibbonToggleButton();
-            this.FPI = this.Factory.CreateRibbonGroup();
             this.MergeBtn = this.Factory.CreateRibbonButton();
             this.Merge2Btn = this.Factory.CreateRibbonButton();
             this.Merge3Btn = this.Factory.CreateRibbonButton();
@@ -106,6 +106,54 @@
             this.group1.Items.Add(this.GetAddressMain);
             this.group1.Label = "Data";
             this.group1.Name = "group1";
+            // 
+            // group2
+            // 
+            this.group2.Items.Add(this.IndexBtn);
+            this.group2.Items.Add(this.ForwardBtn);
+            this.group2.Items.Add(this.ApproveBtn);
+            this.group2.Label = "File";
+            this.group2.Name = "group2";
+            // 
+            // group4
+            // 
+            this.group4.Items.Add(this.UpdateDatebtn);
+            this.group4.Items.Add(this.UpdateRefBtn);
+            this.group4.Items.Add(this.docRefButton);
+            this.group4.Items.Add(this.button1);
+            this.group4.Label = "Update";
+            this.group4.Name = "group4";
+            // 
+            // Signature
+            // 
+            this.Signature.Items.Add(this.button2);
+            this.Signature.Items.Add(this.ScannedImage);
+            this.Signature.Items.Add(this.SigViewBtn);
+            this.Signature.Label = "Signatures";
+            this.Signature.Name = "Signature";
+            this.Signature.Tag = "Manage Signatures";
+            // 
+            // group3
+            // 
+            this.group3.Items.Add(this.BioBtn);
+            this.group3.Items.Add(this.TempSaveBtn);
+            this.group3.Items.Add(this.PdfBtn);
+            this.group3.Items.Add(this.PrintBtn);
+            this.group3.Items.Add(this.HeaderFooterBtn);
+            this.group3.Items.Add(this.StyleBtn);
+            this.group3.Items.Add(this.ShowHiddenBtn);
+            this.group3.Label = "Other";
+            this.group3.Name = "group3";
+            // 
+            // FPI
+            // 
+            this.FPI.Items.Add(this.MergeBtn);
+            this.FPI.Items.Add(this.Merge2Btn);
+            this.FPI.Items.Add(this.Merge3Btn);
+            this.FPI.Items.Add(this.Merge4Btn);
+            this.FPI.Items.Add(this.InvoiceBtn);
+            this.FPI.Label = "FPI";
+            this.FPI.Name = "FPI";
             // 
             // CreateBtns
             // 
@@ -190,14 +238,6 @@
             this.InsolAddressBtn.ShowImage = true;
             this.InsolAddressBtn.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.InsolAddressBtn_Click);
             // 
-            // group2
-            // 
-            this.group2.Items.Add(this.IndexBtn);
-            this.group2.Items.Add(this.ForwardBtn);
-            this.group2.Items.Add(this.ApproveBtn);
-            this.group2.Label = "File";
-            this.group2.Name = "group2";
-            // 
             // IndexBtn
             // 
             this.IndexBtn.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
@@ -224,15 +264,6 @@
             this.ApproveBtn.OfficeImageId = "DataTypeOnOff";
             this.ApproveBtn.ShowImage = true;
             this.ApproveBtn.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.ApproveBtn_Click);
-            // 
-            // group4
-            // 
-            this.group4.Items.Add(this.UpdateDatebtn);
-            this.group4.Items.Add(this.UpdateRefBtn);
-            this.group4.Items.Add(this.docRefButton);
-            this.group4.Items.Add(this.button1);
-            this.group4.Label = "Update";
-            this.group4.Name = "group4";
             // 
             // UpdateDatebtn
             // 
@@ -264,15 +295,6 @@
             // 
             this.button1.Label = "";
             this.button1.Name = "button1";
-            // 
-            // Signature
-            // 
-            this.Signature.Items.Add(this.button2);
-            this.Signature.Items.Add(this.ScannedImage);
-            this.Signature.Items.Add(this.SigViewBtn);
-            this.Signature.Label = "Signatures";
-            this.Signature.Name = "Signature";
-            this.Signature.Tag = "Manage Signatures";
             // 
             // button2
             // 
@@ -327,24 +349,12 @@
             this.SigViewBtn.ShowImage = true;
             this.SigViewBtn.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.SigViewBtn_Click);
             // 
-            // group3
-            // 
-            this.group3.Items.Add(this.BioBtn);
-            this.group3.Items.Add(this.TempSaveBtn);
-            this.group3.Items.Add(this.PdfBtn);
-            this.group3.Items.Add(this.PrintBtn);
-            this.group3.Items.Add(this.HeaderFooterBtn);
-            this.group3.Items.Add(this.StyleBtn);
-            this.group3.Items.Add(this.ShowHiddenBtn);
-            this.group3.Label = "Other";
-            this.group3.Name = "group3";
-            // 
             // BioBtn
             // 
             this.BioBtn.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
-            this.BioBtn.Enabled = false;
             this.BioBtn.Label = "Add Bio";
             this.BioBtn.Name = "BioBtn";
+            this.BioBtn.OfficeImageId = "NewUnifiedGroup";
             this.BioBtn.ShowImage = true;
             this.BioBtn.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.BioBtn_Click);
             // 
@@ -443,16 +453,6 @@
             this.ShowHiddenBtn.Label = "Show/Hide Status";
             this.ShowHiddenBtn.Name = "ShowHiddenBtn";
             this.ShowHiddenBtn.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.ShowHiddenBtn_Click);
-            // 
-            // FPI
-            // 
-            this.FPI.Items.Add(this.MergeBtn);
-            this.FPI.Items.Add(this.Merge2Btn);
-            this.FPI.Items.Add(this.Merge3Btn);
-            this.FPI.Items.Add(this.Merge4Btn);
-            this.FPI.Items.Add(this.InvoiceBtn);
-            this.FPI.Label = "FPI";
-            this.FPI.Name = "FPI";
             // 
             // MergeBtn
             // 

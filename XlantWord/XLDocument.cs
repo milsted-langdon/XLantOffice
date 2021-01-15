@@ -115,6 +115,18 @@ namespace XlantWord
             }
         }
 
+        public class MergeField
+        {
+            public MergeField()
+            {
+                Type = "Text";
+                Parameters = new Dictionary<string, string>();
+            }
+            public string Name { get; set; }
+            public string Type { get; set; }
+            public Dictionary<string, string> Parameters { get; set; }
+        }
+
         private static XDocument settingsDoc = XLtools.settingsDoc;
         public static Document currentDoc;
         public static Microsoft.Office.Interop.Word.View currentView;
@@ -1074,12 +1086,12 @@ namespace XlantWord
             {
                 properties = client.GetType().GetProperties().ToList();
             }
-            string fieldName = GetMergeFieldName(field);
-            if (fieldName != "")
+            MergeField mergeField = GetMergeFieldData(field);
+            if (mergeField.Name != "")
             {
                 foreach (var prop in properties)
                 {
-                    if (prop.Name.ToUpper() == fieldName.ToUpper())
+                    if (prop.Name.ToUpper() == mergeField.Name.ToUpper())
                     {
                         try
                         {
@@ -1088,6 +1100,25 @@ namespace XlantWord
                             {
                                 decimal value = Decimal.Parse(prop.GetValue(client, null).ToString());
                                 app.Selection.TypeText(String.Format("{0:0.00}", value));
+                            }
+                            else if (mergeField.Type.ToUpper() == "IMAGE")
+                            {
+                                app.Selection.TypeText(" ");
+                                string imageLocation = prop.GetValue(client, null).ToString();
+                                Range range = app.Selection.Range;
+                                Microsoft.Office.Interop.Word.InlineShape shape = range.InlineShapes.AddPicture(imageLocation);
+                                shape.LockAspectRatio = MsoTriState.msoTrue;
+                                if (mergeField.Parameters.TryGetValue("height", out string sHeight))
+                                {
+                                    try
+                                    {
+                                        shape.Height = float.Parse(sHeight);
+                                    }
+                                    catch
+                                    {
+                                        throw new Exception("Height was not an float value");
+                                    }
+                                }
                             }
                             else
                             {
@@ -1108,7 +1139,7 @@ namespace XlantWord
         /// </summary>
         /// <param name="fieldText"></param>
         /// <returns></returns>
-        private static string GetMergeFieldName(Field field)
+        private static MergeField GetMergeFieldData(Field field)
         {
             string fieldName = "";
             Range rngFieldCode = field.Code;
@@ -1128,8 +1159,31 @@ namespace XlantWord
                 }
                 fieldName = fieldName.Trim();
             }
-
-            return fieldName;
+            if (fieldName.Contains("@"))
+            {
+                MergeField mergeField = new MergeField();
+                string[] parts = fieldName.Split('@');
+                mergeField.Name = parts[0].Trim();
+                string[] paramaters = parts[1].Split(';');
+                foreach (string p in paramaters)
+                {
+                    string[] details = p.Split('=');
+                    mergeField.Parameters.Add(details[0].Trim().ToLower(), details[1].Trim().ToLower());
+                    if (details[0].Trim().ToUpper() == "TYPE")
+                    {
+                        mergeField.Type = details[1].Trim();
+                    }
+                }
+                return mergeField;
+            }
+            else
+            {
+                MergeField mergeField = new MergeField()
+                {
+                    Name = fieldName
+                };
+                return mergeField;
+            }
         }
 
         public static List<Tuple<string, string>> GetAttachmentFiles()

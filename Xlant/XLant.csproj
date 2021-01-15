@@ -181,6 +181,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MergeClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="XLAPI.cs" />
     <Compile Include="XLCSV.cs" />

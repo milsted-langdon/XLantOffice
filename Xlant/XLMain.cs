@@ -5,6 +5,8 @@ using System.Text;
 using System.Data.SqlClient;
 using System.Data;
 using System.DirectoryServices.AccountManagement;
+using System.Net;
+using System.Xml.Linq;
 
 namespace XLant
 {
@@ -92,20 +94,6 @@ namespace XLant
                             client.IsIndividual = true;
                         }
                     }
-                    
-                    //Start building additional data
-                    //WIP
-                    //xlReader = XLSQL.ReaderQuery("SELECT ISNULL((SELECT ISNULL(SUM(WIPOutstanding),0) as WIPOutstanding FROM wipentries WHERE [Clientcode] = '" + clientcode + "'),0)");
-                    //if (xlReader.HasRows)
-                    //{
-                    //    xlReader.Read();
-                    //    wip = float.Parse(xlReader["wipoutstanding"].ToString());
-                    //}
-                    //Debtor
-                    //xlReader = XLSQL.ReaderQuery("SELECT ISNULL((SELECT ISNULL(SUM(DebtTranUnpaid),0) As DRSTotal FROM [Engine_MLDB].[dbo].[view_debtors] WHERE ([Clientcode] = '" + clientcode + "')),0)");
-                    //if (xlReader.HasRows)
-                    //{
-                        //xlReader.Read();
                     client.wip = 0;
                     client.debtor = 0;
                     //}
@@ -825,6 +813,31 @@ namespace XLant
                     foundYou = user.Title;
                 }
                 return foundYou;
+            }
+
+            public string GetImageLocation()
+            {
+                XDocument settings = XLtools.settingsDoc;
+                try
+                {
+                    string location = "";
+
+                    //query the setting files and try to find a match
+                    XElement setting = (from map in settings.Descendants("Bio")
+                                        select map).FirstOrDefault();
+                    if (setting != null)
+                    {
+                        location = setting.Attribute("Location").Value;
+                    }
+                    location += username + ".jpg";
+                    return location; 
+                }
+                catch (Exception e)
+                {
+                    XLtools.LogException("BioLocation", e.ToString());
+                    return null;
+                }
+
             }
         }
 
