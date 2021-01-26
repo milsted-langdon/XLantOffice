@@ -935,6 +935,13 @@ namespace XLant
                 {
                     AddresseeBlock = name;
                 }
+                if (row.Table.Columns.Contains("datepaid"))
+                {
+                    if (DateTime.TryParse(row["datepaid"].ToString(), out DateTime tempDate))
+                    {
+                        DatePaid = tempDate;
+                    }
+                }
             }
             public decimal TotalPremium { get; set; }
             public bool DirectDebit { get; set; }
@@ -956,6 +963,7 @@ namespace XLant
             public string Salutation { get; set; }
             public string Username { get; set; }
             public bool LastYear { get; set; }
+            public DateTime? DatePaid { get; set; }
 
             /// <summary>
             /// Returns the FPI clients for a manager

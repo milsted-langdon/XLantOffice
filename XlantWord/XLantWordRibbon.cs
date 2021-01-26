@@ -772,6 +772,27 @@ namespace XlantWord
             }
         }
 
+        private void BulkInvoiceButton_Click(object sender, RibbonControlEventArgs e)
+        {
+            DateRangeForm myForm = new DateRangeForm();
+            myForm.ShowDialog();
+
+            if (myForm.ToDate != null && myForm.FromDate != null)
+            {
+                DateTime dateFrom = (DateTime)myForm.FromDate;
+                DateTime dateTo = (DateTime)myForm.ToDate;
+                string query = String.Format("SELECT * FROM dbo.FPIBulkInvoice('{0}', '{1}')", dateFrom.ToString("d"), dateTo.ToString("d"));
+                System.Data.DataTable table = XLSQL.ReturnTable(query);
+                List<XLMain.FPIClient> clients = new List<XLMain.FPIClient>();
+                foreach (System.Data.DataRow row in table.Rows)
+                {
+                    XLMain.FPIClient client = new XLMain.FPIClient(row);
+                    clients.Add(client);
+                }
+                XLDocument.MergeFPIData(clients, forceNewDocument: true, asPdf: true, saveLocationForPdf: @"\\milsted-langdon\ml\ML\Facility\Admin\Admin - Common\FPI\FPI VAT Invoices\Bulk Invoices\");
+            }
+        }
+
         private void pdfAttachmentsBtn_Click(object sender, RibbonControlEventArgs e)
         {
             CreatePrettyPdf("", true);

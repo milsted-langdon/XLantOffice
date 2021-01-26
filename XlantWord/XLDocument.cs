@@ -750,12 +750,19 @@ namespace XlantWord
             }
         }
 
-        public static string AddHeadertoPDF(string filestring, string watermarkFile = "", string fileNamePref = "")
+        public static string AddHeadertoPDF(string filestring, string watermarkFile = "", string fileNamePref = "", string folderPref = "")
         {
             try
             {
-                //find the watermark pdf
-                string folder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\XLant\\";
+                string folder = "";
+                if (folderPref != "")
+                {
+                    folder = folderPref;
+                }
+                else
+                {
+                    folder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\XLant\\"; 
+                }
                 if (String.IsNullOrEmpty(watermarkFile))
                 {
                     watermarkFile = "Watermark.pdf";
@@ -781,14 +788,14 @@ namespace XlantWord
 
                 if (fileNamePref == "")
                 {
-                    filename = DateTime.Now.ToString("yyyy-MM-dd"); 
+                    filename = DateTime.Now.ToString("yyyy-MM-dd");
+                    int id = rnd.Next(1000, 9999); //provides a four digit id
+                    filename += "-" + id.ToString();
                 }
                 else
                 {
                     filename = fileNamePref;
                 }
-                int id = rnd.Next(1000, 9999); //provides a four digit id
-                filename += "-" + id.ToString();
                 filename += ".pdf";
                 //If that file already exists try again until it doesn't
                 while (File.Exists(folder + filename))
@@ -801,8 +808,8 @@ namespace XlantWord
                     {
                         filename = fileNamePref;
                     }
-                    id = rnd.Next(1000, 9999); //provides a four digit id
-                    filename += "-" + id.ToString();
+                    int id2 = rnd.Next(1000, 9999); //provides a four digit id
+                    filename += "-" + id2.ToString();
                     filename += ".pdf";
                 }
                 filelocation += filename;
@@ -966,10 +973,11 @@ namespace XlantWord
         /// Merge an FPI list of clients into the current active document
         /// </summary>
         /// <param name="clients">The list of FPIClients you want to merge</param>
-        public static void MergeFPIData(List<XLMain.FPIClient> clients, string templateXML = null)
+        public static void MergeFPIData(List<XLMain.FPIClient> clients, string templateXML = null, bool forceNewDocument = false, bool asPdf = false, string saveLocationForPdf = "")
         {
             UpdateCurrentDoc();
-            string office = "";
+            string office = "TAUNTON";
+            string department = "GPT";
             string tempXML = "";
             Header header = new Header();
             long startPosition = currentDoc.Content.Start;
@@ -987,25 +995,28 @@ namespace XlantWord
 
             List<PropertyInfo> properties = clients.FirstOrDefault().GetType().GetProperties().ToList();
 
+            app.Documents.Add();
+            UpdateCurrentDoc();
+            Range endRange = currentDoc.Range(currentDoc.Content.End - 1, currentDoc.Content.End - 1);
+            endRange.InsertXML(tempXML);
+            startPosition = 0;
+            header = MapHeader(office, department);
+            DeployHeader(header);
+            tempXML = CopyRangeToWordXML(currentDoc.Range());
+            //List<HeaderFooter> headers = CopyHeaders();
+            //List<HeaderFooter> footers = CopyFooters();
+            endPosition = currentDoc.Content.End - 1;
             foreach (XLMain.FPIClient client in clients)
             {
-                if (client.office.ToUpper() != office.ToUpper())
+                //make the start position the previous end position (less a few to catch all) unless new document
+                if (forceNewDocument)
                 {
-                    //create a new document and set up the headers
                     app.Documents.Add();
                     UpdateCurrentDoc();
-                    startPosition = 0;
-                    Range endRange = currentDoc.Range(currentDoc.Content.End - 1, currentDoc.Content.End - 1);
-                    endRange.InsertXML(tempXML);
-                    //header = MapHeader(client.office, "GPB");
-                    //DeployHeader(header);
-                    tempXML = CopyRangeToWordXML(currentDoc.Range());
-                    endPosition = currentDoc.Content.End - 1;
-                    office = client.office;
+                    endRange = currentDoc.Range();
                 }
                 else
                 {
-                    //make the start position the previous end position (less a few to catch all)
                     if (endPosition > letterLength)
                     {
                         startPosition = endPosition - letterLength;
@@ -1015,13 +1026,22 @@ namespace XlantWord
                         startPosition = 0;
                     }
                     currentDoc.Words.Last.InsertBreak(WdBreakType.wdSectionBreakNextPage);
-                    Range endRange = currentDoc.Range(currentDoc.Content.End - 1, currentDoc.Content.End - 1);
-                    endRange.InsertXML(tempXML);
-                    endPosition = currentDoc.Content.End - 1;
+                    endRange = currentDoc.Range(currentDoc.Content.End - 1, currentDoc.Content.End - 1);
                 }
+                
+                endRange.InsertXML(tempXML);
+                DeployHeader(header);
+                endPosition = currentDoc.Content.End - 1;
                 Range currentRange = currentDoc.Range(startPosition, endPosition);
 
                 UpdateFieldsFromRange(currentRange, client, properties);
+
+                if (asPdf)
+                {
+                    string pdf = CreatePdf();
+                    AddHeadertoPDF(pdf, fileNamePref: client.clientcode, folderPref: saveLocationForPdf);
+                    currentDoc.Close();
+                }
             }
         }
 

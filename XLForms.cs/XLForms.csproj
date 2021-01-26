@@ -59,6 +59,12 @@
     <Compile Include="ClientForm.Designer.cs">
       <DependentUpon>ClientForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="DateRangeForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DateRangeForm.Designer.cs">
+      <DependentUpon>DateRangeForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="MLFSDirRepForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -122,6 +128,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ClientForm.resx">
       <DependentUpon>ClientForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DateRangeForm.resx">
+      <DependentUpon>DateRangeForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MLFSDirRepForm.resx">
       <DependentUpon>MLFSDirRepForm.cs</DependentUpon>
