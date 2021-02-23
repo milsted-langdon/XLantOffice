@@ -681,9 +681,8 @@ namespace XlantWord
             try
             {
                 XLDocument.UpdateCurrentDoc();
-                string path = StandardLocation() + "Letter.docx";
+                string path = StandardLocation() + "Letter.dotx";
                 Document sTemplate = OpenDoc(path, true, false, false);
-                //object template = (object)path;
                 currentDoc.set_AttachedTemplate((object)sTemplate);
                 sTemplate.Close(SaveChanges: false);
                 currentDoc.UpdateStyles();
