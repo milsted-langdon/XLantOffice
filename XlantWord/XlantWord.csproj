@@ -264,6 +264,7 @@
     <EmbeddedResource Include="XLTaskPane.resx">
       <DependentUpon>XLTaskPane.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="app.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -288,6 +289,7 @@
     <None Include="XlantWord_6_TemporaryKey.pfx" />
     <None Include="XlantWord_7_TemporaryKey.pfx" />
     <None Include="XlantWord_8_TemporaryKey.pfx" />
+    <None Include="XlantWord_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
@@ -310,10 +312,10 @@
     <SignManifests>true</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>XlantWord_8_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestKeyFile>XlantWord_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>7399B95D292F4116348A031CCB0BACA47BC09E1E</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>47FEE35EDFC9EE1C42EBB76CC714A59182D82BF7</ManifestCertificateThumbprint>
   </PropertyGroup>
   <!-- Include the build rules for a C# project. -->
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
