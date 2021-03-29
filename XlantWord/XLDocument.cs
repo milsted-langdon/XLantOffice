@@ -972,7 +972,7 @@ namespace XlantWord
         /// Merge an FPI list of clients into the current active document
         /// </summary>
         /// <param name="clients">The list of FPIClients you want to merge</param>
-        public static void MergeFPIData(List<XLMain.FPIClient> clients, string templateXML = null, bool forceNewDocument = false, bool asPdf = false, string saveLocationForPdf = "")
+public static void MergeFPIData(List<XLMain.FPIClient> clients, string templateXML = null, bool forceNewDocument = false, bool asPdf = false, string saveLocationForPdf = "")
         {
             UpdateCurrentDoc();
             string office = "TAUNTON";
@@ -1002,11 +1002,15 @@ namespace XlantWord
             header = MapHeader(office, department);
             DeployHeader(header);
             tempXML = CopyRangeToWordXML(currentDoc.Range());
+            currentDoc.Close(WdSaveOptions.wdDoNotSaveChanges);
+            app.Documents.Add();
+            UpdateCurrentDoc();
             //List<HeaderFooter> headers = CopyHeaders();
             //List<HeaderFooter> footers = CopyFooters();
             endPosition = currentDoc.Content.End - 1;
-            foreach (XLMain.FPIClient client in clients)
+            for (int i = 0; i < clients.Count; i++)
             {
+                XLMain.FPIClient client = clients[i];
                 //make the start position the previous end position (less a few to catch all) unless new document
                 if (forceNewDocument)
                 {
@@ -1024,7 +1028,10 @@ namespace XlantWord
                     {
                         startPosition = 0;
                     }
-                    currentDoc.Words.Last.InsertBreak(WdBreakType.wdSectionBreakNextPage);
+                    if (i > 0)
+                    {
+                        currentDoc.Words.Last.InsertBreak(WdBreakType.wdSectionBreakNextPage); 
+                    }
                     endRange = currentDoc.Range(currentDoc.Content.End - 1, currentDoc.Content.End - 1);
                 }
                 
@@ -1039,7 +1046,7 @@ namespace XlantWord
                 {
                     string pdf = CreatePdf();
                     AddHeadertoPDF(pdf, fileNamePref: client.clientcode, folderPref: saveLocationForPdf);
-                    currentDoc.Close();
+                    currentDoc.Close(WdSaveOptions.wdDoNotSaveChanges);
                 }
             }
         }

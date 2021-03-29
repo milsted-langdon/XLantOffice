@@ -942,6 +942,7 @@ namespace XLant
                         DatePaid = tempDate;
                     }
                 }
+                InvoiceNumber = row["Invoice_Number"].ToString();
             }
             public decimal TotalPremium { get; set; }
             public bool DirectDebit { get; set; }
@@ -964,6 +965,7 @@ namespace XLant
             public string Username { get; set; }
             public bool LastYear { get; set; }
             public DateTime? DatePaid { get; set; }
+            public string InvoiceNumber {get; set; }
 
             /// <summary>
             /// Returns the FPI clients for a manager

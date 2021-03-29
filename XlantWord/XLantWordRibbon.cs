@@ -781,7 +781,7 @@ namespace XlantWord
             {
                 DateTime dateFrom = (DateTime)myForm.FromDate;
                 DateTime dateTo = (DateTime)myForm.ToDate;
-                string query = String.Format("SELECT * FROM dbo.FPIBulkInvoice('{0}', '{1}')", dateFrom.ToString("d"), dateTo.ToString("d"));
+                string query = String.Format("SELECT * FROM dbo.FPIBulkInvoice('{0}', '{1}')", dateFrom.ToString("yyyy-MM-dd"), dateTo.ToString("yyyy-MM-dd"));
                 System.Data.DataTable table = XLSQL.ReturnTable(query);
                 List<XLMain.FPIClient> clients = new List<XLMain.FPIClient>();
                 foreach (System.Data.DataRow row in table.Rows)
